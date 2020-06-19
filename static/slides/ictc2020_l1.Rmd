@@ -505,7 +505,7 @@ is.vector(first_vec)
 ```
 
 
-- charactor vector: `is.charactor()`
+- character vector: `is.character()`
 
 ```{r, comment=NA}
 is.character(first_vec)
@@ -609,7 +609,7 @@ c(y1, y2)
 
 ### Simplifying vector creation
 
-- colon `:` produce regular spaced ascending or descending sequences.
+- colon `:` produces regular spaced ascending or descending sequences.
 
 ```{r, comment=NA}
  10:16

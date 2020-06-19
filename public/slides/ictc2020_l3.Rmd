@@ -1,0 +1,61 @@
+---
+title: "ICTC 3104.3 Data Analytics and Big Data"
+subtitle: "Data Visualization"
+date: "2020-06-20"
+output:
+  xaringan::moon_reader:
+    chakra: libs/remark-latest.min.js
+    lib_dir: libs
+    css: 
+      - default
+      - default-fonts
+      - duke-blue
+      - hygge-duke
+      - libs/cc-fonts.css
+      - libs/figure-captions.css
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+```
+
+# Outline
+
+1. Basics of R Programming
+
+2. Data Import
+
+3. Data Wrangling
+
+4. Data Visualization
+
+
+---
+class: duke-green, center, middle
+# Data Visualization
+
+![700px](workflowds.png)
+---
+
+
+
+---
+
+# What have we learned today?
+
+---
+class: center, middle
+
+
+All rights reserved by 
+
+[Dr Thiyanga S. Talagala](https://thiyanga.netlify.app/) 
+
+and 
+
+[Dr. Chitraka Wickramarachchi](http://science.sjp.ac.lk/sta/staff/mr-chitraka-wickramarachchi/)
+
+
