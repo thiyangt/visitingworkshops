@@ -104,7 +104,7 @@ p + facet_wrap(~continent) +
 
 - Parent language: S
 
-- The latest R version 4.0.0 has been released on 2020-04-24.
+- The latest R version 4.0.1 has been released on 2020-06-06.
 
 ![description of the image](RobertandRoss.jpg)
 
@@ -559,7 +559,7 @@ typeof(anew)
 
 ### Explicit coercion
 
-Vectors can be explicitly coerced from one class to another using the `as.*` functions, if available. For example, `as.charactor`, `as.numeric`, `as.integer`, and `as.logical`.
+Vectors can be explicitly coerced from one class to another using the `as.*` functions, if available. For example, `as.character`, `as.numeric`, `as.integer`, and `as.logical`.
 
 ```{r, comment=NA}
 vec1 <- c(TRUE, FALSE, TRUE, TRUE)
