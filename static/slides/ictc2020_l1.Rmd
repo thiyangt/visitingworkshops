@@ -114,11 +114,11 @@ p + facet_wrap(~continent) +
 
 - **Free**
 
-- **Powerful:** Over 14600 contributed packages on the main repository (CRAN), as of July 2019, provided by top international researchers and programmers
+- **Powerful:** Over 14600 contributed packages on the main repository (CRAN), as of July 2019, provided by top international researchers and programmers.
 
-- **Flexible:** It is a language, and thus allows you to create your own solutions
+- **Flexible:** It is a language, and thus allows you to create your own solutions.
 
-- **Community:** Large global community friendly and helpful, lots of resources
+- **Community:** Large global community friendly and helpful, lots of resources.
 
 ---
 
@@ -143,6 +143,17 @@ background-size: contain
 ## The RStudio IDE
 
 .footer-note[.tiny[.green[Image Credit: ][Clastic Detritus ](https://clasticdetritus.com/2013/01/10/creating-data-plots-with-r/)]]
+
+---
+
+background-image: url('rstudioanalogy.jpeg')
+background-position: center
+background-size: contain
+
+## The RStudio IDE
+
+.footer-note[.tiny[.green[Image Credit: ]R-Ladies Newcastle
+]]]
 ---
 
 background-image: url('airport.jpg')
@@ -251,7 +262,7 @@ ls()
 ```
 
 --
-- To remove objects the function `rm` is available
+- To remove objects the function `rm` is available.
 
     - remove all objects `rm(list=ls())`
     
@@ -732,11 +743,6 @@ shortvec + longvec
 first <- c(1, 2, 3, 4); second <- c(10, 100)
 first * second
 ```
----
-
-# Other vector operations
-
-- Please see the [cheatsheet](/pdf/baser.pdf) and course materials STA Data Analysis II
 
 ---
 
