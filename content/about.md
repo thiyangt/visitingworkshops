@@ -2,7 +2,7 @@
 date: "2016-05-05T21:48:51-07:00"
 ---
 
-![](/img/traffic.jpg)
+![](/img/trafficmedium.jpg)
 
 
 # Visiting Lectures
