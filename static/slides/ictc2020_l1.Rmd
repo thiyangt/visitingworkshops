@@ -86,7 +86,7 @@ p + facet_wrap(~continent) +
 
 # Outline
 
-1. Basics of R Programming 
+1. Basics of R Programming ⚙️
 
 2. Data Import
 
