@@ -26,7 +26,8 @@
       <pubDate>Thu, 05 May 2016 21:48:51 -0700</pubDate>
       
       <guid>/about/</guid>
-      <description>Visiting Lectures 2020 ICTC 3104.3 Data Analytics and Big Data
+      <description>Visiting Lectures 2020 Help - Install R and R Studio
+ICTC 3104.3 Data Analytics and Big Data
 Workshops </description>
     </item>
     
@@ -36,11 +37,22 @@ Workshops </description>
       <pubDate>Thu, 05 May 2016 21:48:51 -0700</pubDate>
       
       <guid>/ictc2020/</guid>
-      <description>👉 Help guide Install R and R studio
+      <description>👉 Help - Install R and R studio
  Introduction and Basics of R Programming   📚 Slides 💻 Lab-work 🔖 Cheat sheet
  Data Import and Data Wrangling with R   📚 Slides 💻 Lab-work 🔖 Cheat sheet
  Data Visualisation with R   📚 Slides 💻 Lab-work 🔖 Cheat sheet
  </description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>/installation/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/installation/</guid>
+      <description>Download and Install R and R Studio R and RStudio   Download R
+  Download RStudio
+  The first thing you need to do to get started with R is to install it on your computer. R works on pretty much every platform available, including the widely available Windows, Mac OS X, and Linux systems. If you want to watch a step-by-step tutorial on how to install R for Mac or Windows, you can watch these videos:</description>
     </item>
     
   </channel>
