@@ -1,7 +1,7 @@
 ---
 title: "STA 506 2.0 Linear Regression Analysis"
 subtitle: "Lecture 1: Introduction to regression analysis"
-author: "Thiyanga S. Talagala"
+author: "Dr Thiyanga S. Talagala"
 date: "`r Sys.Date()`"
 output:
   xaringan::moon_reader:
@@ -819,8 +819,83 @@ ggplot(df,aes(x=x,y=y,group=z))+geom_point(aes(col=z))+facet_wrap(~z)
 
 All four sets are identical when examined using simple summary statistics but vary considerably when grouped.
 
+
 ---
 
+background-image: url('samestat_differentdata.png')
+background-position: center
+background-size: contain
+
+
+---
+![description of the image](SmallChange.gif)
+
+Acknowledgement: Justin Matejke and George Fitzmaurice, Autodesk Research, Canada
+---
+## Regression Analysis
+
+### Functional relationship between two variables
+
+```{r, comment=NA, message=FALSE, warning=FALSE, echo=FALSE}
+library(tidyverse)
+library(magrittr)
+ggplot(Heights, aes(y=dheight, x=mheight)) + geom_point(alpha=0.5) + coord_equal()
+
+```
+
+---
+
+### Functional relationship between two variables
+
+```{r, comment=NA, message=FALSE, warning=FALSE, echo=FALSE}
+library(tidyverse)
+library(magrittr)
+ggplot(Heights, aes(y=dheight, x=mheight)) + geom_point(alpha=0.5) +
+    geom_smooth(method="lm", se=FALSE,
+               col="forestgreen", lwd=2)+ coord_equal()
+
+```
+
+---
+### Functional relationship between two variables
+
+```{r, comment=NA, message=FALSE, warning=FALSE, echo=FALSE}
+library(tidyverse)
+library(magrittr)
+ggplot(Heights, aes(y=dheight, x=mheight)) + geom_point(alpha=0.5) +
+    geom_smooth(method="lm", se=FALSE,
+               col="forestgreen", lwd=2)+ coord_equal() +geom_abline(intercept = c(5, 30, 28), slope = 1, lwd=2, 
+                 color = c("blue", "black", "red"))
+
+```
+
+---
+
+### Functional relationship between two variables
+
+```{r, comment=NA, message=FALSE, warning=FALSE, echo=FALSE}
+library(tidyverse)
+library(magrittr)
+ggplot(Heights, aes(y=dheight, x=mheight)) + geom_point(alpha=0.5) +
+    geom_smooth(method="lm", se=FALSE,
+               col="forestgreen", lwd=2)+ coord_equal()+
+  geom_abline(intercept = c(5, 30, 28), slope = 1, lwd=2, 
+                 color = c("blue", "black", "red"))+geom_abline(intercept = c(12, 30, 28), slope = 1, lwd=2, 
+                 color = c("red", "black", "red"))
+
+```
+---
+## Homework
+
+Install R and R studio
+
+[Help is here](https://edify-thiyanga.netlify.app/installation/)
+
+---
+## Next Lecture
+
+> Simple Linear Regression
+---
 class: center, middle
 
 All rights reserved by 

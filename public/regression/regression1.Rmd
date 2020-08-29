@@ -1,7 +1,7 @@
 ---
 title: "STA 506 2.0 Linear Regression Analysis"
 subtitle: "Lecture 1: Introduction to regression analysis"
-author: "Thiyanga S. Talagala"
+author: "Dr Thiyanga S. Talagala"
 date: "`r Sys.Date()`"
 output:
   xaringan::moon_reader:
@@ -22,6 +22,66 @@ output:
 options(htmltools.dir.version = FALSE)
 ```
 
+
+background-image: url('orange.jpg')
+background-position: center
+background-size: cover
+
+
+### What does a statistician do?
+
+---
+
+### What does a statistician do?
+
+
+```{r, cache=TRUE, comment=NA, message=FALSE, warning=FALSE, echo=FALSE}
+library(ggplot2)
+library(gganimate)
+library(gapminder)
+head(gapminder, 15)
+
+```
+
+---
+
+```{r, cache=TRUE, comment=NA, message=FALSE, warning=FALSE, echo=FALSE}
+p <- ggplot(
+  gapminder, 
+  aes(x = gdpPercap, y=lifeExp, size = pop, colour = country)
+  ) +
+  geom_point(show.legend = FALSE, alpha = 0.7) +
+  scale_color_viridis_d() +
+  scale_size(range = c(2, 12)) +
+  scale_x_log10() +
+  labs(x = "GDP per capita", y = "Life expectancy")
+p
+
+```
+
+
+
+---
+
+```{r, cache=TRUE, comment=NA, message=FALSE, warning=FALSE, echo=FALSE, fig.height=8}
+p <- ggplot(
+  gapminder, 
+  aes(x = gdpPercap, y=lifeExp, size = pop, colour = country)
+  ) +
+  geom_point(show.legend = FALSE, alpha = 0.7) +
+  scale_color_viridis_d() +
+  scale_size(range = c(2, 12)) +
+  scale_x_log10() +
+  labs(x = "GDP per capita", y = "Life expectancy")
+p + facet_wrap(~continent) +
+  transition_time(year) +
+  labs(title = "Year: {frame_time}")
+
+```
+
+
+
+---
 
 ### What is Regression Analysis?
 
@@ -103,20 +163,738 @@ background-size: contain
 
 ]
 
+
+---
+
+# Model
+
+<!--https://www2.stat.duke.edu/courses/Spring19/sta210.001/slides/lec-slides/01-regression-intro.html#18-->
+
+$$Y = f(x_1, x_2, x_3) + \epsilon$$
+
+> Goal: Estimate $f$ ?
+
+## How do we estimate $f$?
+
+### Non-parametric methods:
+
+estimate $f$ using observed data without making explicit assumptions about the functional form of $f$.
+
+### Parametric methods
+
+estimate $f$ using observed data by making assumptions about the functional form of $f$.
+
+Ex: $Y = \beta_0 + \beta_1x_1 + \beta_2x_2 + \beta_3x_3 + \epsilon$
+
 ---
 background-image: url('regressionpaper1.png')
-background-position: right
+background-position: center
+background-size: contain
+
+---
+background-image: url('regressionpaper2.png')
+background-position: center
+background-size: contain
+
+     
+---
+background-image: url('regressionpaper3.png')
+background-position: center
+background-size: contain
+
+
+---
+
+## Do not under-estimate the power of simple models.
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/1zX6diCwlZA" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+<!--https://www.linkedin.com/feed/update/urn:li:activity:6489030516644380672/-->
+
+--
+
+
+
+- Create something new which is more efficient than the existing method.
+
+
+
+---
+background-image: url('GDPR.jpg')
+background-position: center
 background-size: contain
 
 ---
 
-     
+## Machine Learning Algorithms
+
+
+
+.pull-left[
+![](blackbox1.jpg)
+
+]
+
+.pull-right[
+![](blackbox2.png)
+
+]
+
+--
+
+- Random Forest
+
+- XGboost
+
+- Neural networks, etc.
+
+
+---
+## Pearson Correlation Coefficient
+
+![](karlpearson.jpg)
+
+- Measures the strength of the linear relationship between two quantitative variables. 
+
+- Does not completely characterize their relationship.
+
+---
+
+#### Pearson's Correlation Coefficient
+
+
+$$ cor(x,y) = \frac{\sum_{i=1}^n (x_i-\mu_x)(y_i-\mu_y)}{n *\sigma_x \sigma_y} $$
+
+
+<!--https://github.com/EvaMaeRey/statistics/blob/master/difference_in_difference.Rmd-->
+
+
+```{r, include = F}
+set.seed(2020)
+library(tidyverse)
+sd_pop <- function(x){
+  
+sqrt(sum((x - mean(x))^2)/(length(x)))  
+  
+}
+create_x_y <- function(num = 20, 
+                       spread_x = 20,
+                       relationship = .1, 
+                       noise = 3
+                       ){
+  
+  tibble(x = rnorm(num, sd = spread_x) + 50 ) %>% 
+  mutate(y = relationship * x + 
+           rnorm(num, sd = noise)) %>% 
+  mutate(mean_x = mean(x)) %>% 
+  mutate(mean_y = mean(y)) %>% 
+  mutate(area = (x - mean_x)*(y - mean_y)) %>% 
+  mutate(mean_area = mean(area)) %>% 
+  mutate(quasi_mean_area = area/(n() - 1)) %>%
+  mutate(sd_x_sample = sd(x)) %>% 
+  mutate(sd_x = sd_pop(x)) %>% 
+  mutate(sd_y_sample = sd(y)) %>% 
+  mutate(sd_y = sd_pop(y)) %>% 
+  mutate(some_x = sd_x) %>% 
+  mutate(some_x_sample = sd_x_sample) %>% 
+  mutate(some_y = mean_area/some_x) %>% 
+  mutate(some_y_sample = sd_y_sample) 
+  
+}
+data_calc_cor <- function(data){
+  
+  with(cor(x, y), data = data)
+  
+}
+data_create_scatterplot <- function(data){
+data %>% 
+  ggplot() + 
+  theme(legend.position = c(.15, .9)) +
+  aes(x = x) + 
+  aes(y = y) +
+  theme(legend.key = element_blank()) + 
+  theme(legend.title = element_blank()) +
+  theme(axis.text = 
+          element_text(color = "black")) +
+  theme(axis.ticks = 
+          element_line(color = "black")) +
+  labs(title = NULL) +
+  theme(panel.grid = element_blank()) +
+  geom_point(size = 3, pch = 21, col = "red", 
+             fill = "red", lwd = 3, alpha = .6) 
+  
+}
+plot_draw_mean_x <- function(plot){
+  
+  plot + 
+  # 1. mean of x
+  geom_rug(aes(y = NULL), col = "forestgreen") +
+  geom_vline(aes(xintercept = mean(x)), 
+             lty = "dashed", col = "forestgreen")  
+  
+  
+}
+plot_draw_mean_y <- function(plot){
+  
+  plot + 
+  # 2. mean of y
+  geom_rug(col = "#d95f02", aes(x = NULL)) +
+  geom_hline(aes(yintercept = mean(y)), 
+             lty = "dashed", col = "#d95f02")
+  
+}
+plot_draw_differences_x <- function(plot){
+  
+  plot + 
+  # difference xi mean x
+  scale_color_manual(
+    breaks = c(FALSE, TRUE), 
+    label = c("Negative", "Positive"), 
+    values = c("orchid4", "lightgoldenrod3") )  + 
+  geom_segment(
+    aes(col = x > mean(x), 
+        xend = mean(x), yend = y), 
+    arrow = arrow(ends = "first", 
+                  length = unit(0.1, "inches"))) +
+  labs(col = "")
+  
+    
+}
+plot_draw_differences_y <- function(plot){
+  
+  plot +
+  # difference yi mean y
+  geom_segment(aes(col = y > mean(y), 
+                   xend = x, yend = mean(y)), 
+                   arrow = arrow(ends = "first", 
+                                 length = unit(0.1, "inches"))) 
+    
+}
+plot_multiply_differences <- function(plot){
+  
+  plot + 
+  # multiply differences
+  aes(fill = area > 0) +
+  geom_rect(aes(xmin = mean(x), ymin = mean(y),  
+            ymax = y, xmax = x), 
+            alpha = .2  ) +
+  labs(fill = "") +
+  scale_fill_manual(breaks = c(FALSE, TRUE), 
+                    label = c("Negative", "Positive"),  
+                    values = c("orchid4", "lightgoldenrod3")) 
+  
+}
+    
+plot_take_average_rectangle <- function(plot, title = "Picture of Covariance"){
+  
+  plot +      
+  # Average areas 
+  geom_rect(aes(
+           xmin = mean(x),
+           ymin = mean(y),
+           ymax = mean(some_y) + mean(y),
+           xmax = mean(some_x) + mean(x)
+           ),
+            color = "orange",
+          linetype = "dotted",
+           fill = "orange",
+            lwd = 1.5,
+            alpha = .2) +  #BREAK
+  labs(title = title)
+  
+}
+plot_edge_of_rectangle <- function(plot, title = "Picture of Standard Deviation"){
+  
+  plot +      
+  # Average areas 
+  geom_segment(aes(
+           x = mean(x),
+           y = mean(y),
+           yend = mean(y),
+           xend = mean(some_x) + mean(x)
+           ),
+            color = "firebrick",
+            lwd = 2) +  #BREAK
+  labs(title = title)
+  
+}
+plot_normalize_x <- function(plot, data){
+  
+  plot + 
+  # Pearsons's Correlation 
+  scale_x_continuous(
+    sec.axis = sec_axis(~ (. -mean(data$x))/ sd_pop(data$x), 
+                        name = "sd x")) +
+  geom_vline(xintercept = mean(data$x) + sd_pop(data$x), 
+             lty = "dashed", color = "pink") +
+  geom_vline(xintercept = mean(data$x) - sd_pop(data$x), 
+             lty = "dashed", color = "pink") 
+  
+}
+plot_normalize_y <- function(plot, data, title = "Picture of covariance\n*and* Pearson correlation coefficient"){
+  
+  plot + 
+  scale_y_continuous(
+    sec.axis = sec_axis(~ (. -mean(data$y))/ sd_pop(data$y), 
+                        name = "sd y")) +
+  geom_hline(
+    yintercept = mean(data$y) + sd_pop(data$y), 
+    lty = "dashed", color = "pink") +
+  geom_hline(
+    yintercept = mean(data$y) - sd_pop(data$y), 
+    lty = "dashed", color = "pink") + 
+  labs(title = title) +
+  coord_fixed(ratio =  sd_pop(data$x)/sd_pop(data$y) )
+}
+plot_max_correlation <- function(plot, data){
+  
+  plot + 
+    annotate(geom = "rect",
+             alpha = .3, 
+             xmin = data$mean_x[1], xmax = data$mean_x[1] + data$sd_x[1],
+             ymin = data$mean_y[1], ymax = data$mean_y[1] + data$sd_y[1],
+             fill = "orange")
+  
+}
+plot_change_ylab_to_x <- function(plot){
+  
+  plot +
+    labs(y = "x")
+  
+}
+plot_correct_aspect_ratio <- function(plot){
+  
+  plot + 
+    coord_equal()
+  
+}
+```
+
+```{r, include=F}
+cov_equation <- c("",
+  "## $$\\mu_x$$", 
+  "## $$\\mu_y$$", 
+  "## $$x_i-\\mu_x$$",
+  "## $$y_i-\\mu_y$$",
+  "## $$\\sum_{i=1}^n (x_i-\\mu_x)(y_i-\\mu_y)$$",
+  "## $$\\frac{\\sum_{i=1}^n (x_i-\\mu_x)(y_i-\\mu_y)}{n}$$"
+  )
+var_equation <- c("",
+  "## $$\\mu_x$$", 
+  "## $$\\mu_x$$", 
+  "## $$x_i-\\mu_x$$",
+  "## $$x_i-\\mu_x$$",
+  "## $$\\sum_{i=1}^n (x_i-\\mu_x)^2$$",
+  "## $$\\frac{\\sum_{i=1}^n (x_i-\\mu_x)^2}{n}$$"
+  )
+sd_equation <- c("## $$\\frac{\\sum_{i=1}^n (x_i-\\mu_x)^2}{n}$$",
+                 "## $$\\sqrt\\frac{\\sum_{i=1}^n (x_i-\\mu_x)^2}{n}$$")
+cov_to_cor_equation <- c("## $$\\frac{\\sum_{i=1}^n (x_i-\\mu_x)(y_i-\\mu_y)}{n}$$",
+                 "## $$\\frac{\\sum_{i=1}^n (x_i-\\mu_x)(y_i-\\mu_y)}{n*\\sigma_x}$$",
+                 "## $$\\frac{\\sum_{i=1}^n (x_i-\\mu_x)(y_i-\\mu_y)}{n*\\sigma_x\\sigma_y}$$",
+                 "## $$\\frac{\\sum_{i=1}^n (x_i-\\mu_x)(y_i-\\mu_y)}{n*\\sigma_x\\sigma_y}$$")
+```
+
+
+```{r , echo=F, message=FALSE, warning=FALSE, fig.height=7}
+set.seed(2020); create_x_y(relationship = 0) %>% data_create_scatterplot() 
+```
+
+
+---
+#### Covariance: Mean $x$
+
+
+$$ cov(x,y) = \frac{\sum_{i=1}^n (x_i-\mu_x)(y_i-\mu_y)}{N} $$
+
+```{r , echo=F,  warning=FALSE, fig.height=7}
+set.seed(2020); create_x_y(relationship = 0) %>% data_create_scatterplot() %>% 
+  plot_draw_mean_x() 
+```
+---
+
+#### Covariance: Mean $y$
+
+
+$$ cov(x,y) = \frac{\sum_{i=1}^n (x_i-\mu_x)(y_i-\mu_y)}{N} $$
+
+```{r , echo=F,  warning=FALSE, fig.height=7}
+set.seed(2020); create_x_y(relationship = 0) %>% data_create_scatterplot() %>% 
+  plot_draw_mean_x() %>% 
+  plot_draw_mean_y() 
+```
+---
+
+#### Covariance: differences $x$
+
+
+$$ cov(x,y) = \frac{\sum_{i=1}^n (x_i-\mu_x)(y_i-\mu_y)}{N} $$
+
+```{r , echo=F,  warning=FALSE, fig.height=7}
+set.seed(2020); create_x_y(relationship = 0) %>% data_create_scatterplot() %>% 
+  plot_draw_mean_x() %>% 
+  plot_draw_mean_y() %>% 
+  plot_draw_differences_x() 
+```
+---
+
+#### Covariance: Differences $y$
+
+
+$$ cov(x,y) = \frac{\sum_{i=1}^n (x_i-\mu_x)(y_i-\mu_y)}{N} $$
+
+```{r , echo=F,  warning=FALSE, fig.height=7}
+set.seed(2020); create_x_y(relationship = 0) %>% data_create_scatterplot() %>% 
+  plot_draw_mean_x() %>% 
+  plot_draw_mean_y() %>% 
+  plot_draw_differences_x() %>% 
+  plot_draw_differences_y() 
+```
+---
+
+#### Covariance: Multiply differences
+
+
+$$ cov(x,y) = \frac{\sum_{i=1}^n (x_i-\mu_x)(y_i-\mu_y)}{N} $$
+
+```{r , echo=F,  warning=FALSE, fig.height=7}
+set.seed(2020); create_x_y(relationship = 0) %>% data_create_scatterplot() %>% 
+  plot_draw_mean_x() %>% 
+  plot_draw_mean_y() %>% 
+  plot_draw_differences_x() %>% 
+  plot_draw_differences_y() %>% 
+  plot_multiply_differences() 
+```
+---
+
+#### Covariance: take average rectangle
+
+
+$$ cov(x,y) = \frac{\sum_{i=1}^n (x_i-\mu_x)(y_i-\mu_y)}{N} $$
+
+```{r , echo=F,  warning=FALSE, fig.height=7}
+set.seed(2020); create_x_y(relationship = 0) %>% data_create_scatterplot() %>% 
+  plot_draw_mean_x() %>% 
+  plot_draw_mean_y() %>% 
+  plot_draw_differences_x() %>% 
+  plot_draw_differences_y() %>% 
+  plot_multiply_differences() %>% 
+  plot_take_average_rectangle() 
+```
+---
+
+.pull-left[
+### Covariance
+
+$$ cov(x,y) = \frac{\sum_{i=1}^N (x_i-\mu_x)(y_i-\mu_y)}{N} $$
+
+$$ cor(x,y) = \frac{\sum_{i=1}^N (x_i-\mu_x)(y_i-\mu_y)}{N *\sigma_x \sigma_y} $$
+
+$$cor(x, y) = \frac{cov(x, y)}{\sigma_x \sigma_y}$$
+
+]
+
+.pull-right[
+```{r , echo=F,  warning=FALSE, fig.height=7}
+set.seed(2020); create_x_y(relationship = 0) %>% data_create_scatterplot() %>% 
+  plot_draw_mean_x() %>% 
+  plot_draw_mean_y() %>% 
+  plot_draw_differences_x() %>% 
+  plot_draw_differences_y() %>% 
+  plot_multiply_differences() %>% 
+  plot_take_average_rectangle() 
+```
+
+]
+
+
+---
+
+# Variance and Standard Deviations
+
+$$ \sigma^2 = \frac{\sum_{i=1}^N (x_i-\mu_x)^2}{N} $$
+
+$$ \sigma = \sqrt\frac{\sum_{i=1}^N (x_i-\mu_x)^2}{N} $$
+
+---
+
+# Variance
+
+.pull-left[
+$$ \sigma^2 = \frac{\sum_{i=1}^N (x_i-\mu_x)^2}{N} $$
+
+]
+
+
+.pull-right[
+
+```{r, echo=F, warning=FALSE}
+set.seed(2020); create_x_y(relationship = 1,
+           noise = 0) %>% data_create_scatterplot() %>% 
+  plot_change_ylab_to_x() %>% 
+  plot_correct_aspect_ratio() %>% 
+  plot_draw_mean_x() 
+
+```
+
+]
+---
+
+# Variance
+
+.pull-left[
+$$ \sigma^2 = \frac{\sum_{i=1}^N (x_i-\mu_x)^2}{N} $$
+
+]
+
+
+.pull-right[
+
+```{r , echo=F, warning=FALSE}
+set.seed(2020); create_x_y(relationship = 1,
+           noise = 0) %>% data_create_scatterplot() %>% 
+  plot_change_ylab_to_x() %>% 
+  plot_correct_aspect_ratio() %>% 
+  plot_draw_mean_x() %>% 
+  plot_draw_differences_x() 
+
+```
+
+]
+
+---
+## Correlation: Beware
+
+
+
+
+$$ cor(x,y) = \frac{\sum_{i=1}^N (x_i-\mu_x)(y_i-\mu_y)}{N *\sigma_x \sigma_y} $$
 
 
 
 
 
+$$ cor(x,y) = \frac{\sum_{i=1}^n (x_i-\bar{x})(y_i-\bar{y})}{(n-1) *S_x S_y} $$
 
+---
+## Pearson's correlation coefficient
+
+- returns a value of between -1 and +1. A -1 means there is a strong negative correlation and +1 means that there is a strong positive correlation. 
+
+- is very sensitive to outliers.
+
+.pull-left[
+
+```{r, comment=NA, message=FALSE, warning=FALSE, echo=FALSE}
+set.seed(2020)
+x <- rnorm(100)
+df <- data.frame(x=x)
+ggplot(df, aes(x=x, y=x)) + geom_point()+xlab("x") + ylab("y") + ggtitle("Correlation = 1")
+
+```
+
+]
+
+.pull-right[
+
+```{r, comment=NA, message=FALSE, warning=FALSE, echo=FALSE}
+set.seed(2020)
+x <- rnorm(100)
+y = 5 -2*x
+df <- data.frame(x=x, y=y)
+ggplot(df, aes(x=x, y=y)) + geom_point()+xlab("x") + ylab("y") + ggtitle("Correlation = -1")
+
+```
+
+
+]
+
+
+---
+
+## Pearson's correlation coefficient (cont.)
+
+
+```{r, comment=NA, message=FALSE, fig.height=5}
+set.seed(2020)
+x <- rnorm(100)
+y <- rnorm(100)
+
+df <- data.frame(x=x, y=y)
+ggplot(df, aes(x=x, y=y)) + geom_point()+xlab("x") + ylab("y") +
+  ggtitle("Correlation = -0.03") + coord_equal()
+```
+
+
+---
+
+## Pearson's correlation coefficient (cont.)
+
+
+```{r, comment=NA, message=FALSE, fig.height=5}
+set.seed(2020)
+x <- seq(-2, 2, length.out = 20)
+y <- 5*x^2
+
+df <- data.frame(x=x, y=y)
+ggplot(df, aes(x=x, y=y)) + geom_point()+xlab("x") + ylab("y") +
+  ggtitle("Correlation = ---") 
+```
+
+---
+
+
+## Pearson's correlation coefficient (cont.)
+
+
+```{r, comment=NA, message=FALSE, fig.height=5}
+cor(x, y)
+ggplot(df, aes(x=x, y=y)) + geom_point()+xlab("x") + ylab("y") +
+  ggtitle("Correlation = 0.000") 
+
+
+```
+---
+```{r, comment=NA}
+anscombe
+```
+
+---
+
+```{r, comment=NA, message=FALSE}
+x <- c(anscombe$x1, anscombe$x2, anscombe$x3, anscombe$x4)
+y <- c(anscombe$y1, anscombe$y2, anscombe$y2, anscombe$y4)
+z <- as.factor(rep(1:4, each=11))
+df <- data.frame(x=x, y=y, z=z)
+ggplot(df,aes(x=x,y=y,group=z))+geom_point(aes(col=z))+facet_wrap(~z)
+```
+---
+
+
+
+.pull-left[
+```{r, comment=NA, message=FALSE, warning=FALSE}
+cor(anscombe$x1, anscombe$y1)
+mean(anscombe$x1)
+mean(anscombe$y1)
+```
+
+```{r, comment=NA, message=FALSE, warning=FALSE}
+cor(anscombe$x2, anscombe$y2)
+mean(anscombe$x2)
+mean(anscombe$y2)
+```
+
+]
+
+
+.pull-right[
+
+```{r, comment=NA, message=FALSE, warning=FALSE}
+cor(anscombe$x3, anscombe$y3)
+mean(anscombe$x3)
+mean(anscombe$y3)
+```
+
+```{r, comment=NA, message=FALSE, warning=FALSE}
+cor(anscombe$x4, anscombe$y4)
+mean(anscombe$x4)
+mean(anscombe$y4)
+```
+
+
+]
+
+
+---
+ Anscombe's quartet
+
+```{r, comment=NA, message=FALSE, fig.height=5}
+x <- c(anscombe$x1, anscombe$x2, anscombe$x3, anscombe$x4)
+y <- c(anscombe$y1, anscombe$y2, anscombe$y2, anscombe$y4)
+z <- as.factor(rep(1:4, each=11))
+df <- data.frame(x=x, y=y, z=z)
+ggplot(df,aes(x=x,y=y,group=z))+geom_point(aes(col=z))+facet_wrap(~z)
+```
+
+All four sets are identical when examined using simple summary statistics but vary considerably when grouped.
+
+
+---
+
+background-image: url('samestat_differentdata.png')
+background-position: center
+background-size: contain
+
+
+---
+![description of the image](SmallChange.gif)
+
+Acknowledgement: Justin Matejke and George Fitzmaurice, Autodesk Research, Canada
+---
+## Regression Analysis
+
+### Functional relationship between two variables
+
+```{r, comment=NA, message=FALSE, warning=FALSE, echo=FALSE}
+library(tidyverse)
+library(magrittr)
+ggplot(Heights, aes(y=dheight, x=mheight)) + geom_point(alpha=0.5) + coord_equal()
+
+```
+
+---
+
+### Functional relationship between two variables
+
+```{r, comment=NA, message=FALSE, warning=FALSE, echo=FALSE}
+library(tidyverse)
+library(magrittr)
+ggplot(Heights, aes(y=dheight, x=mheight)) + geom_point(alpha=0.5) +
+    geom_smooth(method="lm", se=FALSE,
+               col="forestgreen", lwd=2)+ coord_equal()
+
+```
+
+---
+### Functional relationship between two variables
+
+```{r, comment=NA, message=FALSE, warning=FALSE, echo=FALSE}
+library(tidyverse)
+library(magrittr)
+ggplot(Heights, aes(y=dheight, x=mheight)) + geom_point(alpha=0.5) +
+    geom_smooth(method="lm", se=FALSE,
+               col="forestgreen", lwd=2)+ coord_equal() +geom_abline(intercept = c(5, 30, 28), slope = 1, lwd=2, 
+                 color = c("blue", "black", "red"))
+
+```
+
+---
+
+### Functional relationship between two variables
+
+```{r, comment=NA, message=FALSE, warning=FALSE, echo=FALSE}
+library(tidyverse)
+library(magrittr)
+ggplot(Heights, aes(y=dheight, x=mheight)) + geom_point(alpha=0.5) +
+    geom_smooth(method="lm", se=FALSE,
+               col="forestgreen", lwd=2)+ coord_equal()+
+  geom_abline(intercept = c(5, 30, 28), slope = 1, lwd=2, 
+                 color = c("blue", "black", "red"))+geom_abline(intercept = c(12, 30, 28), slope = 1, lwd=2, 
+                 color = c("red", "black", "red"))
+
+```
+---
+## Homework
+
+Install R and R studio
+
+[Help is here](https://edify-thiyanga.netlify.app/installation/)
+
+---
+## Next Lecture
+
+> Simple Linear Regression
 ---
 class: center, middle
 
@@ -125,6 +903,8 @@ All rights reserved by
 [Dr. Thiyanga S. Talagala](https://thiyanga.netlify.app/) 
 
 
+Acknowledgement
 
+Gina Reynolds, University of Denver.
 
 
