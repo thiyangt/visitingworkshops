@@ -23,6 +23,66 @@ options(htmltools.dir.version = FALSE)
 ```
 
 
+background-image: url('orange.jpg')
+background-position: center
+background-size: cover
+
+
+### What does a statistician do?
+
+---
+
+### What does a statistician do?
+
+
+```{r, cache=TRUE, comment=NA, message=FALSE, warning=FALSE, echo=FALSE}
+library(ggplot2)
+library(gganimate)
+library(gapminder)
+head(gapminder, 15)
+
+```
+
+---
+
+```{r, cache=TRUE, comment=NA, message=FALSE, warning=FALSE, echo=FALSE}
+p <- ggplot(
+  gapminder, 
+  aes(x = gdpPercap, y=lifeExp, size = pop, colour = country)
+  ) +
+  geom_point(show.legend = FALSE, alpha = 0.7) +
+  scale_color_viridis_d() +
+  scale_size(range = c(2, 12)) +
+  scale_x_log10() +
+  labs(x = "GDP per capita", y = "Life expectancy")
+p
+
+```
+
+
+
+---
+
+```{r, cache=TRUE, comment=NA, message=FALSE, warning=FALSE, echo=FALSE, fig.height=8}
+p <- ggplot(
+  gapminder, 
+  aes(x = gdpPercap, y=lifeExp, size = pop, colour = country)
+  ) +
+  geom_point(show.legend = FALSE, alpha = 0.7) +
+  scale_color_viridis_d() +
+  scale_size(range = c(2, 12)) +
+  scale_x_log10() +
+  labs(x = "GDP per capita", y = "Life expectancy")
+p + facet_wrap(~continent) +
+  transition_time(year) +
+  labs(title = "Year: {frame_time}")
+
+```
+
+
+
+---
+
 ### What is Regression Analysis?
 
 - Statistical technique for investigating and modeling the relationship between variables.
@@ -530,6 +590,8 @@ $$ cov(x,y) = \frac{\sum_{i=1}^N (x_i-\mu_x)(y_i-\mu_y)}{N} $$
 
 $$ cor(x,y) = \frac{\sum_{i=1}^N (x_i-\mu_x)(y_i-\mu_y)}{N *\sigma_x \sigma_y} $$
 
+$$cor(x, y) = \frac{cov(x, y)}{\sigma_x \sigma_y}$$
+
 ]
 
 .pull-right[
@@ -601,8 +663,103 @@ set.seed(2020); create_x_y(relationship = 1,
 ]
 
 ---
-## Correlation 
+## Correlation: Beware
+
+
+
+
+$$ cor(x,y) = \frac{\sum_{i=1}^N (x_i-\mu_x)(y_i-\mu_y)}{N *\sigma_x \sigma_y} $$
+
+
+
+
+
+$$ cor(x,y) = \frac{\sum_{i=1}^n (x_i-\bar{x})(y_i-\bar{y})}{(n-1) *S_x S_y} $$
+
 ---
+## Pearson's correlation coefficient
+
+- returns a value of between -1 and +1. A -1 means there is a strong negative correlation and +1 means that there is a strong positive correlation. 
+
+- is very sensitive to outliers.
+
+.pull-left[
+
+```{r, comment=NA, message=FALSE, warning=FALSE, echo=FALSE}
+set.seed(2020)
+x <- rnorm(100)
+df <- data.frame(x=x)
+ggplot(df, aes(x=x, y=x)) + geom_point()+xlab("x") + ylab("y") + ggtitle("Correlation = 1")
+
+```
+
+]
+
+.pull-right[
+
+```{r, comment=NA, message=FALSE, warning=FALSE, echo=FALSE}
+set.seed(2020)
+x <- rnorm(100)
+y = 5 -2*x
+df <- data.frame(x=x, y=y)
+ggplot(df, aes(x=x, y=y)) + geom_point()+xlab("x") + ylab("y") + ggtitle("Correlation = -1")
+
+```
+
+
+]
+
+
+---
+
+## Pearson's correlation coefficient (cont.)
+
+
+```{r, comment=NA, message=FALSE, fig.height=5}
+set.seed(2020)
+x <- rnorm(100)
+y <- rnorm(100)
+
+df <- data.frame(x=x, y=y)
+ggplot(df, aes(x=x, y=y)) + geom_point()+xlab("x") + ylab("y") +
+  ggtitle("Correlation = -0.03") + coord_equal()
+```
+
+
+---
+
+## Pearson's correlation coefficient (cont.)
+
+
+```{r, comment=NA, message=FALSE, fig.height=5}
+set.seed(2020)
+x <- seq(-2, 2, length.out = 20)
+y <- 5*x^2
+
+df <- data.frame(x=x, y=y)
+ggplot(df, aes(x=x, y=y)) + geom_point()+xlab("x") + ylab("y") +
+  ggtitle("Correlation = ---") 
+```
+
+---
+
+
+## Pearson's correlation coefficient (cont.)
+
+
+```{r, comment=NA, message=FALSE, fig.height=5}
+cor(x, y)
+ggplot(df, aes(x=x, y=y)) + geom_point()+xlab("x") + ylab("y") +
+  ggtitle("Correlation = 0.000") 
+
+
+```
+---
+
+
+
+---
+
 class: center, middle
 
 All rights reserved by 

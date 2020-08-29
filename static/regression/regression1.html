@@ -26,6 +26,54 @@ class: center, middle, inverse, title-slide
 
 
 
+background-image: url('orange.jpg')
+background-position: center
+background-size: cover
+
+
+### What does a statistician do?
+
+---
+
+### What does a statistician do?
+
+
+
+```
+# A tibble: 15 x 6
+   country     continent  year lifeExp      pop gdpPercap
+   &lt;fct&gt;       &lt;fct&gt;     &lt;int&gt;   &lt;dbl&gt;    &lt;int&gt;     &lt;dbl&gt;
+ 1 Afghanistan Asia       1952    28.8  8425333      779.
+ 2 Afghanistan Asia       1957    30.3  9240934      821.
+ 3 Afghanistan Asia       1962    32.0 10267083      853.
+ 4 Afghanistan Asia       1967    34.0 11537966      836.
+ 5 Afghanistan Asia       1972    36.1 13079460      740.
+ 6 Afghanistan Asia       1977    38.4 14880372      786.
+ 7 Afghanistan Asia       1982    39.9 12881816      978.
+ 8 Afghanistan Asia       1987    40.8 13867957      852.
+ 9 Afghanistan Asia       1992    41.7 16317921      649.
+10 Afghanistan Asia       1997    41.8 22227415      635.
+11 Afghanistan Asia       2002    42.1 25268405      727.
+12 Afghanistan Asia       2007    43.8 31889923      975.
+13 Albania     Europe     1952    55.2  1282697     1601.
+14 Albania     Europe     1957    59.3  1476505     1942.
+15 Albania     Europe     1962    64.8  1728137     2313.
+```
+
+---
+
+![](regression1_files/figure-html/unnamed-chunk-2-1.png)&lt;!-- --&gt;
+
+
+
+---
+
+![](regression1_files/figure-html/unnamed-chunk-3-1.gif)&lt;!-- --&gt;
+
+
+
+---
+
 ### What is Regression Analysis?
 
 - Statistical technique for investigating and modeling the relationship between variables.
@@ -80,7 +128,7 @@ background-size: contain
 ]
 
 .pull-right[
-![](regression1_files/figure-html/unnamed-chunk-2-1.png)&lt;!-- --&gt;
+![](regression1_files/figure-html/unnamed-chunk-5-1.png)&lt;!-- --&gt;
 
 ]
 
@@ -218,7 +266,7 @@ $$ cor(x,y) = \frac{\sum_{i=1}^n (x_i-\mu_x)(y_i-\mu_y)}{n *\sigma_x \sigma_y} $
 
 
 
-![](regression1_files/figure-html/unnamed-chunk-5-1.png)&lt;!-- --&gt;
+![](regression1_files/figure-html/unnamed-chunk-8-1.png)&lt;!-- --&gt;
 
 
 ---
@@ -227,7 +275,7 @@ $$ cor(x,y) = \frac{\sum_{i=1}^n (x_i-\mu_x)(y_i-\mu_y)}{n *\sigma_x \sigma_y} $
 
 $$ cov(x,y) = \frac{\sum_{i=1}^n (x_i-\mu_x)(y_i-\mu_y)}{N} $$
 
-![](regression1_files/figure-html/unnamed-chunk-6-1.png)&lt;!-- --&gt;
+![](regression1_files/figure-html/unnamed-chunk-9-1.png)&lt;!-- --&gt;
 ---
 
 #### Covariance: Mean `\(y\)`
@@ -235,7 +283,7 @@ $$ cov(x,y) = \frac{\sum_{i=1}^n (x_i-\mu_x)(y_i-\mu_y)}{N} $$
 
 $$ cov(x,y) = \frac{\sum_{i=1}^n (x_i-\mu_x)(y_i-\mu_y)}{N} $$
 
-![](regression1_files/figure-html/unnamed-chunk-7-1.png)&lt;!-- --&gt;
+![](regression1_files/figure-html/unnamed-chunk-10-1.png)&lt;!-- --&gt;
 ---
 
 #### Covariance: differences `\(x\)`
@@ -243,7 +291,7 @@ $$ cov(x,y) = \frac{\sum_{i=1}^n (x_i-\mu_x)(y_i-\mu_y)}{N} $$
 
 $$ cov(x,y) = \frac{\sum_{i=1}^n (x_i-\mu_x)(y_i-\mu_y)}{N} $$
 
-![](regression1_files/figure-html/unnamed-chunk-8-1.png)&lt;!-- --&gt;
+![](regression1_files/figure-html/unnamed-chunk-11-1.png)&lt;!-- --&gt;
 ---
 
 #### Covariance: Differences `\(y\)`
@@ -251,7 +299,7 @@ $$ cov(x,y) = \frac{\sum_{i=1}^n (x_i-\mu_x)(y_i-\mu_y)}{N} $$
 
 $$ cov(x,y) = \frac{\sum_{i=1}^n (x_i-\mu_x)(y_i-\mu_y)}{N} $$
 
-![](regression1_files/figure-html/unnamed-chunk-9-1.png)&lt;!-- --&gt;
+![](regression1_files/figure-html/unnamed-chunk-12-1.png)&lt;!-- --&gt;
 ---
 
 #### Covariance: Multiply differences
@@ -259,7 +307,7 @@ $$ cov(x,y) = \frac{\sum_{i=1}^n (x_i-\mu_x)(y_i-\mu_y)}{N} $$
 
 $$ cov(x,y) = \frac{\sum_{i=1}^n (x_i-\mu_x)(y_i-\mu_y)}{N} $$
 
-![](regression1_files/figure-html/unnamed-chunk-10-1.png)&lt;!-- --&gt;
+![](regression1_files/figure-html/unnamed-chunk-13-1.png)&lt;!-- --&gt;
 ---
 
 #### Covariance: take average rectangle
@@ -267,7 +315,7 @@ $$ cov(x,y) = \frac{\sum_{i=1}^n (x_i-\mu_x)(y_i-\mu_y)}{N} $$
 
 $$ cov(x,y) = \frac{\sum_{i=1}^n (x_i-\mu_x)(y_i-\mu_y)}{N} $$
 
-![](regression1_files/figure-html/unnamed-chunk-11-1.png)&lt;!-- --&gt;
+![](regression1_files/figure-html/unnamed-chunk-14-1.png)&lt;!-- --&gt;
 ---
 
 .pull-left[
@@ -277,10 +325,12 @@ $$ cov(x,y) = \frac{\sum_{i=1}^N (x_i-\mu_x)(y_i-\mu_y)}{N} $$
 
 $$ cor(x,y) = \frac{\sum_{i=1}^N (x_i-\mu_x)(y_i-\mu_y)}{N *\sigma_x \sigma_y} $$
 
+`$$cor(x, y) = \frac{cov(x, y)}{\sigma_x \sigma_y}$$`
+
 ]
 
 .pull-right[
-![](regression1_files/figure-html/unnamed-chunk-12-1.png)&lt;!-- --&gt;
+![](regression1_files/figure-html/unnamed-chunk-15-1.png)&lt;!-- --&gt;
 
 ]
 
@@ -305,7 +355,7 @@ $$ \sigma^2 = \frac{\sum_{i=1}^N (x_i-\mu_x)^2}{N} $$
 
 .pull-right[
 
-![](regression1_files/figure-html/unnamed-chunk-13-1.png)&lt;!-- --&gt;
+![](regression1_files/figure-html/unnamed-chunk-16-1.png)&lt;!-- --&gt;
 
 ]
 ---
@@ -320,13 +370,109 @@ $$ \sigma^2 = \frac{\sum_{i=1}^N (x_i-\mu_x)^2}{N} $$
 
 .pull-right[
 
-![](regression1_files/figure-html/unnamed-chunk-14-1.png)&lt;!-- --&gt;
+![](regression1_files/figure-html/unnamed-chunk-17-1.png)&lt;!-- --&gt;
 
 ]
 
 ---
-## Correlation 
+## Correlation: Beware
+
+
+
+
+$$ cor(x,y) = \frac{\sum_{i=1}^N (x_i-\mu_x)(y_i-\mu_y)}{N *\sigma_x \sigma_y} $$
+
+
+
+
+
+$$ cor(x,y) = \frac{\sum_{i=1}^n (x_i-\bar{x})(y_i-\bar{y})}{(n-1) *S_x S_y} $$
+
 ---
+## Pearson's correlation coefficient
+
+- returns a value of between -1 and +1. A -1 means there is a strong negative correlation and +1 means that there is a strong positive correlation. 
+
+- is very sensitive to outliers.
+
+.pull-left[
+
+![](regression1_files/figure-html/unnamed-chunk-18-1.png)&lt;!-- --&gt;
+
+]
+
+.pull-right[
+
+![](regression1_files/figure-html/unnamed-chunk-19-1.png)&lt;!-- --&gt;
+
+
+]
+
+
+---
+
+## Pearson's correlation coefficient (cont.)
+
+
+
+```r
+set.seed(2020)
+x &lt;- rnorm(100)
+y &lt;- rnorm(100)
+
+df &lt;- data.frame(x=x, y=y)
+ggplot(df, aes(x=x, y=y)) + geom_point()+xlab("x") + ylab("y") +
+  ggtitle("Correlation = -0.03") + coord_equal()
+```
+
+![](regression1_files/figure-html/unnamed-chunk-20-1.png)&lt;!-- --&gt;
+
+
+---
+
+## Pearson's correlation coefficient (cont.)
+
+
+
+```r
+set.seed(2020)
+x &lt;- seq(-2, 2, length.out = 20)
+y &lt;- 5*x^2
+
+df &lt;- data.frame(x=x, y=y)
+ggplot(df, aes(x=x, y=y)) + geom_point()+xlab("x") + ylab("y") +
+  ggtitle("Correlation = ---") 
+```
+
+![](regression1_files/figure-html/unnamed-chunk-21-1.png)&lt;!-- --&gt;
+
+---
+
+
+## Pearson's correlation coefficient (cont.)
+
+
+
+```r
+cor(x, y)
+```
+
+```
+[1] -1.70372e-16
+```
+
+```r
+ggplot(df, aes(x=x, y=y)) + geom_point()+xlab("x") + ylab("y") +
+  ggtitle("Correlation = 0.000") 
+```
+
+![](regression1_files/figure-html/unnamed-chunk-22-1.png)&lt;!-- --&gt;
+---
+
+
+
+---
+
 class: center, middle
 
 All rights reserved by 
