@@ -85,9 +85,9 @@ p + facet_wrap(~continent) +
 
 ### What is Regression Analysis?
 
-- Statistical technique for investigating and modeling the relationship between variables.
+- Statistical technique for investigating and modelling the relationship between variables.
 
-### Statistical Modeling
+### Statistical Modelling
 
 - a simplified, mathematically-formalized way to approximate reality (i.e. what generates your data) and optionally to make predictions from this approximation.
 
@@ -891,10 +891,43 @@ Install R and R studio
 
 [Help is here](https://edify-thiyanga.netlify.app/installation/)
 
+
+---
+
+## Simple Linear Regression
+
+
+**Simple** - single regressor
+
+**Linear** - has a dual role here.
+
+It may be taken to describe the fact that the relationship between $Y$ and $X$ is linear. More generally, the word linear refers to the fact that the regression parameters enter in a linear fashion.
+
+
+---
+## Terminologies
+
+
+- Response variable: dependent variable
+
+- Explanatory variables: independent variables, predictors, regressor variables, features (in Machine Learning)
+
+- Parameter 
+
+- Statistic
+
+- Estimator
+
+- Estimate
+
+[Read my blogpost](https://thiyanga.netlify.app/post/statterms1/)
+
+
+
 ---
 ## Next Lecture
 
-> Simple Linear Regression
+> More work - Simple Linear Regression
 ---
 class: center, middle
 
