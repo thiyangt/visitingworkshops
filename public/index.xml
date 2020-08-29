@@ -28,7 +28,7 @@
       <guid>/about/</guid>
       <description>Visiting Lectures 2020 Help - Install R and R Studio
 ICTC 3104.3 Data Analytics and Big Data
-Workshops </description>
+Workshops Other Regression</description>
     </item>
     
     <item>
@@ -42,6 +42,15 @@ Workshops </description>
  Data Import and Data Wrangling with R   📚 Slides 💻 Lab-work 🔖 Cheat sheet
  Data Visualisation with R   📚 Slides 💻 Lab-work 🔖 Cheat sheet
  </description>
+    </item>
+    
+    <item>
+      <title>📚</title>
+      <link>/reg2020/</link>
+      <pubDate>Thu, 05 May 2016 21:48:51 -0700</pubDate>
+      
+      <guid>/reg2020/</guid>
+      <description> 📚 Slide 1: Introduction to regression analysis  </description>
     </item>
     
     <item>
