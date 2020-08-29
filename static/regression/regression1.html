@@ -204,15 +204,139 @@ background-size: contain
 
 ---
 
-## Pearson Correlation Coefficient
+#### Pearson's Correlation Coefficient
 
 
+$$ cor(x,y) = \frac{\sum_{i=1}^n (x_i-\mu_x)(y_i-\mu_y)}{n *\sigma_x \sigma_y} $$
+
+
+&lt;!--https://github.com/EvaMaeRey/statistics/blob/master/difference_in_difference.Rmd--&gt;
+
+
+
+
+
+
+
+![](regression1_files/figure-html/unnamed-chunk-5-1.png)&lt;!-- --&gt;
+
+
+---
+#### Covariance: Mean `\(x\)`
+
+
+$$ cov(x,y) = \frac{\sum_{i=1}^n (x_i-\mu_x)(y_i-\mu_y)}{N} $$
+
+![](regression1_files/figure-html/unnamed-chunk-6-1.png)&lt;!-- --&gt;
+---
+
+#### Covariance: Mean `\(y\)`
+
+
+$$ cov(x,y) = \frac{\sum_{i=1}^n (x_i-\mu_x)(y_i-\mu_y)}{N} $$
+
+![](regression1_files/figure-html/unnamed-chunk-7-1.png)&lt;!-- --&gt;
+---
+
+#### Covariance: differences `\(x\)`
+
+
+$$ cov(x,y) = \frac{\sum_{i=1}^n (x_i-\mu_x)(y_i-\mu_y)}{N} $$
+
+![](regression1_files/figure-html/unnamed-chunk-8-1.png)&lt;!-- --&gt;
+---
+
+#### Covariance: Differences `\(y\)`
+
+
+$$ cov(x,y) = \frac{\sum_{i=1}^n (x_i-\mu_x)(y_i-\mu_y)}{N} $$
+
+![](regression1_files/figure-html/unnamed-chunk-9-1.png)&lt;!-- --&gt;
+---
+
+#### Covariance: Multiply differences
+
+
+$$ cov(x,y) = \frac{\sum_{i=1}^n (x_i-\mu_x)(y_i-\mu_y)}{N} $$
+
+![](regression1_files/figure-html/unnamed-chunk-10-1.png)&lt;!-- --&gt;
+---
+
+#### Covariance: take average rectangle
+
+
+$$ cov(x,y) = \frac{\sum_{i=1}^n (x_i-\mu_x)(y_i-\mu_y)}{N} $$
+
+![](regression1_files/figure-html/unnamed-chunk-11-1.png)&lt;!-- --&gt;
+---
+
+.pull-left[
+### Covariance
+
+$$ cov(x,y) = \frac{\sum_{i=1}^N (x_i-\mu_x)(y_i-\mu_y)}{N} $$
+
+$$ cor(x,y) = \frac{\sum_{i=1}^N (x_i-\mu_x)(y_i-\mu_y)}{N *\sigma_x \sigma_y} $$
+
+]
+
+.pull-right[
+![](regression1_files/figure-html/unnamed-chunk-12-1.png)&lt;!-- --&gt;
+
+]
+
+
+---
+
+# Variance and Standard Deviations
+
+$$ \sigma^2 = \frac{\sum_{i=1}^N (x_i-\mu_x)^2}{N} $$
+
+$$ \sigma = \sqrt\frac{\sum_{i=1}^N (x_i-\mu_x)^2}{N} $$
+
+---
+
+# Variance
+
+.pull-left[
+$$ \sigma^2 = \frac{\sum_{i=1}^N (x_i-\mu_x)^2}{N} $$
+
+]
+
+
+.pull-right[
+
+![](regression1_files/figure-html/unnamed-chunk-13-1.png)&lt;!-- --&gt;
+
+]
+---
+
+# Variance
+
+.pull-left[
+$$ \sigma^2 = \frac{\sum_{i=1}^N (x_i-\mu_x)^2}{N} $$
+
+]
+
+
+.pull-right[
+
+![](regression1_files/figure-html/unnamed-chunk-14-1.png)&lt;!-- --&gt;
+
+]
+
+---
+## Correlation 
 ---
 class: center, middle
 
 All rights reserved by 
 
-[Dr. Thiyanga S. Talagala](https://thiyanga.netlify.app/)
+[Dr. Thiyanga S. Talagala](https://thiyanga.netlify.app/) 
+
+
+Acknowledgement
+
+Gina Reynolds, University of Denver.
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
