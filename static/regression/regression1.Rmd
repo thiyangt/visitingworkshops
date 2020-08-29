@@ -755,8 +755,69 @@ ggplot(df, aes(x=x, y=y)) + geom_point()+xlab("x") + ylab("y") +
 
 ```
 ---
+```{r, comment=NA}
+anscombe
+```
+
+---
+
+```{r, comment=NA, message=FALSE}
+x <- c(anscombe$x1, anscombe$x2, anscombe$x3, anscombe$x4)
+y <- c(anscombe$y1, anscombe$y2, anscombe$y2, anscombe$y4)
+z <- as.factor(rep(1:4, each=11))
+df <- data.frame(x=x, y=y, z=z)
+ggplot(df,aes(x=x,y=y,group=z))+geom_point(aes(col=z))+facet_wrap(~z)
+```
+---
 
 
+
+.pull-left[
+```{r, comment=NA, message=FALSE, warning=FALSE}
+cor(anscombe$x1, anscombe$y1)
+mean(anscombe$x1)
+mean(anscombe$y1)
+```
+
+```{r, comment=NA, message=FALSE, warning=FALSE}
+cor(anscombe$x2, anscombe$y2)
+mean(anscombe$x2)
+mean(anscombe$y2)
+```
+
+]
+
+
+.pull-right[
+
+```{r, comment=NA, message=FALSE, warning=FALSE}
+cor(anscombe$x3, anscombe$y3)
+mean(anscombe$x3)
+mean(anscombe$y3)
+```
+
+```{r, comment=NA, message=FALSE, warning=FALSE}
+cor(anscombe$x4, anscombe$y4)
+mean(anscombe$x4)
+mean(anscombe$y4)
+```
+
+
+]
+
+
+---
+ Anscombe's quartet
+
+```{r, comment=NA, message=FALSE, fig.height=5}
+x <- c(anscombe$x1, anscombe$x2, anscombe$x3, anscombe$x4)
+y <- c(anscombe$y1, anscombe$y2, anscombe$y2, anscombe$y4)
+z <- as.factor(rep(1:4, each=11))
+df <- data.frame(x=x, y=y, z=z)
+ggplot(df,aes(x=x,y=y,group=z))+geom_point(aes(col=z))+facet_wrap(~z)
+```
+
+All four sets are identical when examined using simple summary statistics but vary considerably when grouped.
 
 ---
 
