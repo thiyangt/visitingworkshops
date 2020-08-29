@@ -2,7 +2,7 @@
 title: "STA 506 2.0 Linear Regression Analysis"
 subtitle: "Lecture 1: Introduction to regression analysis"
 author: "Dr Thiyanga S. Talagala"
-date: "`r Sys.Date()`"
+date: "2020-08-29"
 output:
   xaringan::moon_reader:
     lib_dir: libs
@@ -263,7 +263,7 @@ background-size: contain
 #### Pearson's Correlation Coefficient
 
 
-$$ cor(x,y) = \frac{\sum_{i=1}^n (x_i-\mu_x)(y_i-\mu_y)}{n *\sigma_x \sigma_y} $$
+$$ cor(x,y) = \frac{\sum_{i=1}^N (x_i-\mu_x)(y_i-\mu_y)}{N *\sigma_x \sigma_y} $$
 
 
 <!--https://github.com/EvaMaeRey/statistics/blob/master/difference_in_difference.Rmd-->
@@ -505,7 +505,7 @@ set.seed(2020); create_x_y(relationship = 0) %>% data_create_scatterplot()
 #### Covariance: Mean $x$
 
 
-$$ cov(x,y) = \frac{\sum_{i=1}^n (x_i-\mu_x)(y_i-\mu_y)}{N} $$
+$$ cov(x,y) = \frac{\sum_{i=1}^N (x_i-\mu_x)(y_i-\mu_y)}{N} $$
 
 ```{r , echo=F,  warning=FALSE, fig.height=7}
 set.seed(2020); create_x_y(relationship = 0) %>% data_create_scatterplot() %>% 
@@ -516,7 +516,7 @@ set.seed(2020); create_x_y(relationship = 0) %>% data_create_scatterplot() %>%
 #### Covariance: Mean $y$
 
 
-$$ cov(x,y) = \frac{\sum_{i=1}^n (x_i-\mu_x)(y_i-\mu_y)}{N} $$
+$$ cov(x,y) = \frac{\sum_{i=1}^N (x_i-\mu_x)(y_i-\mu_y)}{N} $$
 
 ```{r , echo=F,  warning=FALSE, fig.height=7}
 set.seed(2020); create_x_y(relationship = 0) %>% data_create_scatterplot() %>% 
@@ -528,7 +528,7 @@ set.seed(2020); create_x_y(relationship = 0) %>% data_create_scatterplot() %>%
 #### Covariance: differences $x$
 
 
-$$ cov(x,y) = \frac{\sum_{i=1}^n (x_i-\mu_x)(y_i-\mu_y)}{N} $$
+$$ cov(x,y) = \frac{\sum_{i=1}^N (x_i-\mu_x)(y_i-\mu_y)}{N} $$
 
 ```{r , echo=F,  warning=FALSE, fig.height=7}
 set.seed(2020); create_x_y(relationship = 0) %>% data_create_scatterplot() %>% 
@@ -541,7 +541,7 @@ set.seed(2020); create_x_y(relationship = 0) %>% data_create_scatterplot() %>%
 #### Covariance: Differences $y$
 
 
-$$ cov(x,y) = \frac{\sum_{i=1}^n (x_i-\mu_x)(y_i-\mu_y)}{N} $$
+$$ cov(x,y) = \frac{\sum_{i=1}^N (x_i-\mu_x)(y_i-\mu_y)}{N} $$
 
 ```{r , echo=F,  warning=FALSE, fig.height=7}
 set.seed(2020); create_x_y(relationship = 0) %>% data_create_scatterplot() %>% 
@@ -555,7 +555,7 @@ set.seed(2020); create_x_y(relationship = 0) %>% data_create_scatterplot() %>%
 #### Covariance: Multiply differences
 
 
-$$ cov(x,y) = \frac{\sum_{i=1}^n (x_i-\mu_x)(y_i-\mu_y)}{N} $$
+$$ cov(x,y) = \frac{\sum_{i=1}^N (x_i-\mu_x)(y_i-\mu_y)}{N} $$
 
 ```{r , echo=F,  warning=FALSE, fig.height=7}
 set.seed(2020); create_x_y(relationship = 0) %>% data_create_scatterplot() %>% 
@@ -570,7 +570,7 @@ set.seed(2020); create_x_y(relationship = 0) %>% data_create_scatterplot() %>%
 #### Covariance: take average rectangle
 
 
-$$ cov(x,y) = \frac{\sum_{i=1}^n (x_i-\mu_x)(y_i-\mu_y)}{N} $$
+$$ cov(x,y) = \frac{\sum_{i=1}^N (x_i-\mu_x)(y_i-\mu_y)}{N} $$
 
 ```{r , echo=F,  warning=FALSE, fig.height=7}
 set.seed(2020); create_x_y(relationship = 0) %>% data_create_scatterplot() %>% 
