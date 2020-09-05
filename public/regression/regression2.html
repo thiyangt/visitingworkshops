@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>STA 506 2.0 Linear Regression Analysis</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Dr Thiyanga S. Talagala" />
+    <meta name="date" content="2020-09-05" />
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
+    <link href="libs/remark-css/default-fonts.css" rel="stylesheet" />
+    <link href="libs/remark-css/duke-blue.css" rel="stylesheet" />
+    <link href="libs/remark-css/hygge-duke.css" rel="stylesheet" />
+    <link rel="stylesheet" href="libs/cc-fonts.css" type="text/css" />
+    <link rel="stylesheet" href="libs/figure-captions.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# STA 506 2.0 Linear Regression Analysis
+## Lecture 2: Simple Linear Regression
+### Dr Thiyanga S. Talagala
+### 2020-09-05
+
+---
+
+
+
+## Recap: Terminologies
+
+
+- Response variable: dependent variable
+
+- Explanatory variables: independent variables, predictors, regressor variables, features (in Machine Learning)
+
+&gt; Response variable = Model function + Random Error
+
+- Parameter 
+
+- Statistic
+
+- Estimator
+
+- Estimate
+
+[Read my blogpost](https://thiyanga.netlify.app/post/statterms1/)
+
+
+---
+# In-class
+
+---
+# In-class
+
+---
+# Simple Linear Regression
+
+**Simple** - single regressor
+
+**Linear** - has a dual role here.
+
+~~It may be taken to describe the fact that the relationship between `\(Y\)` and `\(X\)` is linear.~~ The word linear refers to the fact that the regression parameters enter in a linear fashion.
+
+---
+
+# Meaning of Linear Model
+
+| What about this?
+
+`$$Y =  \beta_0 + \beta_1x_1 + \beta_{2}x_2 + \epsilon$$`
+
+--
+
+| Linear or nonlinear?
+
+ `$$Y = \beta_0 + \beta_1x + \beta_{2}x^2 + \epsilon$$`
+&lt;!--While the independent variable is squared, the model is still linear in the parameters. Linear models can also contain log terms and inverse terms to follow different kinds of curves and yet continue to be linear in the parameters.--&gt;
+
+--
+| Linear or nonlinear?
+
+`$$Y = \beta_0e^{\beta_1x} + \epsilon$$`
+---
+
+## Intrinsically Linear
+
+`$$Y = \alpha X_1^\beta X_2^\gamma X_3^\delta e^\epsilon$$`
+
+Let us take natual logarithms 
+
+`$$ln Y = ln (\alpha) + \beta ln(X_1) + \gamma ln(X_2) + \delta ln(X_3) + \epsilon$$`
+--
+ What about this?
+
+`$$Y = \alpha X_1^\beta X_2^\gamma X_3^\delta + \epsilon$$`
+
+
+---
+
+**True relationship between X and Y in the population**
+
+`$$Y = f(X) + \epsilon$$`
+
+**If `\(f\)` is approximated by a linear function**
+
+`$$Y = \beta_0 + \beta_1X + \epsilon$$`
+
+The error terms are normally distributed with mean `\(0\)` and variance `\(\sigma^2\)`. Then the mean response, `\(Y\)`, at any value of the `\(X\)` is 
+
+`$$E(Y|X=x_i) = E(\beta_0 + \beta_1x_i + \epsilon)=\beta_0+\beta_1x_i$$`
+
+For a single unit `\((y_i, x_i)\)`
+
+`$$y_i = \beta_0 + \beta_1x_i+\epsilon_i \text{  where  } \epsilon_i \sim N(0, \sigma^2)$$`
+
+We use sample values `\((y_i, x_i)\)` where `\(i=1, 2, ...n\)` to estimate `\(\beta_0\)` and `\(\beta_1\)`.
+
+The fitted regression model is 
+
+`$$\hat{Y_i} = \hat{\beta}_0 + \hat{\beta}_1x_i$$`
+---
+class:  duke-orange, center, middle
+
+## Buckle up!
+
+### Let's walk through the steps.
+---
+## In-class
+
+**True relationship between X and Y in the population**
+
+`$$Y = f(X) + \epsilon$$`
+&gt; 
+
+---
+
+## In-class
+
+**True relationship between X and Y in the population**
+
+`$$Y = f(X) + \epsilon$$`
+
+Example: Suppose you want to model daughters' height as a function of mothers' height.
+
+Do you think an exact (deterministic) relationship exists between these two variables?
+
+---
+
+## In-class
+
+**True relationship between X and Y in the population**
+
+`$$Y = f(X) + \epsilon$$`
+
+Example: Suppose you want to model daughters' height as a function of mothers' height.
+
+Do you think an exact (deterministic) relationship exists between these two variables?
+
+&gt; Why?
+
+---
+## In-class
+
+**True relationship between X and Y in the population**
+
+`$$Y = f(X) + \epsilon$$`
+
+Example: Suppose you want to model daughters' height as a function of mothers' height.
+
+Do you think an exact (deterministic) relationship exists between these two variables?
+
+1. Daughters' height may depend on many other variables than Mothers' height.
+
+---
+## In-class
+
+**True relationship between X and Y in the population**
+
+`$$Y = f(X) + \epsilon$$`
+
+Example: Suppose you want to model daughters' height as a function of mothers' height.
+
+Do you think an exact (deterministic) relationship exists between these two variables?
+
+1. Daughters' height may depend on many other variables than Mothers' height.
+
+2. Even if many variables are included in the model, it is unlikely that we can predict the daughter's height exactly. Why?
+
+
+---
+## In-class
+
+**True relationship between X and Y in the population**
+
+`$$Y = f(X) + \epsilon$$`
+
+Example: Suppose you want to model daughters' height as a function of mothers' height.
+
+Do you think an exact (deterministic) relationship exists between these two variables?
+
+1. Daughters' height may depend on many other variables than Mothers' height.
+
+2. Even if many variables are included in the model, it is unlikely that we can predict the daughter's height exactly. Why?
+
+There will almost certainly be some variations in the model predictions that cannot be modeled, or explained. 
+
+These unexplained variances are assumed to be
+caused by the unexplainable random phenomena, so they can be referred to as random
+error.
+
+---
+## In-class
+---
+
+## In-class: Population Regression Line
+
+
+**True relationship between X and Y in the population**
+
+`$$Y = f(X) + \epsilon$$`
+
+**If `\(f\)` is approximated by a linear function**
+
+`$$Y = \beta_0 + \beta_1X + \epsilon$$`
+
+The error terms are normally distributed with mean `\(0\)` and variance `\(\sigma^2\)`. Then the mean response, `\(Y\)`, at any value of the `\(X\)` is 
+
+`$$E(Y|X=x_i) = E(\beta_0 + \beta_1x_i + \epsilon)=\beta_0+\beta_1x_i$$`
+
+---
+## In-class: Population Regression Line
+
+`$$E(Y|X=x_i) = E(\beta_0 + \beta_1x_i + \epsilon)=\beta_0+\beta_1x_i$$`
+
+For a single unit `\((y_i, x_i)\)`
+
+`$$y_i = \beta_0 + \beta_1x_i+\epsilon_i \text{  where  } \epsilon_i \sim N(0, \sigma^2)$$`
+
+
+---
+## Take a sample: 
+
+The fitted regression line is 
+
+`$$\hat{Y_i} = \hat{\beta}_0 + \hat{\beta}_1x_i$$`
+
+---
+## Our example
+
+Dashboard: https://statisticsmart.shinyapps.io/SimpleLinearRegression/
+
+![](regression2_files/figure-html/unnamed-chunk-1-1.png)&lt;!-- --&gt;
+
+---
+## Our example (0.52, 30.7)
+
+Dashboard: https://statisticsmart.shinyapps.io/SimpleLinearRegression/
+
+![](regression2_files/figure-html/unnamed-chunk-2-1.png)&lt;!-- --&gt;
+
+---
+## Our example (0.582, 28.5)
+
+Dashboard: https://statisticsmart.shinyapps.io/SimpleLinearRegression/
+
+![](regression2_files/figure-html/unnamed-chunk-3-1.png)&lt;!-- --&gt;
+---
+
+## Our example (0.5, 32.5)
+
+Dashboard: https://statisticsmart.shinyapps.io/SimpleLinearRegression/
+
+![](regression2_files/figure-html/unnamed-chunk-4-1.png)&lt;!-- --&gt;
+
+## Which is the best?
+---
+## Which is the best?
+
+.pull-left[
+![](regression2_files/figure-html/unnamed-chunk-5-1.png)&lt;!-- --&gt;
+]
+
+.pull-right[
+
+Sum of squares of **Residuals**
+
+`$$SSR=e_1^2+e_2^2+...+e_n^2$$`
+]
+---
+
+## Evaluating your answers: Fitted values
+
+.pull-left[
+![](regression2_files/figure-html/unnamed-chunk-6-1.png)&lt;!-- --&gt;
+
+
+]
+
+.pull-right[
+Dheight = 30.7 + 0.52Mheight
+
+
+```r
+df &lt;- alr3::heights
+df$fitted &lt;- 30.7 + (0.52*df$M)
+head(df,10)
+```
+
+```
+   Mheight Dheight fitted
+1     59.7    55.1 61.744
+2     58.2    56.5 60.964
+3     60.6    56.0 62.212
+4     60.7    56.8 62.264
+5     61.8    56.0 62.836
+6     55.5    57.9 59.560
+7     55.4    57.1 59.508
+8     56.8    57.6 60.236
+9     57.5    57.2 60.600
+10    57.3    57.1 60.496
+```
+
+First fitted value: 30.7 + (0.52 * 59.7) = 61.744
+]
+
+---
+## Evaluating your answers
+
+.pull-left[
+![](regression2_files/figure-html/unnamed-chunk-8-1.png)&lt;!-- --&gt;
+
+Sum of squares of **Residuals**
+
+`$$SSR=e_1^2+e_2^2+...+e_n^2$$`
+]
+
+.pull-right[
+Dheight = 30.7 + 0.52Mheight
+
+
+```
+   Mheight Dheight fitted resid_squared
+1     59.7    55.1 61.744     44.142736
+2     58.2    56.5 60.964     19.927296
+3     60.6    56.0 62.212     38.588944
+4     60.7    56.8 62.264     29.855296
+5     61.8    56.0 62.836     46.730896
+6     55.5    57.9 59.560      2.755600
+7     55.4    57.1 59.508      5.798464
+8     56.8    57.6 60.236      6.948496
+9     57.5    57.2 60.600     11.560000
+10    57.3    57.1 60.496     11.532816
+```
+
+```
+[1] 7511.118
+```
+
+SSR: 7511.118
+]
+
+---
+## Evaluating your answers
+
+Dashboard: https://statisticsmart.shinyapps.io/SimpleLinearRegression/
+
+.pull-left[
+![](regression2_files/figure-html/unnamed-chunk-10-1.png)&lt;!-- --&gt;
+]
+
+.pull-right[
+
+
+
+- Green: 7511.118 (0.52, 30.7)
+
+- Orange: 8717.41 (0.582, 28.5)
+
+- Purple: 7066.075 (0.5, 32.5)
+]
+---
+
+### How to estimate `\(\beta_0\)` and `\(\beta_1\)`?
+
+Sum of squares of Residuals
+
+`$$SSR=e_1^2+e_2^2+...+e_n^2$$`
+
+**Observed value**
+
+`\(y_i\)` 
+
+**Fitted value**
+
+`\(\hat{Y_i}\)` 
+
+`\(\hat{Y_i} = \hat{\beta}_0 + \hat{\beta}_1x_i\)`
+
+**Residual**
+
+`\(e_i = y_i - \hat{Y_i}\)` 
+
+The least-squares regression approach chooses coefficients `\(\hat{\beta}_0\)` and `\(\hat{\beta}_1\)` to minimize `\(SSR\)`.
+
+---
+### Least-squares Estimation of the Parameters
+
+`$$y_i = \beta_0 + \beta_1x_i + \epsilon_i \text{,  i =1, 2, 3, ...n .}$$`
+
+The least squares criterion is
+
+`$$S(\beta_0, \beta_1) = \sum_{i=1}^n (y_i - \beta_0 - \beta_1x_i)^2.$$`
+---
+### Least-squares Estimation of the Parameters (cont.)
+
+The least squares criterion is
+
+`$$S(\beta_0, \beta_1) = \sum_{i=1}^n (y_i - \beta_0 - \beta_1x_i)^2.$$`
+
+The least-squares estimators of `\(\beta_0\)` and `\(\beta_1\)`, say `\(\hat{\beta_0}\)` and `\(\hat{\beta_1},\)` must satisfy
+
+`$$\frac{\partial S}{\partial \beta_0}|_{\hat{\beta_0}, \hat{\beta_1}} = -2\sum_{i=1}^{n}(y_i - \hat{\beta_0} - \hat{\beta_1}x_i) = 0$$`
+
+and
+
+`$$\frac{\partial S}{\partial \beta_1}|_{\hat{\beta_0}, \hat{\beta_1}} = -2\sum_{i=1}^{n}(y_i - \hat{\beta_0} - \hat{\beta_1}x_i)x_i = 0.$$`
+---
+
+### Least-squares Estimation of the Parameters (cont.)
+
+Simplifying the two equations yields
+
+`$$n\hat{\beta_0}+\hat{\beta_1}\sum_{i=1}^nx_i=\sum_{i=1}^ny_i,$$`
+`$$\hat{\beta_0}\sum_{i=1}^nx_i+\hat{\beta_1}\sum_{i=1}^nx^2_i=\sum_{i=1}^ny_ix_i.$$`
+
+These are called **least-squares normal equations**.
+
+---
+## Least-squares Estimation of the Parameters (cont.)
+
+
+
+`$$n\hat{\beta_0}+\hat{\beta_1}\sum_{i=1}^nx_i=\sum_{i=1}^ny_i,$$`
+
+`$$\hat{\beta_0}\sum_{i=1}^nx_i+\hat{\beta_1}\sum_{i=1}^nx^2_i=\sum_{i=1}^ny_ix_i.$$`
+
+The solution to the normal equation is
+
+`$$\hat{\beta_0} = \bar{y} - \hat{\beta_1}\bar{x},$$`
+
+and
+
+`$$\hat{\beta_1} = \frac{\sum_{i=1}^ny_ix_i - \frac{\sum_{i=1}^ny_i\sum_{i=1}^nx_i}{n}}{\sum_{i=1}^nx_i^2 - \frac{(\sum_{i=1}^nx_i)^2}{n}}.$$`
+
+The fitted simple linear regression model is then
+
+`$$\hat{Y} = \hat{\beta_0} + \hat{\beta}_1x$$`
+
+---
+## Least-squares fit
+
+&gt; Try this with R
+
+
+```r
+library(alr3) # to load the dataset
+model1 &lt;- lm(Dheight ~ Mheight, data=heights)
+model1
+```
+
+```
+
+Call:
+lm(formula = Dheight ~ Mheight, data = heights)
+
+Coefficients:
+(Intercept)      Mheight  
+    29.9174       0.5417  
+```
+---
+## Least-squares fit and your guesses
+
+
+![](regression2_files/figure-html/unnamed-chunk-13-1.png)&lt;!-- --&gt;
+
+
+```r
+fit  &lt;- 0.5417 * df$Mheight + 29.9174
+sum((df$Dheight - fit)^2)
+```
+
+```
+[1] 7051.97
+```
+
+---
+# Least square fit and your guesses
+
+.pull-left[
+![](regression2_files/figure-html/unnamed-chunk-15-1.png)&lt;!-- --&gt;
+]
+
+.pull-right[
+
+- Green: 7511.118 (0.52, 30.7)
+
+- Orange: 8717.41 (0.582, 28.5)
+
+- Purple: 7066.075 (0.5, 32.5)
+
+- Blue: **7051.97** (0.541, 29.9174)
+
+]
+
+
+## Try this with R
+
+
+```r
+library(alr3) # to load the dataset
+model1 &lt;- lm(Dheight ~ Mheight, data=heights)
+model1
+```
+
+
+```r
+summary(model1)
+```
+
+```
+
+Call:
+lm(formula = Dheight ~ Mheight, data = heights)
+
+Residuals:
+   Min     1Q Median     3Q    Max 
+-7.397 -1.529  0.036  1.492  9.053 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept) 29.91744    1.62247   18.44   &lt;2e-16 ***
+Mheight      0.54175    0.02596   20.87   &lt;2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 2.266 on 1373 degrees of freedom
+Multiple R-squared:  0.2408,	Adjusted R-squared:  0.2402 
+F-statistic: 435.5 on 1 and 1373 DF,  p-value: &lt; 2.2e-16
+```
+
+---
+## Visualise the model: Try with R
+
+
+```r
+ggplot(data=heights, aes(x=Mheight, y=Dheight)) + 
+  geom_point(alpha=0.5) +
+  geom_smooth(method="lm", se=FALSE,
+               col="blue", lwd=2) +
+  theme(aspect.ratio = 1)
+```
+
+![](regression2_files/figure-html/unnamed-chunk-19-1.png)&lt;!-- --&gt;
+
+
+---
+## Least squares regression line
+.pull-left[
+
+![](regression2_files/figure-html/unnamed-chunk-20-1.png)&lt;!-- --&gt;
+]
+
+.pull-right[
+
+
+```r
+summary(alr3::heights)
+```
+
+```
+    Mheight         Dheight     
+ Min.   :55.40   Min.   :55.10  
+ 1st Qu.:60.80   1st Qu.:62.00  
+ Median :62.40   Median :63.60  
+ Mean   :62.45   Mean   :63.75  
+ 3rd Qu.:63.90   3rd Qu.:65.60  
+ Max.   :70.80   Max.   :73.10  
+```
+
+The LSRL passes through the point ($\bar{x}$, `\(\bar{y}\)`), that is (sample mean of `\(x\)`, sample mean of `\(y\)`)
+
+]
+
+---
+## Least squares regression line
+
+.pull-left[
+![](regression2_files/figure-html/unnamed-chunk-22-1.png)&lt;!-- --&gt;
+
+]
+
+.pull-right[
+
+The least squares regression line doesn't match the population regression line perfectly, but it is a pretty good estimate. And, of course, we'd get a different least squares regression line if we took another (different) sample.
+]
+---
+
+## In-class
+
+A graphical illustration of various quantities computed after fitting a regression line to data
+
+---
+## Interpretation of coefficients
+
+
+```
+
+Call:
+lm(formula = Dheight ~ Mheight, data = heights)
+
+Residuals:
+   Min     1Q Median     3Q    Max 
+-7.397 -1.529  0.036  1.492  9.053 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept) 29.91744    1.62247   18.44   &lt;2e-16 ***
+Mheight      0.54175    0.02596   20.87   &lt;2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 2.266 on 1373 degrees of freedom
+Multiple R-squared:  0.2408,	Adjusted R-squared:  0.2402 
+F-statistic: 435.5 on 1 and 1373 DF,  p-value: &lt; 2.2e-16
+```
+
+Intercept ($\hat{\beta_0}$): Not meaningful
+
+Slope ($\hat{\beta_1}$): 
+---
+## Extrapolation: beyond the scope of the model.
+
+![](regression2_files/figure-html/unnamed-chunk-24-1.png)&lt;!-- --&gt;
+
+---
+## Next Lecture
+
+&gt; More work - Simple Linear Regression, Residual Analysis, Predictions
+---
+class: center, middle
+
+All rights reserved by 
+
+[Dr. Thiyanga S. Talagala](https://thiyanga.netlify.app/)
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
