@@ -116,15 +116,8 @@ $$Y =  \beta_0 + \beta_1x_1 + \beta_{2}x_2 + \epsilon$$
 | Linear or nonlinear?
 
 $$Y = \beta_0e^{\beta_1x} + \epsilon$$
----
 
-## Intrinsically Linear
 
-$$Y = \alpha X_1^\beta X_2^\gamma X_3^\delta e^\epsilon$$
-
-Let us take natural logarithms 
-
-$$ln Y = ln (\alpha) + \beta ln(X_1) + \gamma ln(X_2) + \delta ln(X_3) + \epsilon$$
 --
  What about this?
 
