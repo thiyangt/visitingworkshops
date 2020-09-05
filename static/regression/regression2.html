@@ -25,6 +25,36 @@ class: center, middle, inverse, title-slide
 
 
 
+## Recap: correlation
+
+![](cor.png)
+
+
+---
+## Recap: correlation (cont.)
+
+.pull-left[
+
+![](cor.png)
+
+]
+
+.pull-right[
+
+
+|value         |interpretation        |
+|:-------------|:---------------------|
+|-1            |Perfect negative      |
+|(-1, -0.75)   |Strong negative       |
+|(-0.75, -0.5) |Moderate negative     |
+|(-0.5, -0.25) |Weak negative         |
+|(-0.25, 0.25) |No linear association |
+|(0.25, 0.5)   |Weak positive         |
+|(0.5, 0.75)   |Moderate positive     |
+|(0.75, 1)     |Strong positive       |
+|1             |Perfect positive      |
+]
+---
 ## Recap: Terminologies
 
 
@@ -85,7 +115,7 @@ class: center, middle, inverse, title-slide
 
 `$$Y = \alpha X_1^\beta X_2^\gamma X_3^\delta e^\epsilon$$`
 
-Let us take natual logarithms 
+Let us take natural logarithms 
 
 `$$ln Y = ln (\alpha) + \beta ln(X_1) + \gamma ln(X_2) + \delta ln(X_3) + \epsilon$$`
 --
@@ -117,6 +147,59 @@ We use sample values `\((y_i, x_i)\)` where `\(i=1, 2, ...n\)` to estimate `\(\b
 The fitted regression model is 
 
 `$$\hat{Y_i} = \hat{\beta}_0 + \hat{\beta}_1x_i$$`
+---
+## Normal distribution
+
+
+
+.pull-left[
+![](regression2_files/figure-html/unnamed-chunk-3-1.png)&lt;!-- --&gt;
+
+```
+[1] 5.008403
+```
+]
+
+.pull-left[
+![](regression2_files/figure-html/unnamed-chunk-4-1.png)&lt;!-- --&gt;
+
+```
+[1] 5.082935
+```
+]
+
+---
+## Normal distribution
+
+.pull-left[
+![](regression2_files/figure-html/unnamed-chunk-5-1.png)&lt;!-- --&gt;
+]
+
+.pull-left[
+![](regression2_files/figure-html/unnamed-chunk-6-1.png)&lt;!-- --&gt;
+]
+
+---
+
+### Normal distribution
+
+![](normal1.png)
+
+From: https://towardsdatascience.com/do-my-data-follow-a-normal-distribution-fb411ae7d832
+
+---
+### Normal distribution
+
+![](normal2.png)
+
+From: https://towardsdatascience.com/do-my-data-follow-a-normal-distribution-fb411ae7d832
+---
+
+### Normal distribution
+
+![](normal3.png)
+
+From: https://towardsdatascience.com/do-my-data-follow-a-normal-distribution-fb411ae7d832
 ---
 class:  duke-orange, center, middle
 
@@ -201,7 +284,7 @@ Do you think an exact (deterministic) relationship exists between these two vari
 
 2. Even if many variables are included in the model, it is unlikely that we can predict the daughter's height exactly. Why?
 
-There will almost certainly be some variations in the model predictions that cannot be modeled, or explained. 
+There will almost certainly be some variations in the model predictions that cannot be modelled, or explained. 
 
 These unexplained variances are assumed to be
 caused by the unexplainable random phenomena, so they can be referred to as random
@@ -248,35 +331,35 @@ The fitted regression line is
 
 Dashboard: https://statisticsmart.shinyapps.io/SimpleLinearRegression/
 
-![](regression2_files/figure-html/unnamed-chunk-1-1.png)&lt;!-- --&gt;
+![](regression2_files/figure-html/unnamed-chunk-7-1.png)&lt;!-- --&gt;
 
 ---
 ## Our example (0.52, 30.7)
 
 Dashboard: https://statisticsmart.shinyapps.io/SimpleLinearRegression/
 
-![](regression2_files/figure-html/unnamed-chunk-2-1.png)&lt;!-- --&gt;
+![](regression2_files/figure-html/unnamed-chunk-8-1.png)&lt;!-- --&gt;
 
 ---
 ## Our example (0.582, 28.5)
 
 Dashboard: https://statisticsmart.shinyapps.io/SimpleLinearRegression/
 
-![](regression2_files/figure-html/unnamed-chunk-3-1.png)&lt;!-- --&gt;
+![](regression2_files/figure-html/unnamed-chunk-9-1.png)&lt;!-- --&gt;
 ---
 
 ## Our example (0.5, 32.5)
 
 Dashboard: https://statisticsmart.shinyapps.io/SimpleLinearRegression/
 
-![](regression2_files/figure-html/unnamed-chunk-4-1.png)&lt;!-- --&gt;
+![](regression2_files/figure-html/unnamed-chunk-10-1.png)&lt;!-- --&gt;
 
 ## Which is the best?
 ---
 ## Which is the best?
 
 .pull-left[
-![](regression2_files/figure-html/unnamed-chunk-5-1.png)&lt;!-- --&gt;
+![](regression2_files/figure-html/unnamed-chunk-11-1.png)&lt;!-- --&gt;
 ]
 
 .pull-right[
@@ -290,7 +373,7 @@ Sum of squares of **Residuals**
 ## Evaluating your answers: Fitted values
 
 .pull-left[
-![](regression2_files/figure-html/unnamed-chunk-6-1.png)&lt;!-- --&gt;
+![](regression2_files/figure-html/unnamed-chunk-12-1.png)&lt;!-- --&gt;
 
 
 ]
@@ -326,7 +409,7 @@ First fitted value: 30.7 + (0.52 * 59.7) = 61.744
 ## Evaluating your answers
 
 .pull-left[
-![](regression2_files/figure-html/unnamed-chunk-8-1.png)&lt;!-- --&gt;
+![](regression2_files/figure-html/unnamed-chunk-14-1.png)&lt;!-- --&gt;
 
 Sum of squares of **Residuals**
 
@@ -364,7 +447,7 @@ SSR: 7511.118
 Dashboard: https://statisticsmart.shinyapps.io/SimpleLinearRegression/
 
 .pull-left[
-![](regression2_files/figure-html/unnamed-chunk-10-1.png)&lt;!-- --&gt;
+![](regression2_files/figure-html/unnamed-chunk-16-1.png)&lt;!-- --&gt;
 ]
 
 .pull-right[
@@ -480,7 +563,7 @@ Coefficients:
 ## Least-squares fit and your guesses
 
 
-![](regression2_files/figure-html/unnamed-chunk-13-1.png)&lt;!-- --&gt;
+![](regression2_files/figure-html/unnamed-chunk-19-1.png)&lt;!-- --&gt;
 
 
 ```r
@@ -496,7 +579,7 @@ sum((df$Dheight - fit)^2)
 # Least square fit and your guesses
 
 .pull-left[
-![](regression2_files/figure-html/unnamed-chunk-15-1.png)&lt;!-- --&gt;
+![](regression2_files/figure-html/unnamed-chunk-21-1.png)&lt;!-- --&gt;
 ]
 
 .pull-right[
@@ -511,7 +594,7 @@ sum((df$Dheight - fit)^2)
 
 ]
 
-
+---
 ## Try this with R
 
 
@@ -559,14 +642,14 @@ ggplot(data=heights, aes(x=Mheight, y=Dheight)) +
   theme(aspect.ratio = 1)
 ```
 
-![](regression2_files/figure-html/unnamed-chunk-19-1.png)&lt;!-- --&gt;
+![](regression2_files/figure-html/unnamed-chunk-25-1.png)&lt;!-- --&gt;
 
 
 ---
 ## Least squares regression line
 .pull-left[
 
-![](regression2_files/figure-html/unnamed-chunk-20-1.png)&lt;!-- --&gt;
+![](regression2_files/figure-html/unnamed-chunk-26-1.png)&lt;!-- --&gt;
 ]
 
 .pull-right[
@@ -586,15 +669,16 @@ summary(alr3::heights)
  Max.   :70.80   Max.   :73.10  
 ```
 
-The LSRL passes through the point ($\bar{x}$, `\(\bar{y}\)`), that is (sample mean of `\(x\)`, sample mean of `\(y\)`)
+
 
 ]
 
+The LSRL passes through the point ( `\(\bar{x}\)`, `\(\bar{y}\)`), that is (sample mean of `\(x\)`, sample mean of `\(y\)`)
 ---
 ## Least squares regression line
 
 .pull-left[
-![](regression2_files/figure-html/unnamed-chunk-22-1.png)&lt;!-- --&gt;
+![](regression2_files/figure-html/unnamed-chunk-28-1.png)&lt;!-- --&gt;
 
 ]
 
@@ -604,42 +688,18 @@ The least squares regression line doesn't match the population regression line p
 ]
 ---
 
-## In-class
 
-A graphical illustration of various quantities computed after fitting a regression line to data
-
----
-## Interpretation of coefficients
+background-image: url('reg7.PNG')
+background-position: center
+background-size: contain
 
 
-```
 
-Call:
-lm(formula = Dheight ~ Mheight, data = heights)
 
-Residuals:
-   Min     1Q Median     3Q    Max 
--7.397 -1.529  0.036  1.492  9.053 
-
-Coefficients:
-            Estimate Std. Error t value Pr(&gt;|t|)    
-(Intercept) 29.91744    1.62247   18.44   &lt;2e-16 ***
-Mheight      0.54175    0.02596   20.87   &lt;2e-16 ***
----
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-
-Residual standard error: 2.266 on 1373 degrees of freedom
-Multiple R-squared:  0.2408,	Adjusted R-squared:  0.2402 
-F-statistic: 435.5 on 1 and 1373 DF,  p-value: &lt; 2.2e-16
-```
-
-Intercept ($\hat{\beta_0}$): Not meaningful
-
-Slope ($\hat{\beta_1}$): 
 ---
 ## Extrapolation: beyond the scope of the model.
 
-![](regression2_files/figure-html/unnamed-chunk-24-1.png)&lt;!-- --&gt;
+![](regression2_files/figure-html/unnamed-chunk-29-1.png)&lt;!-- --&gt;
 
 ---
 ## Next Lecture

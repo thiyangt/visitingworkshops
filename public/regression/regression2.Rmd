@@ -22,6 +22,46 @@ output:
 options(htmltools.dir.version = FALSE)
 ```
 
+## Recap: correlation
+
+![](cor.png)
+
+
+---
+## Recap: correlation (cont.)
+
+.pull-left[
+
+![](cor.png)
+
+]
+
+.pull-right[
+
+```{r, comment=NA, echo=FALSE}
+library(knitr)
+
+cor <- data.frame(value=c("-1", "(-1, -0.75)",
+                          "(-0.75, -0.5)",
+                          "(-0.5, -0.25)",
+                          "(-0.25, 0.25)",
+                          "(0.25, 0.5)",
+                          "(0.5, 0.75)",
+                          "(0.75, 1)",
+                          "1"),
+                  interpretation = c("Perfect negative",
+                                     "Strong negative",
+                                     "Moderate negative",
+                                     "Weak negative",
+                                     "No linear association",
+                                     "Weak positive",
+                                     "Moderate positive",
+                                     "Strong positive",
+                                     "Perfect positive"))
+kable(cor)
+```
+]
+---
 ## Recap: Terminologies
 
 
@@ -82,7 +122,7 @@ $$Y = \beta_0e^{\beta_1x} + \epsilon$$
 
 $$Y = \alpha X_1^\beta X_2^\gamma X_3^\delta e^\epsilon$$
 
-Let us take natual logarithms 
+Let us take natural logarithms 
 
 $$ln Y = ln (\alpha) + \beta ln(X_1) + \gamma ln(X_2) + \delta ln(X_3) + \epsilon$$
 --
@@ -114,6 +154,85 @@ We use sample values $(y_i, x_i)$ where $i=1, 2, ...n$ to estimate $\beta_0$ and
 The fitted regression model is 
 
 $$\hat{Y_i} = \hat{\beta}_0 + \hat{\beta}_1x_i$$
+---
+## Normal distribution
+
+```{r, comment=NA, echo=FALSE, warning=FALSE, message=FALSE}
+library(tidyverse)
+set.seed(100)
+dfr1 <- data.frame(data1=rnorm(1000, 5, 0.5), data2=rnorm(1000, 5, 20))
+
+```
+
+.pull-left[
+```{r, comment=NA, warning=FALSE, message=FALSE, echo=FALSE}
+ggplot(dfr1, aes(x=data1)) + 
+geom_histogram(aes(y =..density..),
+                   breaks = seq(2.5, 7.5, by = 0.1), 
+                   colour = "white", 
+                   fill = "#e7298a") 
+mean(dfr1$data1)
+```
+]
+
+.pull-left[
+```{r, comment=NA, warning=FALSE, message=FALSE, echo=FALSE}
+ggplot(dfr1, aes(x=data2)) + 
+geom_histogram(aes(y =..density..),
+                   breaks = seq(-70, 70, by = 2), 
+                   colour = "white", 
+                   fill = "#1b9e77") 
+mean(dfr1$data2)
+```
+]
+
+---
+## Normal distribution
+
+.pull-left[
+```{r, comment=NA, warning=FALSE, message=FALSE, echo=FALSE}
+ggplot(dfr1, aes(x=data1)) + 
+geom_histogram(aes(y =..density..),
+                   breaks = seq(2.5, 7.5, by = 0.1), 
+                   colour = "white", 
+                   fill = "#e7298a") +
+stat_function(fun = dnorm, args = list(mean = mean(dfr1$data1), sd = sd(dfr1$data1)))
+```
+]
+
+.pull-left[
+```{r, comment=NA, warning=FALSE, message=FALSE, echo=FALSE}
+ggplot(dfr1, aes(x=data2)) + 
+geom_histogram(aes(y =..density..),
+                   breaks = seq(-70, 70, by = 2), 
+                   colour = "white", 
+                   fill = "#1b9e77")  +
+stat_function(fun = dnorm, args = list(mean = mean(dfr1$data2), sd = sd(dfr1$data2)))
+
+```
+]
+
+---
+
+### Normal distribution
+
+![](normal1.png)
+
+From: https://towardsdatascience.com/do-my-data-follow-a-normal-distribution-fb411ae7d832
+
+---
+### Normal distribution
+
+![](normal2.png)
+
+From: https://towardsdatascience.com/do-my-data-follow-a-normal-distribution-fb411ae7d832
+---
+
+### Normal distribution
+
+![](normal3.png)
+
+From: https://towardsdatascience.com/do-my-data-follow-a-normal-distribution-fb411ae7d832
 ---
 class:  duke-orange, center, middle
 
@@ -198,7 +317,7 @@ Do you think an exact (deterministic) relationship exists between these two vari
 
 2. Even if many variables are included in the model, it is unlikely that we can predict the daughter's height exactly. Why?
 
-There will almost certainly be some variations in the model predictions that cannot be modeled, or explained. 
+There will almost certainly be some variations in the model predictions that cannot be modelled, or explained. 
 
 These unexplained variances are assumed to be
 caused by the unexplainable random phenomena, so they can be referred to as random
@@ -592,7 +711,7 @@ sum((df$Dheight - fit)^2)
 
 ]
 
-
+---
 ## Try this with R
 
 ```{r, comment=NA, eval=FALSE}
@@ -641,10 +760,11 @@ ggplot(data=heights, aes(x=Mheight, y=Dheight)) +
 summary(alr3::heights)
 ```
 
-The LSRL passes through the point ($\bar{x}$, $\bar{y}$), that is (sample mean of $x$, sample mean of $y$)
+
 
 ]
 
+The LSRL passes through the point ( $\bar{x}$, $\bar{y}$), that is (sample mean of $x$, sample mean of $y$)
 ---
 ## Least squares regression line
 
@@ -667,20 +787,14 @@ The least squares regression line doesn't match the population regression line p
 ]
 ---
 
-## In-class
 
-A graphical illustration of various quantities computed after fitting a regression line to data
+background-image: url('reg7.PNG')
+background-position: center
+background-size: contain
 
----
-## Interpretation of coefficients
 
-```{r, comment=NA, echo=FALSE}
-summary(model1)
-```
 
-Intercept ($\hat{\beta_0}$): Not meaningful
 
-Slope ($\hat{\beta_1}$): 
 ---
 ## Extrapolation: beyond the scope of the model.
 
