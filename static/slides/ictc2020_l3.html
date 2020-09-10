@@ -3,7 +3,7 @@
   <head>
     <title>ICTC 3104.3 Data Analytics and Big Data</title>
     <meta charset="utf-8" />
-    <meta name="date" content="2020-06-20" />
+    <meta name="date" content="2020-09-10" />
     <link href="libs/remark-css/default.css" rel="stylesheet" />
     <link href="libs/remark-css/default-fonts.css" rel="stylesheet" />
     <link href="libs/remark-css/duke-blue.css" rel="stylesheet" />
@@ -17,7 +17,7 @@ class: center, middle, inverse, title-slide
 
 # ICTC 3104.3 Data Analytics and Big Data
 ## Data Visualization
-### 2020-06-20
+### 2020-09-10
 
 ---
 
@@ -36,16 +36,546 @@ class: center, middle, inverse, title-slide
 
 ---
 class: duke-green, center, middle
+
 # Data Visualization
 
 ![700px](workflowds.png)
 ---
+# Visualising Variables: Graphics
 
-
+## Inclass - demo
 
 ---
 
-# What have we learned today?
+# Installing R Packages
+
+## Method 1
+
+![](inst.png)
+
+## Method 2
+
+```r
+install.packages("ggplot2")
+```
+
+---
+
+## Load package 
+
+```r
+library(ggplot2)
+```
+
+Now search `?qplot`
+
+Note: You shouldn't have to re-install packages each time you open R. However, you do need to load the packages you want to use in that session via `library`.
+
+---
+
+## mozzie dataset
+
+
+```r
+library(mozzie)
+data(mozzie)
+```
+
+
+
+We will use Rmarkdown to report the findings.
+---
+## Data Visualization with `qplot`
+
+## plot vs qplot
+
+.pull-left[
+
+```r
+plot(mozzie$Colombo, mozzie$Gampaha)
+```
+
+![](ictc2020_l3_files/figure-html/unnamed-chunk-3-1.png)&lt;!-- --&gt;
+]
+
+.pull-right[
+
+```r
+qplot(Colombo, Gampaha, data=mozzie)
+```
+
+![](ictc2020_l3_files/figure-html/unnamed-chunk-4-1.png)&lt;!-- --&gt;
+]
+---
+## Data Visualization with `qplot`
+
+.pull-left[
+
+```r
+qplot(Colombo, Gampaha, data=mozzie)
+```
+
+![](ictc2020_l3_files/figure-html/unnamed-chunk-5-1.png)&lt;!-- --&gt;
+]
+
+.pull-right[
+
+```r
+qplot(Colombo, Gampaha, data=mozzie, colour=Year)
+```
+
+![](ictc2020_l3_files/figure-html/unnamed-chunk-6-1.png)&lt;!-- --&gt;
+]
+---
+## Data Visualization with `qplot`
+
+.pull-left[
+
+```r
+qplot(Colombo, Gampaha, data=mozzie)
+```
+
+![](ictc2020_l3_files/figure-html/unnamed-chunk-7-1.png)&lt;!-- --&gt;
+]
+
+.pull-right[
+
+```r
+qplot(Colombo, Gampaha, data=mozzie, size=Year)
+```
+
+![](ictc2020_l3_files/figure-html/unnamed-chunk-8-1.png)&lt;!-- --&gt;
+]
+
+---
+
+## Data Visualization with `qplot`
+
+.pull-left[
+
+```r
+qplot(Colombo, Gampaha, data=mozzie)
+```
+
+![](ictc2020_l3_files/figure-html/unnamed-chunk-9-1.png)&lt;!-- --&gt;
+]
+
+.pull-right[
+
+```r
+qplot(Colombo, Gampaha, data=mozzie, geom="point")
+```
+
+![](ictc2020_l3_files/figure-html/unnamed-chunk-10-1.png)&lt;!-- --&gt;
+]
+
+
+---
+## Data Visualization with `qplot`
+
+.pull-left[
+
+```r
+qplot(ID, Gampaha, data=mozzie)
+```
+
+![](ictc2020_l3_files/figure-html/unnamed-chunk-11-1.png)&lt;!-- --&gt;
+]
+
+.pull-right[
+
+```r
+qplot(ID, Gampaha, data=mozzie, geom="line")
+```
+
+![](ictc2020_l3_files/figure-html/unnamed-chunk-12-1.png)&lt;!-- --&gt;
+]
+
+---
+## Data Visualization with `qplot`
+
+.pull-left[
+
+```r
+qplot(ID, Gampaha, data=mozzie)
+```
+
+![](ictc2020_l3_files/figure-html/unnamed-chunk-13-1.png)&lt;!-- --&gt;
+]
+
+.pull-right[
+
+```r
+qplot(ID, Gampaha, data=mozzie, geom="path")
+```
+
+![](ictc2020_l3_files/figure-html/unnamed-chunk-14-1.png)&lt;!-- --&gt;
+]
+
+---
+
+## Data Visualization with `qplot`
+
+.pull-left[
+
+```r
+qplot(Colombo, Gampaha, data=mozzie, geom="line")
+```
+
+![](ictc2020_l3_files/figure-html/unnamed-chunk-15-1.png)&lt;!-- --&gt;
+]
+
+.pull-right[
+
+```r
+qplot(Colombo, Gampaha, data=mozzie, geom="path")
+```
+
+![](ictc2020_l3_files/figure-html/unnamed-chunk-16-1.png)&lt;!-- --&gt;
+]
+
+---
+## Data Visualization with `qplot`
+
+.pull-left[
+
+```r
+qplot(Colombo, Gampaha, data=mozzie, geom=c("line", "point"))
+```
+
+![](ictc2020_l3_files/figure-html/unnamed-chunk-17-1.png)&lt;!-- --&gt;
+]
+
+.pull-right[
+
+
+```r
+qplot(Colombo, Gampaha, data=mozzie, geom=c("path", "point"))
+```
+
+![](ictc2020_l3_files/figure-html/unnamed-chunk-18-1.png)&lt;!-- --&gt;
+]
+---
+
+## Data Visualization with `qplot`
+
+.pull-left[
+
+```r
+boxplot(Colombo~Year, data=mozzie)
+```
+
+![](ictc2020_l3_files/figure-html/unnamed-chunk-19-1.png)&lt;!-- --&gt;
+]
+
+.pull-right[
+
+
+```r
+qplot(factor(Year), Colombo, data=mozzie, geom="boxplot")
+```
+
+![](ictc2020_l3_files/figure-html/unnamed-chunk-20-1.png)&lt;!-- --&gt;
+]
+
+---
+
+## Data Visualization with `qplot`
+
+.pull-left[
+
+
+```r
+qplot(factor(Year), Colombo, data=mozzie, geom="boxplot")
+```
+
+![](ictc2020_l3_files/figure-html/unnamed-chunk-21-1.png)&lt;!-- --&gt;
+]
+
+.pull-right[
+
+
+```r
+qplot(factor(Year), Colombo, data=mozzie) # geom="point"-default
+```
+
+![](ictc2020_l3_files/figure-html/unnamed-chunk-22-1.png)&lt;!-- --&gt;
+]
+
+---
+## Data Visualization with `qplot`
+.pull-left[
+
+
+```r
+qplot(factor(Year), Colombo, data=mozzie, geom="point")
+```
+
+![](ictc2020_l3_files/figure-html/unnamed-chunk-23-1.png)&lt;!-- --&gt;
+]
+
+.pull-right[
+
+
+```r
+qplot(factor(Year), Colombo, data=mozzie, geom=c("jitter", "point")) # geom="point"-default
+```
+
+![](ictc2020_l3_files/figure-html/unnamed-chunk-24-1.png)&lt;!-- --&gt;
+]
+
+---
+
+## Data Visualization with `qplot`
+.pull-left[
+
+
+```r
+qplot(factor(Year), Colombo, data=mozzie, geom=c("jitter", "point"))
+```
+
+![](ictc2020_l3_files/figure-html/unnamed-chunk-25-1.png)&lt;!-- --&gt;
+]
+
+.pull-right[
+
+
+```r
+qplot(factor(Year), Colombo, data=mozzie, geom=c("jitter", "point", "boxplot")) # geom="point"-default
+```
+
+![](ictc2020_l3_files/figure-html/unnamed-chunk-26-1.png)&lt;!-- --&gt;
+]
+
+---
+
+
+## Data Visualization with `qplot`
+.pull-left[
+
+
+```r
+qplot(Colombo, data=mozzie)
+```
+
+```
+`stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+```
+
+![](ictc2020_l3_files/figure-html/unnamed-chunk-27-1.png)&lt;!-- --&gt;
+]
+
+.pull-right[
+
+
+```r
+qplot(Colombo, data=mozzie, geom="density") 
+```
+
+![](ictc2020_l3_files/figure-html/unnamed-chunk-28-1.png)&lt;!-- --&gt;
+]
+
+---
+# geom arguments in qplot
+
+
+- `point`: scatterplots.
+
+- `line`:  line plot
+
+- `histogram`:   histogram
+
+- `boxplot`: boxplot
+
+- `density`: density plot
+
+- `bar`: barplot
+
+- `smooth`: fits a smooth line
+
+---
+
+# Inputs
+
+- data: Specify the dataframe that all variables belong to
+
+- main: add a title
+
+- xlab, ylab: add x and y axis labels
+
+- color: Controls the color of the lines/points
+
+- fill: Controls the color of areas (e.g. for histograms, boxplots)
+
+- size: Controls the size of points
+
+- shape: The shape of points ("circle", "square", "triangle", etc. . . )
+
+- alpha: Controls the level of transparency of points/lines/fills
+
+- lwd: Controls line width
+
+- lty: Line type ("solid", "dashed", "dotted", etc. . . )
+
+- facets: Split up the data into multiple plots
+
+
+---
+# Facetting
+
+
+```r
+df &lt;- data.frame(gender=rep(c("Male", "Female"), each=5), 
+                 income = c("high", "high", "high", "low", "middle", "middle", "middle", "low", "low", "high"))
+qplot(data=df, geom="bar", income)+facet_grid(~gender)
+```
+
+![](ictc2020_l3_files/figure-html/unnamed-chunk-29-1.png)&lt;!-- --&gt;
+
+---
+# Change the order
+
+
+```r
+df$income &lt;- factor(df$income, levels = c("high", "middle", "low"))
+qplot(data=df, geom="bar", income)+facet_grid(~gender)
+```
+
+![](ictc2020_l3_files/figure-html/unnamed-chunk-30-1.png)&lt;!-- --&gt;
+---
+
+# Add y-axis
+
+
+```r
+df$income &lt;- factor(df$income, levels = c("high", "middle", "low"))
+qplot(data=df, geom="bar", income)+facet_grid(~gender) + ylab("Count")
+```
+
+![](ictc2020_l3_files/figure-html/unnamed-chunk-31-1.png)&lt;!-- --&gt;
+---
+# Percentages in y-axis
+
+
+```r
+library(magrittr)
+library(tidyverse)
+df2 &lt;- df %&gt;% 
+  group_by(gender, income) %&gt;% 
+  summarise(count=n()) %&gt;% 
+  mutate(percentage=count/sum(count)*100)
+df2
+```
+
+```
+# A tibble: 6 x 4
+# Groups:   gender [2]
+  gender income count percentage
+  &lt;chr&gt;  &lt;fct&gt;  &lt;int&gt;      &lt;dbl&gt;
+1 Female high       1         20
+2 Female middle     2         40
+3 Female low        2         40
+4 Male   high       3         60
+5 Male   middle     1         20
+6 Male   low        1         20
+```
+---
+
+# Plot percentages
+
+
+```r
+ggplot(df2, aes(x = income, y = percentage)) +
+  geom_bar(stat="identity", width = 0.7) +
+  facet_grid(~gender) + 
+  labs(x = "Groupchange", y = "percent", fill = "Symscore") 
+```
+
+![](ictc2020_l3_files/figure-html/unnamed-chunk-33-1.png)&lt;!-- --&gt;
+---
+# Stack bar chart
+
+
+```r
+qplot(x=gender,  data=df)+geom_bar(aes(fill = income))
+```
+
+![](ictc2020_l3_files/figure-html/unnamed-chunk-34-1.png)&lt;!-- --&gt;
+
+Hard to compare across when you have more than two categories.
+---
+
+class: duke-orange, center, middle
+
+# Your turn - Individual Assignment 1
+
+![](facebook.jpg)
+
+---
+# Data
+
+
+```r
+facebookdata_marketing &lt;- readRDS("~/Lecturer/1_TEACHING/2020_s1/Rprogramming/static/slides/facebookdata_marketing.rds")
+head(facebookdata_marketing)
+```
+
+```
+# A tibble: 6 x 11
+  month category  hour paid  totalReach engagedUsers postConsumers
+  &lt;fct&gt; &lt;fct&gt;    &lt;dbl&gt; &lt;fct&gt;      &lt;dbl&gt;        &lt;dbl&gt;         &lt;dbl&gt;
+1 12    2            3 0           2752          178           109
+2 12    2           10 0          10460         1457          1361
+3 12    3            3 0           2413          177           113
+4 12    3           10 1          50128         2211           790
+5 12    2            3 0           7244          671           410
+6 12    2            9 0          10472         1191          1073
+# … with 4 more variables: postConsumptions &lt;dbl&gt;, sawbyLiked &lt;dbl&gt;,
+#   clickbyLiked &lt;dbl&gt;, totalInteractions &lt;dbl&gt;
+```
+
+```r
+dim(facebookdata_marketing)
+```
+
+```
+[1] 500  11
+```
+
+A manager of a retail company wants to identify the factors associated with total number of likes, comments, and shares on facebook posts. Perform a suitable exploratory data analysis.
+---
+
+## Variable description
+
+- **month:** Month the post was published (1, 2, 3, ..., 12)
+
+- **category:** Type of the post (1 - Link, 2 - Video, 3 - Picture)
+
+- **hour:** Hour the post was published (0, 1, ...24)
+
+- **paid:** If the company paid to Facebook for advertising (0 - No, 1 - Yes)
+
+- **totalReach:** Number of people who saw the page post
+(unique users).
+
+- **engagedUsers:** Number of people who clicked anywhere
+in the post (unique users).
+
+- **postConsumers:** Number of people who sent a direct message to the owner
+of the post.
+
+- **postConsumption:** Number of clicks anywhere in the post.
+
+- **sawbyLiked:** Number of people who saw the page post
+because they have liked that page.
+
+- **clickbyLiked:** Number of people who have liked the Page
+and clicked anywhere in the post.
+
+- **totalInteractions:** The sum of “likes,” “comments,” and “shares”
+of the post
+
+
 
 ---
 class: center, middle
@@ -53,11 +583,7 @@ class: center, middle
 
 All rights reserved by 
 
-[Dr Thiyanga S. Talagala](https://thiyanga.netlify.app/) 
-
-and 
-
-[Dr. Chitraka Wickramarachchi](http://science.sjp.ac.lk/sta/staff/mr-chitraka-wickramarachchi/)
+[Dr Thiyanga S. Talagala](https://thiyanga.netlify.app/)
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="libs/remark-latest.min.js"></script>

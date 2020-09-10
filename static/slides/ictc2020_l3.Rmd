@@ -1,7 +1,7 @@
 ---
 title: "ICTC 3104.3 Data Analytics and Big Data"
 subtitle: "Data Visualization"
-date: "2020-06-20"
+date: "2020-09-10"
 output:
   xaringan::moon_reader:
     chakra: libs/remark-latest.min.js
@@ -35,16 +35,414 @@ options(htmltools.dir.version = FALSE)
 
 ---
 class: duke-green, center, middle
+
 # Data Visualization
 
 ![700px](workflowds.png)
 ---
+# Visualising Variables: Graphics
 
-
+## Inclass - demo
 
 ---
 
-# What have we learned today?
+# Installing R Packages
+
+## Method 1
+
+![](inst.png)
+
+## Method 2
+
+```r
+install.packages("ggplot2")
+```
+
+---
+
+## Load package 
+
+```r
+library(ggplot2)
+```
+
+Now search `?qplot`
+
+Note: You shouldn't have to re-install packages each time you open R. However, you do need to load the packages you want to use in that session via `library`.
+
+---
+
+## mozzie dataset
+
+```{r}
+library(mozzie)
+data(mozzie)
+```
+
+```{r, comment=NA, echo=FALSE}
+library(ggplot2)
+```
+
+We will use Rmarkdown to report the findings.
+---
+## Data Visualization with `qplot`
+
+## plot vs qplot
+
+.pull-left[
+```{r, comment=NA}
+plot(mozzie$Colombo, mozzie$Gampaha)
+```
+]
+
+.pull-right[
+```{r, comment=NA}
+qplot(Colombo, Gampaha, data=mozzie)
+```
+]
+---
+## Data Visualization with `qplot`
+
+.pull-left[
+```{r, comment=NA}
+qplot(Colombo, Gampaha, data=mozzie)
+```
+]
+
+.pull-right[
+```{r, comment=NA}
+qplot(Colombo, Gampaha, data=mozzie, colour=Year)
+```
+]
+---
+## Data Visualization with `qplot`
+
+.pull-left[
+```{r, comment=NA}
+qplot(Colombo, Gampaha, data=mozzie)
+```
+]
+
+.pull-right[
+```{r, comment=NA}
+qplot(Colombo, Gampaha, data=mozzie, size=Year)
+```
+]
+
+---
+
+## Data Visualization with `qplot`
+
+.pull-left[
+```{r, comment=NA}
+qplot(Colombo, Gampaha, data=mozzie)
+```
+]
+
+.pull-right[
+```{r, comment=NA}
+qplot(Colombo, Gampaha, data=mozzie, geom="point")
+```
+]
+
+
+---
+## Data Visualization with `qplot`
+
+.pull-left[
+```{r, comment=NA}
+qplot(ID, Gampaha, data=mozzie)
+```
+]
+
+.pull-right[
+```{r, comment=NA}
+qplot(ID, Gampaha, data=mozzie, geom="line")
+```
+]
+
+---
+## Data Visualization with `qplot`
+
+.pull-left[
+```{r, comment=NA}
+qplot(ID, Gampaha, data=mozzie)
+```
+]
+
+.pull-right[
+```{r, comment=NA}
+qplot(ID, Gampaha, data=mozzie, geom="path")
+```
+]
+
+---
+
+## Data Visualization with `qplot`
+
+.pull-left[
+```{r, comment=NA}
+qplot(Colombo, Gampaha, data=mozzie, geom="line")
+```
+]
+
+.pull-right[
+```{r, comment=NA}
+qplot(Colombo, Gampaha, data=mozzie, geom="path")
+```
+]
+
+---
+## Data Visualization with `qplot`
+
+.pull-left[
+```{r, comment=NA}
+qplot(Colombo, Gampaha, data=mozzie, geom=c("line", "point"))
+```
+]
+
+.pull-right[
+
+```{r, comment=NA}
+qplot(Colombo, Gampaha, data=mozzie, geom=c("path", "point"))
+```
+]
+---
+
+## Data Visualization with `qplot`
+
+.pull-left[
+```{r, comment=NA}
+boxplot(Colombo~Year, data=mozzie)
+```
+]
+
+.pull-right[
+
+```{r, comment=NA}
+qplot(factor(Year), Colombo, data=mozzie, geom="boxplot")
+```
+]
+
+---
+
+## Data Visualization with `qplot`
+
+.pull-left[
+
+```{r, comment=NA}
+qplot(factor(Year), Colombo, data=mozzie, geom="boxplot")
+```
+]
+
+.pull-right[
+
+```{r, comment=NA}
+qplot(factor(Year), Colombo, data=mozzie) # geom="point"-default
+```
+]
+
+---
+## Data Visualization with `qplot`
+.pull-left[
+
+```{r, comment=NA}
+qplot(factor(Year), Colombo, data=mozzie, geom="point")
+```
+]
+
+.pull-right[
+
+```{r, comment=NA}
+qplot(factor(Year), Colombo, data=mozzie, geom=c("jitter", "point")) # geom="point"-default
+```
+]
+
+---
+
+## Data Visualization with `qplot`
+.pull-left[
+
+```{r, comment=NA}
+qplot(factor(Year), Colombo, data=mozzie, geom=c("jitter", "point"))
+```
+]
+
+.pull-right[
+
+```{r, comment=NA}
+qplot(factor(Year), Colombo, data=mozzie, geom=c("jitter", "point", "boxplot")) # geom="point"-default
+```
+]
+
+---
+
+
+## Data Visualization with `qplot`
+.pull-left[
+
+```{r, comment=NA}
+qplot(Colombo, data=mozzie)
+```
+]
+
+.pull-right[
+
+```{r, comment=NA}
+qplot(Colombo, data=mozzie, geom="density") 
+```
+]
+
+---
+# geom arguments in qplot
+
+
+- `point`: scatterplots.
+
+- `line`:  line plot
+
+- `histogram`:   histogram
+
+- `boxplot`: boxplot
+
+- `density`: density plot
+
+- `bar`: barplot
+
+- `smooth`: fits a smooth line
+
+---
+
+# Inputs
+
+- data: Specify the dataframe that all variables belong to
+
+- main: add a title
+
+- xlab, ylab: add x and y axis labels
+
+- color: Controls the color of the lines/points
+
+- fill: Controls the color of areas (e.g. for histograms, boxplots)
+
+- size: Controls the size of points
+
+- shape: The shape of points ("circle", "square", "triangle", etc. . . )
+
+- alpha: Controls the level of transparency of points/lines/fills
+
+- lwd: Controls line width
+
+- lty: Line type ("solid", "dashed", "dotted", etc. . . )
+
+- facets: Split up the data into multiple plots
+
+
+---
+# Facetting
+
+```{r, comment=NA, fig.height=5}
+df <- data.frame(gender=rep(c("Male", "Female"), each=5), 
+                 income = c("high", "high", "high", "low", "middle", "middle", "middle", "low", "low", "high"))
+qplot(data=df, geom="bar", income)+facet_grid(~gender)
+```
+
+---
+# Change the order
+
+```{r, comment=NA, fig.height=6}
+df$income <- factor(df$income, levels = c("high", "middle", "low"))
+qplot(data=df, geom="bar", income)+facet_grid(~gender)
+```
+---
+
+# Add y-axis
+
+```{r, comment=NA, fig.height=6}
+df$income <- factor(df$income, levels = c("high", "middle", "low"))
+qplot(data=df, geom="bar", income)+facet_grid(~gender) + ylab("Count")
+```
+---
+# Percentages in y-axis
+
+```{r, comment=NA, message=FALSE, warning=FALSE}
+library(magrittr)
+library(tidyverse)
+df2 <- df %>% 
+  group_by(gender, income) %>% 
+  summarise(count=n()) %>% 
+  mutate(percentage=count/sum(count)*100)
+df2
+```
+---
+
+# Plot percentages
+
+```{r, comment=NA, fig.height=5}
+ggplot(df2, aes(x = income, y = percentage)) +
+  geom_bar(stat="identity", width = 0.7) +
+  facet_grid(~gender) + 
+  labs(x = "Groupchange", y = "percent", fill = "Symscore") 
+```
+---
+# Stack bar chart
+
+```{r, comment=NA, fig.height=6}
+qplot(x=gender,  data=df)+geom_bar(aes(fill = income))
+```
+
+Hard to compare across when you have more than two categories.
+---
+
+class: duke-orange, center, middle
+
+# Your turn - Individual Assignment 1
+
+![](facebook.jpg)
+
+---
+# Data
+
+```{r, comment=NA}
+facebookdata_marketing <- readRDS("~/Lecturer/1_TEACHING/2020_s1/Rprogramming/static/slides/facebookdata_marketing.rds")
+head(facebookdata_marketing)
+dim(facebookdata_marketing)
+```
+
+A manager of a retail company wants to identify the factors associated with total number of likes, comments, and shares on facebook posts. Perform a suitable exploratory data analysis.
+---
+
+## Variable description
+
+- **month:** Month the post was published (1, 2, 3, ..., 12)
+
+- **category:** Type of the post (1 - Link, 2 - Video, 3 - Picture)
+
+- **hour:** Hour the post was published (0, 1, ...24)
+
+- **paid:** If the company paid to Facebook for advertising (0 - No, 1 - Yes)
+
+- **totalReach:** Number of people who saw the page post
+(unique users).
+
+- **engagedUsers:** Number of people who clicked anywhere
+in the post (unique users).
+
+- **postConsumers:** Number of people who sent a direct message to the owner
+of the post.
+
+- **postConsumption:** Number of clicks anywhere in the post.
+
+- **sawbyLiked:** Number of people who saw the page post
+because they have liked that page.
+
+- **clickbyLiked:** Number of people who have liked the Page
+and clicked anywhere in the post.
+
+- **totalInteractions:** The sum of “likes,” “comments,” and “shares”
+of the post
+
+
 
 ---
 class: center, middle
@@ -54,8 +452,6 @@ All rights reserved by
 
 [Dr Thiyanga S. Talagala](https://thiyanga.netlify.app/) 
 
-and 
 
-[Dr. Chitraka Wickramarachchi](http://science.sjp.ac.lk/sta/staff/mr-chitraka-wickramarachchi/)
 
 
