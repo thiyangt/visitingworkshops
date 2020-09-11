@@ -254,7 +254,7 @@ qplot(factor(Year), Colombo, data=mozzie, geom="point")
 .pull-right[
 
 ```{r, comment=NA}
-qplot(factor(Year), Colombo, data=mozzie, geom=c("jitter", "point")) # geom="point"-default
+qplot(factor(Year), Colombo, data=mozzie, geom="jitter") # geom="point"-default
 ```
 ]
 
@@ -404,7 +404,8 @@ class: duke-orange, center, middle
 # Data
 
 ```{r, comment=NA}
-facebookdata_marketing <- readRDS("~/Lecturer/1_TEACHING/2020_s1/Rprogramming/static/slides/facebookdata_marketing.rds")
+facebookdata_marketing <- readRDS("~/Lecturer/1_TEACHING/2020_s1/Rprogramming/static/slides/facebookdata_marketing.rds") # Include your file path
+
 head(facebookdata_marketing)
 dim(facebookdata_marketing)
 ```
