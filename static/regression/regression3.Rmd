@@ -126,6 +126,14 @@ background-image: url('variation.PNG')
 background-position: center
 background-size: contain
 
+
+---
+
+background-image: url('weight2.png')
+background-position: center
+background-size: contain
+
+
 ---
 ```{r, comment=NA, message=FALSE, warning=FALSE}
 df <- alr3::heights
@@ -180,6 +188,7 @@ background-size: contain
 .pull-left[
 This is useful for detecting several common types of model inadequacies.
 ]
+
 
 ---
 
@@ -288,10 +297,9 @@ $$R^2 = \frac{SS_R}{SS_T} = 1-\frac{SS_{Res}}{SS_T}$$
 
 $SS_T$ - A measure of the variability in $y$ without considering the effect of the regressor variable $x$.
 
-
 Measures the variation of  $y$ values around their mean.
 
-$$SS_R$$ - Explained variation attributable to factors other than the relationship between $x$ and $y$.
+$SS_R$ - Explained variation attributable to factors other than the relationship between $x$ and $y$.
 
 $SS_{Res}$ - A measure of the variability in $y$ remaining after $x$ has been considered.
 
