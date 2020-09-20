@@ -1,6 +1,6 @@
 ---
 title: "STA 506 2.0 Linear Regression Analysis"
-subtitle: "Lecture 2: Simple Linear Regression"
+subtitle: "Lecture 2-3: Simple Linear Regression"
 author: "Dr Thiyanga S. Talagala"
 date: "2020-09-05"
 output:

@@ -1,8 +1,8 @@
 ---
 title: "STA 506 2.0 Linear Regression Analysis"
-subtitle: "Lecture 3: Simple Linear Regression (cont.)"
+subtitle: "Lecture 4: Simple Linear Regression (cont.)"
 author: "Dr Thiyanga S. Talagala"
-date: "2020-09-12"
+date: "2020-09-19"
 output:
   xaringan::moon_reader:
     lib_dir: libs
@@ -115,23 +115,6 @@ $$e_i = y_i - \hat{Y_i}$$
 
 - Deviation between the observed value (true value) and fitted value.
 
-- Residuals measure the variability in the **response variable** not explained by the regression model.
-
----
-## Let's look at 
-
-> Residuals measure the variability in the **response variable** not explained by the regression model.
----
-background-image: url('variation.PNG')
-background-position: center
-background-size: contain
-
-
----
-
-background-image: url('weight2.png')
-background-position: center
-background-size: contain
 
 
 ---
@@ -191,11 +174,15 @@ This is useful for detecting several common types of model inadequacies.
 
 
 ---
+### Our example
+
+ 1) The relationship between the response $Y$ and the regressors is linear, at least approximately.  (Residuals vs Fitted/ Residual vs X - this is optional in Simple Linear Regression)
+
+ 2) The error term $\epsilon$ has zero mean. (Residuals vs Fitted)
+
+ 3) The error term $\epsilon$ has constant variance $\sigma^2$. (Residuals vs Fitted)
 
 
-### 1) The relationship between the response $Y$ and the regressors is linear, at least approximately.
-
-Plot of residuals vs fitted values and Plot of residuals vs predictor 
 
 
 .pull-left[
@@ -203,7 +190,7 @@ Plot of residuals vs fitted values and Plot of residuals vs predictor
 Residuals vs Fitted
 
 
-```{r, comment=NA, echo=FALSE}
+```{r, comment=NA, echo=FALSE, fig.height=4, , fig.width=4}
 ggplot(model1_fitresid, 
   aes(x = .fitted, y = .resid))+
   geom_point() +
@@ -218,7 +205,7 @@ ggplot(model1_fitresid,
 Residuals vs X
 
 
-```{r comment=NA, echo=FALSE}
+```{r comment=NA, echo=FALSE, fig.height=4, , fig.width=4}
 ggplot(model1_fitresid, 
   aes(x = Mheight, y = .resid))+
   geom_point() +
@@ -232,20 +219,8 @@ ggplot(model1_fitresid,
 ### Note
 
 In simple linear regression, it is not necessary to plot residuals versus both fitted values and regressor variable. The reason is fitted values are linear combinations of the regressor variable, so the plot would only differ in the scale for the abscissa.
----
-## 2) The error term $\epsilon$ has zero mean.
 
-## 3) The error term $\epsilon$ has constant variance $\sigma^2$.
 
-Residuals vs Fitted
-
-```{r, comment=NA, echo=FALSE, fig.height=5, fig.width=5}
-ggplot(model1_fitresid, 
-  aes(x = .fitted, y = .resid))+
-  geom_point(alpha=0.5) +
-  geom_hline(yintercept = 0, col = "blue", size = 1)
-
-```
 
 ---
 
@@ -291,17 +266,44 @@ $H0:$ Errors are normally distributed.
 $H1:$ Errors are not normally distributed.
 
 ---
+class:  duke-orange, center, middle
+
+
+# Coefficient of Determination
+
+---
+
+
+
+.pull-right[
+
+![](variation.PNG)
+]
+
+.pull-left[
+> Residuals measure the variability in the **response variable** not explained by the regression model.
+
+]
+---
+
+background-image: url('weight2.png')
+background-position: center
+background-size: contain
+
+
+
+---
 ## Coefficient of Determination
 
-$$R^2 = \frac{SS_R}{SS_T} = 1-\frac{SS_{Res}}{SS_T}$$
+$$R^2 = \frac{SS_M}{SS_T} = 1-\frac{SS_{R}}{SS_T}$$
 
 $SS_T$ - A measure of the variability in $y$ without considering the effect of the regressor variable $x$.
 
 Measures the variation of  $y$ values around their mean.
 
-$SS_R$ - Explained variation attributable to factors other than the relationship between $x$ and $y$.
+$SS_M$ - Explained variation attributable to factors other than the relationship between $x$ and $y$.
 
-$SS_{Res}$ - A measure of the variability in $y$ remaining after $x$ has been considered.
+$SS_{R}$ - A measure of the variability in $y$ remaining after $x$ has been considered.
 
 $R^2$ - Proportion of variation explained by the regressor $x$.
 
@@ -325,6 +327,28 @@ summary(model1)
 ```
 
 $24\%$ of the variability in daughter's height is accounted by the regression model.
+---
+# $R^2$ = 24.08%
+
+- Maybe you have one or more omitted variables. It is important to consider other factors that might influence the daughter's height:
+
+    - Father's height
+
+    - Physical activities performed by the daughter
+
+    - Food nutrition, etc.
+
+- Maybe the functional form of the regression form is incorrect (so you have to add some quadratic, or cubic terms...). At the same time a transformation can be an alternative (if appropriate).
+
+- Maybe could be the effect of a group of outlier (maybe not one...).
+
+---
+
+- A large $R^2$ does not necessarily imply that the regression model will be an accurate predictor.
+
+- $R^2$ does not measure the appropriateness of the linear model.
+
+- $R^2$ will often large even though $Y$ and $X$ are nonlinearly related. 
 
 ---
 ## Relationship between $r$ and $R^2$

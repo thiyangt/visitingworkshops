@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>STA 506 2.0 Linear Regression Analysis</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Dr Thiyanga S. Talagala" />
+    <meta name="date" content="2020-09-19" />
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
+    <link href="libs/remark-css/default-fonts.css" rel="stylesheet" />
+    <link href="libs/remark-css/duke-blue.css" rel="stylesheet" />
+    <link href="libs/remark-css/hygge-duke.css" rel="stylesheet" />
+    <link rel="stylesheet" href="libs/cc-fonts.css" type="text/css" />
+    <link rel="stylesheet" href="libs/figure-captions.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# STA 506 2.0 Linear Regression Analysis
+## Lecture 4: Interpretation of Regression Outputs
+### Dr Thiyanga S. Talagala
+### 2020-09-19
+
+---
+
+
+
+
+## Recapping what we know
+
+**True linear regression model/ Population regression equation**
+
+$$\mu_{Y|X=x} = \beta_0 + \beta_1x $$
+
+- how the mean of `\(Y\)` changes for given values of `\(X\)`.
+
+- We can also write the equation in terms of the observed values of `\(Y\)`, rather than the mean.  Because the individual observations for any given value of `\(X\)` vary randomly about the mean of `\(Y|X\)`, we need to account for this random variation, or error, in the regression equation.  Sample regression line
+
+`$$y_i = \beta_0 + \beta_1x_i + \epsilon_i, \text{ i = 1, 2, 3...n}$$`
+
+**Fitted regression line**
+
+`$$\hat{Y} = \hat{\beta}_0 + \hat{\beta}_1x$$`
+
+
+---
+# Revisiting the fitted regression model
+
+## Fitted model
+
+
+```r
+library(alr3) # to load the dataset
+```
+
+```
+Loading required package: car
+```
+
+```
+Loading required package: carData
+```
+
+```r
+model1 &lt;- lm(Dheight ~ Mheight, data=heights)
+model1
+```
+
+```
+
+Call:
+lm(formula = Dheight ~ Mheight, data = heights)
+
+Coefficients:
+(Intercept)      Mheight  
+    29.9174       0.5417  
+```
+
+---
+## Model summary
+
+
+```r
+summary(model1)
+```
+
+```
+
+Call:
+lm(formula = Dheight ~ Mheight, data = heights)
+
+Residuals:
+   Min     1Q Median     3Q    Max 
+-7.397 -1.529  0.036  1.492  9.053 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept) 29.91744    1.62247   18.44   &lt;2e-16 ***
+Mheight      0.54175    0.02596   20.87   &lt;2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 2.266 on 1373 degrees of freedom
+Multiple R-squared:  0.2408,	Adjusted R-squared:  0.2402 
+F-statistic: 435.5 on 1 and 1373 DF,  p-value: &lt; 2.2e-16
+```
+
+---
+# `\(R^2\)` = 24.08%
+
+- Maybe you have one or more omitted variables. It is important to consider other factors that might influence the daughter's height:
+
+    - Father's height
+
+    - Physical activities performed by the daughter
+
+    - Food nutrition, etc.
+
+- Maybe the functional form of the regression form is incorrect (so you have to add some quadratic, or cubic terms...). At the same time a transformation can be an alternative (if appropriate).
+
+- Maybe could be the effect of a group of outlier (maybe not one...).
+
+---
+
+
+- A large `\(R^2\)` does not necessarily imply that the regression model will be ab accurate predictor.
+
+- `\(R^2\)` does not measure the appropriateness of the linear model.
+
+- `\(R^2\)` will often large even though `\(Y\)` and `\(X\)` are nonlinearly related. 
+
+---
+![Scatterplot of  price vs carat in diamonds (Pearson's correlation coefficient = 0.783)](regression4_files/figure-html/unnamed-chunk-3-1.png)
+
+```
+[1] 0.7834839
+```
+---
+
+
+```
+
+Call:
+lm(formula = carat ~ price, data = df)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-2.91911 -0.66197 -0.07846  0.82734  2.97025 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)  0.74996    0.23234   3.228   0.0017 ** 
+price        0.18736    0.01501  12.481   &lt;2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 1.137 on 98 degrees of freedom
+Multiple R-squared:  0.6138,	Adjusted R-squared:  0.6099 
+F-statistic: 155.8 on 1 and 98 DF,  p-value: &lt; 2.2e-16
+```
+
+
+- `\(R^2\)` is large eventhough the linear approximation is poor.
+
+&gt; In general a good policy is to observe the scatterplot of your data 
+
+---
+class:  duke-orange, center, middle
+
+![](crystal.jpg)
+
+ Y - Crystal size
+ 
+ X - Number of hours it takes crystal to grow
+
+---
+## Data set
+
+
+```r
+crystaldata &lt;- data.frame(Size = c(0.08, 0.07,  1.12, 2.01, 4.43, 
+                                   4.98, 4.92, 7.18, 
+                                   5.57, 8.40, 8.81, 10.81, 11.61, 10.12, 13.12, 15.04, 0.075, 0.075,  1.13, 2.02, 4.45, 
+                                   4.99, 4.95, 7.28, 
+                                   5.67, 8.40, 8.51, 10.82, 11.62, 10.13, 13.22, 15.03),
+  Time= c(2, 2, 4, 4,6, 8, 10, 12, 14, 16, 18, 20, 20, 24, 26, 28, 2, 2, 4, 4,6, 8, 10, 12, 14, 16, 18, 20, 20, 24, 26, 28))
+crystaldata
+```
+
+```
+     Size Time
+1   0.080    2
+2   0.070    2
+3   1.120    4
+4   2.010    4
+5   4.430    6
+6   4.980    8
+7   4.920   10
+8   7.180   12
+9   5.570   14
+10  8.400   16
+11  8.810   18
+12 10.810   20
+13 11.610   20
+14 10.120   24
+15 13.120   26
+16 15.040   28
+17  0.075    2
+18  0.075    2
+19  1.130    4
+20  2.020    4
+21  4.450    6
+22  4.990    8
+23  4.950   10
+24  7.280   12
+25  5.670   14
+26  8.400   16
+27  8.510   18
+28 10.820   20
+29 11.620   20
+30 10.130   24
+31 13.220   26
+32 15.030   28
+```
+---
+## scatterplot
+
+
+```r
+ggplot(crystaldata, aes(x=Time, y = Size)) + geom_point()
+```
+
+![](regression4_files/figure-html/unnamed-chunk-6-1.png)&lt;!-- --&gt;
+
+```r
+cor(crystaldata$Time, crystaldata$Size)
+```
+
+```
+[1] 0.9741803
+```
+---
+
+## Fit a simple linear regression model
+
+
+```r
+mod1 &lt;- lm(Size ~ Time, data=crystaldata)
+mod1
+```
+
+```
+
+Call:
+lm(formula = Size ~ Time, data = crystaldata)
+
+Coefficients:
+(Intercept)         Time  
+    -0.1982       0.5210  
+```
+
+---
+## Visualise the model
+
+
+```r
+ggplot(crystaldata, aes(y=Size, x=Time))+geom_point(alpha=0.5) +
+  geom_abline(intercept = -0.21, slope = 0.52, colour="forestgreen", lwd=2) +
+            theme(aspect.ratio = 1)
+```
+
+![](regression4_files/figure-html/unnamed-chunk-8-1.png)&lt;!-- --&gt;
+
+---
+## Questions
+
+1. How well does this equation fit the data?
+
+2. Are any of the bsic assumptions violated?
+
+
+---
+
+
+
+```r
+summary(mod1)
+```
+
+```
+
+Call:
+lm(formula = Size ~ Time, data = crystaldata)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-2.1855 -0.7643  0.0313  0.7405  1.5223 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept) -0.19821    0.34838  -0.569    0.574    
+Time         0.52099    0.02204  23.634   &lt;2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 1.05 on 30 degrees of freedom
+Multiple R-squared:  0.949,	Adjusted R-squared:  0.9473 
+F-statistic: 558.5 on 1 and 30 DF,  p-value: &lt; 2.2e-16
+```
+
+
+---
+## Coefficient of determination
+
+
+
+```
+
+Call:
+lm(formula = Size ~ Time, data = crystaldata)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-2.1855 -0.7643  0.0313  0.7405  1.5223 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept) -0.19821    0.34838  -0.569    0.574    
+Time         0.52099    0.02204  23.634   &lt;2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 1.05 on 30 degrees of freedom
+Multiple R-squared:  0.949,	Adjusted R-squared:  0.9473 
+F-statistic: 558.5 on 1 and 30 DF,  p-value: &lt; 2.2e-16
+```
+
+- 94.5% of the variability in size is accunted by the regression model. 
+
+or
+
+- 94.5% of the variation in size  is explained by the number of hours it takes crystal to grow.
+
+
+---
+## Are any of the basic assumptions violated?
+
+.pull-left[
+
+
+```r
+mod1
+```
+
+```
+
+Call:
+lm(formula = Size ~ Time, data = crystaldata)
+
+Coefficients:
+(Intercept)         Time  
+    -0.1982       0.5210  
+```
+
+]
+
+.pull-right[
+- Fitted value and Residuals
+
+
+```r
+crystaldata
+```
+
+```
+     Size Time
+1   0.080    2
+2   0.070    2
+3   1.120    4
+4   2.010    4
+5   4.430    6
+6   4.980    8
+7   4.920   10
+8   7.180   12
+9   5.570   14
+10  8.400   16
+11  8.810   18
+12 10.810   20
+13 11.610   20
+14 10.120   24
+15 13.120   26
+16 15.040   28
+17  0.075    2
+18  0.075    2
+19  1.130    4
+20  2.020    4
+21  4.450    6
+22  4.990    8
+23  4.950   10
+24  7.280   12
+25  5.670   14
+26  8.400   16
+27  8.510   18
+28 10.820   20
+29 11.620   20
+30 10.130   24
+31 13.220   26
+32 15.030   28
+```
+
+]
+
+---
+
+## Compute Residuals and Fitted values
+
+
+```r
+library(broom)
+mod1_fitresid &lt;- augment(mod1)
+mod1_fitresid
+```
+
+```
+# A tibble: 32 x 9
+    Size  Time .fitted .se.fit  .resid   .hat .sigma  .cooksd .std.resid
+   &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;    &lt;dbl&gt;      &lt;dbl&gt;
+ 1  0.08     2   0.844   0.312 -0.764  0.0883   1.06 0.0281      -0.762 
+ 2  0.07     2   0.844   0.312 -0.774  0.0883   1.06 0.0289      -0.772 
+ 3  1.12     4   1.89    0.278 -0.766  0.0700   1.06 0.0215      -0.756 
+ 4  2.01     4   1.89    0.278  0.124  0.0700   1.07 0.000567     0.123 
+ 5  4.43     6   2.93    0.247  1.50   0.0552   1.03 0.0634       1.47  
+ 6  4.98     8   3.97    0.220  1.01   0.0440   1.05 0.0223       0.984 
+ 7  4.92    10   5.01    0.200 -0.0917 0.0363   1.07 0.000149    -0.0890
+ 8  7.18    12   6.05    0.188  1.13   0.0321   1.05 0.0197       1.09  
+ 9  5.57    14   7.10    0.186 -1.53   0.0314   1.03 0.0354      -1.48  
+10  8.4     16   8.14    0.194  0.262  0.0343   1.07 0.00115      0.254 
+# … with 22 more rows
+```
+
+---
+
+### 1) The relationship between the response `\(Y\)` and the regressors is linear, at least approximately.
+
+Plot of residuals vs fitted values and Plot of residuals vs predictor 
+
+
+.pull-left[
+
+Residuals vs Fitted
+
+
+![](regression4_files/figure-html/unnamed-chunk-14-1.png)&lt;!-- --&gt;
+]
+
+
+.pull-right[
+
+Residuals vs Time
+
+
+![](regression4_files/figure-html/unnamed-chunk-15-1.png)&lt;!-- --&gt;
+]
+
+---
+
+## 2) The error term `\(\epsilon\)` has zero mean.
+
+## 3) The error term `\(\epsilon\)` has constant variance `\(\sigma^2\)`.
+
+Residuals vs Fitted
+
+![](regression4_files/figure-html/unnamed-chunk-16-1.png)&lt;!-- --&gt;
+
+
+---
+
+## 4) The error are uncorrelated.
+
+---
+## 5) The errors are normally distributed.
+
+
+.pull-left[
+
+```r
+ggplot(mod1_fitresid, 
+       aes(x=.resid))+
+  geom_histogram(colour="white")+ggtitle("Distribution of Residuals")
+```
+
+![](regression4_files/figure-html/unnamed-chunk-17-1.png)&lt;!-- --&gt;
+]
+
+.pull-right[
+
+```r
+ggplot(mod1_fitresid, 
+       aes(sample=.resid))+
+  stat_qq() + stat_qq_line()+labs(x="Theoretical Quantiles", y="Sample Quantiles")
+```
+
+![](regression4_files/figure-html/unnamed-chunk-18-1.png)&lt;!-- --&gt;
+
+]
+
+
+```r
+shapiro.test(mod1_fitresid$.resid)
+```
+
+```
+
+	Shapiro-Wilk normality test
+
+data:  mod1_fitresid$.resid
+W = 0.95397, p-value = 0.1867
+```
+
+
+---
+## Interpretations
+
+**Slope:**
+
+
+
+**Intercept:**
+
+Sometimes `\(X\)` can never realistically take the value of zero, then the intercept is meaningless.
+
+---
+
+
+```r
+mod1
+```
+
+```
+
+Call:
+lm(formula = Size ~ Time, data = crystaldata)
+
+Coefficients:
+(Intercept)         Time  
+    -0.1982       0.5210  
+```
+
+
+---
+
+## Hypothesis testing - Intercept
+
+`\(H_0: \beta_1=0\)`
+
+`\(H_1: \beta_1 \neq 0\)`
+
+
+```r
+summary(mod1)
+```
+
+```
+
+Call:
+lm(formula = Size ~ Time, data = crystaldata)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-2.1855 -0.7643  0.0313  0.7405  1.5223 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept) -0.19821    0.34838  -0.569    0.574    
+Time         0.52099    0.02204  23.634   &lt;2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 1.05 on 30 degrees of freedom
+Multiple R-squared:  0.949,	Adjusted R-squared:  0.9473 
+F-statistic: 558.5 on 1 and 30 DF,  p-value: &lt; 2.2e-16
+```
+
+---
+## Situations where `\(H_0: \beta_1=0\)` is not rejected
+
+
+---
+## Situations where `\(H_0: \beta_1=0\)` is rejected
+
+---
+
+## Analysis of variance - ANOVA
+
+- 
+
+---
+## Next Lecture
+
+&gt; Multiple linear regression
+---
+class: center, middle
+
+
+
+Acknowledgement
+
+Introduction to Linear Regression Analysis, Douglas C. Montgomery, Elizabeth A. Peck, G. Geoffrey Vining
+
+All rights reserved by 
+
+[Dr. Thiyanga S. Talagala](https://thiyanga.netlify.app/)
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
