@@ -109,7 +109,7 @@ Diagnosing methods are primarily based on model residuals.
 
 ## Residuals
 
-$$e_i = \text{True value} - \text{Fitted value}$$
+$$e_i = \text{Observed value} - \text{Fitted value}$$
 
 $$e_i = y_i - \hat{Y_i}$$
 
