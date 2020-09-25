@@ -1,0 +1,221 @@
+---
+title: "Simple Linear Regression Analysis with R"
+author: "Prepared by Dr Thiyanga S. Talagala"
+date: "26/09/2020"
+output: 
+ html_document:
+   toc: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, comment = NA, message = FALSE, fig.height = 5, fig.width = 5)
+```
+
+# Load packages
+
+```{r}
+library(tidyverse)
+library(broom)
+
+```
+
+# Load dataset
+
+```{r, comment=NA}
+house <- read_csv("house.csv")
+
+```
+
+## Overview of the dataset
+
+```{r}
+glimpse(house)
+```
+
+
+```{r}
+summary(house)
+```
+
+# Visualise data
+
+```{r}
+qplot(data=house, x=price, geom=c("histogram"))+
+  geom_histogram(color="black", fill="#d95f02")
+```
+
+Interpretation:
+
+
+__________________
+
+
+___________________
+
+```{r}
+qplot(data=house, x=houseSize, geom=c("histogram"))+
+  geom_histogram(color="black", fill="#1b9e77")
+```
+
+Interpretation: 
+
+
+___________________
+
+___________________
+
+
+```{r}
+qplot(data=house, y=price, x=houseSize) + 
+  xlab("House size (sqft)") + 
+  ylab("Price") + 
+  labs(title="Price vs House size (sqft)")
+  
+```
+
+
+```{r}
+
+cor(house$price, house$houseSize)
+```
+
+Interpretation: 
+
+
+___________________
+
+___________________
+
+
+
+
+
+# Fit a regression model
+
+```{r}
+slrfit <- lm(house$price ~ house$houseSize)
+slrfit
+
+  
+```
+
+Write the fitted regression model:
+
+___________________
+
+___________________
+
+
+# Model adequacy checking
+
+## Compute fitted values and residuals
+
+```{r}
+slrfit_values <- augment(slrfit)
+slrfit_values
+```
+
+## Residuals vs fitted values
+
+Write the code to plot residual vs fitted values
+
+```{r, echo=FALSE}
+qplot(data=slrfit_values, y=.resid, x=.fitted)
+
+```
+
+___________________
+
+
+## Normality test of residuals
+
+
+```{r}
+qplot(data=slrfit_values, x=.resid, geom=c("histogram"))+
+  geom_histogram(color="black", fill="lightblue")
+```
+
+```{r}
+ggplot(data=slrfit_values) + 
+  geom_qq(aes(sample=house.price))
+```
+
+```{r}
+shapiro.test(house$price)
+```
+
+H0:
+
+H1: 
+
+Decision:
+
+Conclusion: 
+
+
+
+
+# Interpretation of the model output
+
+```{r}
+summary(slrfit)
+```
+
+## Coefficient of determination
+
+$R^2 = 87.02\%$
+
+Interpretation: 
+
+## Point estimate of $\beta_0$
+
+Interpretation: 
+
+
+___________________
+
+___________________
+
+
+## Intervals estimate of $\beta_0$
+
+Interpretation: 
+
+
+___________________
+
+___________________
+
+
+## Point estimate of $\beta_1$
+
+Interpretation: 
+
+
+___________________
+
+___________________
+
+
+## Intervals estimate of $\beta_1$
+
+Interpretation: 
+
+
+___________________
+
+___________________
+
+# Hypothesis testing on the Slope and Intercept
+
+## Use of t-Tests
+
+## Testing the Significance of Regression
+
+# Interval Estimation of the Mean Response
+
+# Prediction of New Observations
+
+
+
+
