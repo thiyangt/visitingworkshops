@@ -129,7 +129,7 @@ slrfit_values
 
 Write the code to plot residual vs fitted values
 
-```{r, echo=FALSE}
+```{r}
 qplot(data=slrfit_values, y=.resid, x=.fitted)
 
 ```
