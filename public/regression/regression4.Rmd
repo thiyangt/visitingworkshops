@@ -377,18 +377,22 @@ $$[\hat{\beta_1} - t_{\alpha/2, n-2}se(\hat{\beta_1}), \hat{\beta_1} + t_{\alpha
 
 ## t-distribution
 
-$t_{0.025, 23}$
+$t_{0.025, 30}$
 
-```{r, comment=NA, echo=FALSE, fig.height=5}
-qt(0.025, df=23)
+```{r, comment=NA, echo=TRUE, fig.height=5}
+qt(0.975, df=30)
 ```
 
 ```{r, comment=NA, echo=FALSE, fig.height=5}
 ggplot(data.frame(x = c(-4, 4)), aes(x)) +
-  stat_function(fun = dt, args =list(df =23)) +
-  stat_function(fun = dt,   args =list(df =23),
-                xlim = c(1.78,4),
+  stat_function(fun = dt, args =list(df =30)) +
+  stat_function(fun = dt,   args =list(df =30),
+                xlim = c(2.04,4),
                 geom = "area") 
+```
+
+```{r, comment=NA, echo=TRUE, fig.height=5}
+qt(0.025, df=30)
 ```
 
 ---

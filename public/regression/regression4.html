@@ -589,14 +589,27 @@ In-class
 
 ## t-distribution
 
-`\(t_{0.025, 23}\)`
+`\(t_{0.025, 30}\)`
 
+
+```r
+qt(0.975, df=30)
+```
 
 ```
-[1] -2.068658
+[1] 2.042272
 ```
 
 ![](regression4_files/figure-html/unnamed-chunk-22-1.png)&lt;!-- --&gt;
+
+
+```r
+qt(0.025, df=30)
+```
+
+```
+[1] -2.042272
+```
 
 ---
 
@@ -793,7 +806,7 @@ ggplot(crystaldata, aes(y=Size, x=Time))+geom_point(alpha=0.5) +
             theme(aspect.ratio = 1)
 ```
 
-![](regression4_files/figure-html/unnamed-chunk-28-1.png)&lt;!-- --&gt;
+![](regression4_files/figure-html/unnamed-chunk-29-1.png)&lt;!-- --&gt;
 
 ]
 
@@ -807,7 +820,7 @@ ggplot(crystaldata, aes(y=Size, x=Time))+geom_point(alpha=0.5) +
             theme(aspect.ratio = 1)
 ```
 
-![](regression4_files/figure-html/unnamed-chunk-29-1.png)&lt;!-- --&gt;
+![](regression4_files/figure-html/unnamed-chunk-30-1.png)&lt;!-- --&gt;
 
 ]
 
