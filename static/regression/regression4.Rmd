@@ -1,8 +1,8 @@
 ---
 title: "STA 506 2.0 Linear Regression Analysis"
-subtitle: "Lecture 4: Interpretation of Regression Outputs"
+subtitle: "Lecture 5: Interpretation of Regression Outputs"
 author: "Dr Thiyanga S. Talagala"
-date: "2020-09-19"
+date: "2020-09-25"
 output:
   xaringan::moon_reader:
     lib_dir: libs
@@ -33,7 +33,9 @@ $$\mu_{Y|X=x} = \beta_0 + \beta_1x $$
 
 - We can also write the equation in terms of the observed values of $Y$, rather than the mean.  Because the individual observations for any given value of $X$ vary randomly about the mean of $Y|X$, we need to account for this random variation, or error, in the regression equation.  Sample regression line
 
-$$y_i = \beta_0 + \beta_1x_i + \epsilon_i, \text{ i = 1, 2, 3...n}$$
+$$Y_i = \beta_0 + \beta_1x_i + \epsilon_i, \text{ i = 1, 2, 3...n}$$
+
+> Please  write the assumptions of $\epsilon_i$
 
 **Fitted regression line**
 
@@ -76,7 +78,7 @@ summary(model1)
 ---
 
 
-- A large $R^2$ does not necessarily imply that the regression model will be ab accurate predictor.
+- A large $R^2$ does not necessarily imply that the regression model will be an accurate predictor.
 
 - $R^2$ does not measure the appropriateness of the linear model.
 
@@ -102,7 +104,7 @@ summary(mod)
 ```
 
 
-- $R^2$ is large eventhough the linear approximation is poor.
+- $R^2$ is large even though the linear approximation is poor.
 
 > In general a good policy is to observe the scatterplot of your data 
 
@@ -158,7 +160,7 @@ ggplot(crystaldata, aes(y=Size, x=Time))+geom_point(alpha=0.5) +
 
 1. How well does this equation fit the data?
 
-2. Are any of the bsic assumptions violated?
+2. Are any of the basic assumptions violated?
 
 
 ---
@@ -179,7 +181,7 @@ summary(mod1)
 
 ```
 
-- 94.5% of the variability in size is accunted by the regression model. 
+- 94.5% of the variability in size is accounted by the regression model. 
 
 or
 
@@ -189,23 +191,15 @@ or
 ---
 ## Are any of the basic assumptions violated?
 
-.pull-left[
+
 
 ```{r , comment=NA}
 mod1
 
 ```
 
-]
 
-.pull-right[
-- Fitted value and Residuals
 
-```{r, comment=NA}
-crystaldata
-```
-
-]
 
 ---
 
@@ -304,21 +298,44 @@ shapiro.test(mod1_fitresid$.resid)
 ---
 ## Interpretations
 
+$$\mu_{Y|X=x} = \beta_0 + \beta_1x $$
+
 **Slope:**
 
-
+Increase in the mean response for every one unit increase in the explanatory variable.
 
 **Intercept:**
 
-Sometimes $X$ can never realistically take the value of zero, then the intercept is meaningless.
+Mean response when the explanatory variable equals 0
 
----
-
-```{r, comment=NA}
+```{r , comment=NA}
 mod1
+
 ```
 
 
+.content-box-yellow[Interpret slope and intercept]
+
+---
+## Nonsensical intercept interpretation
+
+
+- Sometimes it doesn't make sense to interpret the intercept: when?
+
+    - $X$ can never realistically take the value of zero, then the intercept is meaningless.
+
+    - The intercept is negative even though the response can take only positive values.
+
+- The intercept helps the line fit the data as closely as possible.
+
+- It is fine to have a regression model with nonsensical intercept if it helps the model give better overall prediction accuracy.
+
+
+---
+
+class:  duke-orange, center, middle
+
+## Hypothesis testing on the slope and intercept
 ---
 
 ## Hypothesis testing - Intercept
@@ -332,17 +349,182 @@ summary(mod1)
 ```
 
 ---
-## Situations where $H_0: \beta_1=0$ is not rejected
+## Situations where $H_0: \beta_1=0$ is not rejected.
+
+In-class
 
 
 ---
-## Situations where $H_0: \beta_1=0$ is rejected
+## Situations where $H_0: \beta_1=0$ is rejected.
 
+In-class
+
+
+---
+## Confidence Interval on $\beta_0$ and $\beta_1$
+
+- Confidence intervals $\beta_0$
+
+$$[\hat{\beta_0} - t_{\alpha/2, n-2}se(\hat{\beta_0}), \hat{\beta_0} + t_{\alpha/2, n-2}se(\hat{\beta_0})]$$
+
+- Confidence intervals $\beta_1$
+
+$$[\hat{\beta_1} - t_{\alpha/2, n-2}se(\hat{\beta_1}), \hat{\beta_1} + t_{\alpha/2, n-2}se(\hat{\beta_1})]$$
+
+
+
+---
+
+## t-distribution
+
+$t_{0.025, 23}$
+
+```{r, comment=NA, echo=FALSE, fig.height=5}
+qt(0.025, df=23)
+```
+
+```{r, comment=NA, echo=FALSE, fig.height=5}
+ggplot(data.frame(x = c(-4, 4)), aes(x)) +
+  stat_function(fun = dt, args =list(df =23)) +
+  stat_function(fun = dt,   args =list(df =23),
+                xlim = c(1.78,4),
+                geom = "area") 
+```
+
+---
+```{r, comment=NA}
+summary(mod1)
+```
+
+
+.content-box-yellow[Compute confidence intervals on slope and intercept]
+
+---
+## Confidence Interval on $\beta_0$ and $\beta_1$ - Interpretation
+
+- Confidence intervals $\beta_0$
+
+$$[\hat{\beta_0} - t_{\alpha/2, n-2}se(\hat{\beta_0}), \hat{\beta_0} + t_{\alpha/2, n-2}se(\hat{\beta_0})]$$
+
+- Confidence intervals $\beta_1$
+
+$$[\hat{\beta_1} - t_{\alpha/2, n-2}se(\hat{\beta_1}), \hat{\beta_1} + t_{\alpha/2, n-2}se(\hat{\beta_1})]$$
+
+Frequency interpretation:
+
+If we were to take repeated samples of the same size at the same $X$ levels and construct, for example, $95\%$ confidence intervals on the slope for each sample, then $95\%$ of those intervals will contain the true value $\beta_1$.
+
+In general, the larger the confidence coefficient $(1-\alpha)$ is, the wider the confidence interval.
 ---
 
 ## Analysis of variance - ANOVA
 
-- 
+- We may also use ANOVA to test the significance of regression.
+
+- The idea behind the ANOVA  is that the variation in the response variable (referred to as the total variation - **SST**) is partitioned into two parts: 
+ 
+> i. how much of the variation is explained by the regression model (referred to as the variable name in the R output) - **SSM (Model sum of squares)**
+ 
+> ii. how much of the variation is left unexplained by the regression model (called the “Residual” or “Error”) - **SSE (Residual or error sum of squares)**.
+
+$$\sum_{i=1}^n(y_i - \bar{y})^2=\sum_{i=1}^n(\hat{y}_i - \bar{y})^2 + \sum_{i=1}^n(y_i - \hat{y_i})^2$$
+
+$$SST = SSM + SSE$$
+
+Degrees of component
+
+$$df_T = df_M + df_E$$
+$$n-1 = 1 + (n-2)$$
+---
+
+## ANOVA  - F test
+
+$$F = \frac{SSM/df_M}{SSE/df_E} = \frac{MS_M}{MS_E}$$
+
+$$E(MS_E) = \sigma^2$$
+---
+
+## ANOVA - Hypothesis
+
+$$H_0: \beta_1=0$$
+$$H_1: \beta_1 \neq 0$$
+
+
+- In simple linear regression t-test is equivalent to the F test.
+
+- The real usefulness of the analysis of variance is in multiple regression models.
+
+```{r, comment=NA}
+anova(mod1)
+```
+---
+
+
+```{r, comment=NA}
+summary(mod1)
+```
+
+---
+### Regression through the origin (No intercept)
+
+-  Appropriate in analysing data from chemical and other manufacturing processes. 
+
+- Do not misuse the no-intercept model: where the data lie in a region of $x$-space remote from the origin.
+
+- Scatterplot sometimes helps in deciding whether or not to fit the no-intercept model.
+
+How to select the model: Fit both models (with intercept and without intercept) and choose between them based on the quality of the fit.
+
+```{r, comment=NA, message=FALSE}
+mod2 <- lm(Size ~ Time -1, data=crystaldata)
+mod2
+```
+
+---
+
+```{r, comment=NA, message=FALSE}
+summary(mod2)
+```
+---
+
+.pull-left[
+
+With intercept
+
+```{r, comment=NA, fig.height=5}
+ggplot(crystaldata, aes(y=Size, x=Time))+geom_point(alpha=0.5) +
+  geom_abline(intercept = -0.21, slope = 0.52, colour="forestgreen", lwd=2) +
+            theme(aspect.ratio = 1)
+
+```
+
+]
+
+.pull-right[
+Without intercept
+
+```{r, comment=NA, fig.height=5}
+ggplot(crystaldata, aes(y=Size, x=Time))+geom_point(alpha=0.5) +
+  geom_abline(intercept = 0, slope = 0.51, colour="red", lwd=2) +
+            theme(aspect.ratio = 1)
+
+```
+
+]
+
+Perform the residual analysis on the new model before using it.
+---
+
+class:  duke-orange, center, middle
+
+## Prediction of new observations
+
+---
+```{r, comment=NA}
+test <- data.frame(Time = c(2, 2, 6, 6, 8, 20, 26))
+test
+predict(mod2, newdata=test, interval="predict") 
+```
 
 ---
 ## Next Lecture

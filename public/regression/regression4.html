@@ -4,7 +4,7 @@
     <title>STA 506 2.0 Linear Regression Analysis</title>
     <meta charset="utf-8" />
     <meta name="author" content="Dr Thiyanga S. Talagala" />
-    <meta name="date" content="2020-09-19" />
+    <meta name="date" content="2020-09-25" />
     <link href="libs/remark-css/default.css" rel="stylesheet" />
     <link href="libs/remark-css/default-fonts.css" rel="stylesheet" />
     <link href="libs/remark-css/duke-blue.css" rel="stylesheet" />
@@ -17,9 +17,9 @@
 class: center, middle, inverse, title-slide
 
 # STA 506 2.0 Linear Regression Analysis
-## Lecture 4: Interpretation of Regression Outputs
+## Lecture 5: Interpretation of Regression Outputs
 ### Dr Thiyanga S. Talagala
-### 2020-09-19
+### 2020-09-25
 
 ---
 
@@ -36,7 +36,9 @@ $$\mu_{Y|X=x} = \beta_0 + \beta_1x $$
 
 - We can also write the equation in terms of the observed values of `\(Y\)`, rather than the mean.  Because the individual observations for any given value of `\(X\)` vary randomly about the mean of `\(Y|X\)`, we need to account for this random variation, or error, in the regression equation.  Sample regression line
 
-`$$y_i = \beta_0 + \beta_1x_i + \epsilon_i, \text{ i = 1, 2, 3...n}$$`
+`$$Y_i = \beta_0 + \beta_1x_i + \epsilon_i, \text{ i = 1, 2, 3...n}$$`
+
+&gt; Please  write the assumptions of `\(\epsilon_i\)`
 
 **Fitted regression line**
 
@@ -123,7 +125,7 @@ F-statistic: 435.5 on 1 and 1373 DF,  p-value: &lt; 2.2e-16
 ---
 
 
-- A large `\(R^2\)` does not necessarily imply that the regression model will be ab accurate predictor.
+- A large `\(R^2\)` does not necessarily imply that the regression model will be an accurate predictor.
 
 - `\(R^2\)` does not measure the appropriateness of the linear model.
 
@@ -160,7 +162,7 @@ F-statistic: 155.8 on 1 and 98 DF,  p-value: &lt; 2.2e-16
 ```
 
 
-- `\(R^2\)` is large eventhough the linear approximation is poor.
+- `\(R^2\)` is large even though the linear approximation is poor.
 
 &gt; In general a good policy is to observe the scatterplot of your data 
 
@@ -276,7 +278,7 @@ ggplot(crystaldata, aes(y=Size, x=Time))+geom_point(alpha=0.5) +
 
 1. How well does this equation fit the data?
 
-2. Are any of the bsic assumptions violated?
+2. Are any of the basic assumptions violated?
 
 
 ---
@@ -335,7 +337,7 @@ Multiple R-squared:  0.949,	Adjusted R-squared:  0.9473
 F-statistic: 558.5 on 1 and 30 DF,  p-value: &lt; 2.2e-16
 ```
 
-- 94.5% of the variability in size is accunted by the regression model. 
+- 94.5% of the variability in size is accounted by the regression model. 
 
 or
 
@@ -345,7 +347,7 @@ or
 ---
 ## Are any of the basic assumptions violated?
 
-.pull-left[
+
 
 
 ```r
@@ -362,53 +364,8 @@ Coefficients:
     -0.1982       0.5210  
 ```
 
-]
-
-.pull-right[
-- Fitted value and Residuals
 
 
-```r
-crystaldata
-```
-
-```
-     Size Time
-1   0.080    2
-2   0.070    2
-3   1.120    4
-4   2.010    4
-5   4.430    6
-6   4.980    8
-7   4.920   10
-8   7.180   12
-9   5.570   14
-10  8.400   16
-11  8.810   18
-12 10.810   20
-13 11.610   20
-14 10.120   24
-15 13.120   26
-16 15.040   28
-17  0.075    2
-18  0.075    2
-19  1.130    4
-20  2.020    4
-21  4.450    6
-22  4.990    8
-23  4.950   10
-24  7.280   12
-25  5.670   14
-26  8.400   16
-27  8.510   18
-28 10.820   20
-29 11.620   20
-30 10.130   24
-31 13.220   26
-32 15.030   28
-```
-
-]
 
 ---
 
@@ -450,7 +407,7 @@ Plot of residuals vs fitted values and Plot of residuals vs predictor
 Residuals vs Fitted
 
 
-![](regression4_files/figure-html/unnamed-chunk-14-1.png)&lt;!-- --&gt;
+![](regression4_files/figure-html/unnamed-chunk-13-1.png)&lt;!-- --&gt;
 ]
 
 
@@ -459,7 +416,7 @@ Residuals vs Fitted
 Residuals vs Time
 
 
-![](regression4_files/figure-html/unnamed-chunk-15-1.png)&lt;!-- --&gt;
+![](regression4_files/figure-html/unnamed-chunk-14-1.png)&lt;!-- --&gt;
 ]
 
 ---
@@ -470,7 +427,7 @@ Residuals vs Time
 
 Residuals vs Fitted
 
-![](regression4_files/figure-html/unnamed-chunk-16-1.png)&lt;!-- --&gt;
+![](regression4_files/figure-html/unnamed-chunk-15-1.png)&lt;!-- --&gt;
 
 
 ---
@@ -489,7 +446,7 @@ ggplot(mod1_fitresid,
   geom_histogram(colour="white")+ggtitle("Distribution of Residuals")
 ```
 
-![](regression4_files/figure-html/unnamed-chunk-17-1.png)&lt;!-- --&gt;
+![](regression4_files/figure-html/unnamed-chunk-16-1.png)&lt;!-- --&gt;
 ]
 
 .pull-right[
@@ -500,7 +457,7 @@ ggplot(mod1_fitresid,
   stat_qq() + stat_qq_line()+labs(x="Theoretical Quantiles", y="Sample Quantiles")
 ```
 
-![](regression4_files/figure-html/unnamed-chunk-18-1.png)&lt;!-- --&gt;
+![](regression4_files/figure-html/unnamed-chunk-17-1.png)&lt;!-- --&gt;
 
 ]
 
@@ -521,15 +478,15 @@ W = 0.95397, p-value = 0.1867
 ---
 ## Interpretations
 
+$$\mu_{Y|X=x} = \beta_0 + \beta_1x $$
+
 **Slope:**
 
-
+Increase in the mean response for every one unit increase in the explanatory variable.
 
 **Intercept:**
 
-Sometimes `\(X\)` can never realistically take the value of zero, then the intercept is meaningless.
-
----
+Mean response when the explanatory variable equals 0
 
 
 ```r
@@ -547,6 +504,28 @@ Coefficients:
 ```
 
 
+.content-box-yellow[Interpret slope and intercept]
+
+---
+## Nonsensical intercept interpretation
+
+
+- Sometimes it doesn't make sense to interpret the intercept: when?
+
+    - `\(X\)` can never realistically take the value of zero, then the intercept is meaningless.
+
+    - The intercept is negative even though the response can take only positive values.
+
+- The intercept helps the line fit the data as closely as possible.
+
+- It is fine to have a regression model with nonsensical intercept if it helps the model give better overall prediction accuracy.
+
+
+---
+
+class:  duke-orange, center, middle
+
+## Hypothesis testing on the slope and intercept
 ---
 
 ## Hypothesis testing - Intercept
@@ -582,17 +561,295 @@ F-statistic: 558.5 on 1 and 30 DF,  p-value: &lt; 2.2e-16
 ```
 
 ---
-## Situations where `\(H_0: \beta_1=0\)` is not rejected
+## Situations where `\(H_0: \beta_1=0\)` is not rejected.
+
+In-class
 
 
 ---
-## Situations where `\(H_0: \beta_1=0\)` is rejected
+## Situations where `\(H_0: \beta_1=0\)` is rejected.
 
+In-class
+
+
+---
+## Confidence Interval on `\(\beta_0\)` and `\(\beta_1\)`
+
+- Confidence intervals `\(\beta_0\)`
+
+`$$[\hat{\beta_0} - t_{\alpha/2, n-2}se(\hat{\beta_0}), \hat{\beta_0} + t_{\alpha/2, n-2}se(\hat{\beta_0})]$$`
+
+- Confidence intervals `\(\beta_1\)`
+
+`$$[\hat{\beta_1} - t_{\alpha/2, n-2}se(\hat{\beta_1}), \hat{\beta_1} + t_{\alpha/2, n-2}se(\hat{\beta_1})]$$`
+
+
+
+---
+
+## t-distribution
+
+`\(t_{0.025, 23}\)`
+
+
+```
+[1] -2.068658
+```
+
+![](regression4_files/figure-html/unnamed-chunk-22-1.png)&lt;!-- --&gt;
+
+---
+
+```r
+summary(mod1)
+```
+
+```
+
+Call:
+lm(formula = Size ~ Time, data = crystaldata)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-2.1855 -0.7643  0.0313  0.7405  1.5223 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept) -0.19821    0.34838  -0.569    0.574    
+Time         0.52099    0.02204  23.634   &lt;2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 1.05 on 30 degrees of freedom
+Multiple R-squared:  0.949,	Adjusted R-squared:  0.9473 
+F-statistic: 558.5 on 1 and 30 DF,  p-value: &lt; 2.2e-16
+```
+
+
+.content-box-yellow[Compute confidence intervals on slope and intercept]
+
+---
+## Confidence Interval on `\(\beta_0\)` and `\(\beta_1\)` - Interpretation
+
+- Confidence intervals `\(\beta_0\)`
+
+`$$[\hat{\beta_0} - t_{\alpha/2, n-2}se(\hat{\beta_0}), \hat{\beta_0} + t_{\alpha/2, n-2}se(\hat{\beta_0})]$$`
+
+- Confidence intervals `\(\beta_1\)`
+
+`$$[\hat{\beta_1} - t_{\alpha/2, n-2}se(\hat{\beta_1}), \hat{\beta_1} + t_{\alpha/2, n-2}se(\hat{\beta_1})]$$`
+
+Frequency interpretation:
+
+If we were to take repeated samples of the same size at the same `\(X\)` levels and construct, for example, `\(95\%\)` confidence intervals on the slope for each sample, then `\(95\%\)` of those intervals will contain the true value `\(\beta_1\)`.
+
+In general, the larger the confidence coefficient `\((1-\alpha)\)` is, the wider the confidence interval.
 ---
 
 ## Analysis of variance - ANOVA
 
-- 
+- We may also use ANOVA to test the significance of regression.
+
+- The idea behind the ANOVA  is that the variation in the response variable (referred to as the total variation - **SST**) is partitioned into two parts: 
+ 
+&gt; i. how much of the variation is explained by the regression model (referred to as the variable name in the R output) - **SSM (Model sum of squares)**
+ 
+&gt; ii. how much of the variation is left unexplained by the regression model (called the “Residual” or “Error”) - **SSE (Residual or error sum of squares)**.
+
+`$$\sum_{i=1}^n(y_i - \bar{y})^2=\sum_{i=1}^n(\hat{y}_i - \bar{y})^2 + \sum_{i=1}^n(y_i - \hat{y_i})^2$$`
+
+`$$SST = SSM + SSE$$`
+
+Degrees of component
+
+`$$df_T = df_M + df_E$$`
+`$$n-1 = 1 + (n-2)$$`
+---
+
+## ANOVA  - F test
+
+`$$F = \frac{SSM/df_M}{SSE/df_E} = \frac{MS_M}{MS_E}$$`
+
+`$$E(MS_E) = \sigma^2$$`
+---
+
+## ANOVA - Hypothesis
+
+`$$H_0: \beta_1=0$$`
+`$$H_1: \beta_1 \neq 0$$`
+
+
+- In simple linear regression t-test is equivalent to the F test.
+
+- The real usefulness of the analysis of variance is in multiple regression models.
+
+
+```r
+anova(mod1)
+```
+
+```
+Analysis of Variance Table
+
+Response: Size
+          Df Sum Sq Mean Sq F value    Pr(&gt;F)    
+Time       1 615.46  615.46  558.55 &lt; 2.2e-16 ***
+Residuals 30  33.06    1.10                      
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+```
+---
+
+
+
+```r
+summary(mod1)
+```
+
+```
+
+Call:
+lm(formula = Size ~ Time, data = crystaldata)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-2.1855 -0.7643  0.0313  0.7405  1.5223 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept) -0.19821    0.34838  -0.569    0.574    
+Time         0.52099    0.02204  23.634   &lt;2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 1.05 on 30 degrees of freedom
+Multiple R-squared:  0.949,	Adjusted R-squared:  0.9473 
+F-statistic: 558.5 on 1 and 30 DF,  p-value: &lt; 2.2e-16
+```
+
+---
+### Regression through the origin (No intercept)
+
+-  Appropriate in analysing data from chemical and other manufacturing processes. 
+
+- Do not misuse the no-intercept model: where the data lie in a region of `\(x\)`-space remote from the origin.
+
+- Scatterplot sometimes helps in deciding whether or not to fit the no-intercept model.
+
+How to select the model: Fit both models (with intercept and without intercept) and choose between them based on the quality of the fit.
+
+
+```r
+mod2 &lt;- lm(Size ~ Time -1, data=crystaldata)
+mod2
+```
+
+```
+
+Call:
+lm(formula = Size ~ Time - 1, data = crystaldata)
+
+Coefficients:
+  Time  
+0.5104  
+```
+
+---
+
+
+```r
+summary(mod2)
+```
+
+```
+
+Call:
+lm(formula = Size ~ Time - 1, data = crystaldata)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-2.12895 -0.92631 -0.04059  0.78642  1.41254 
+
+Coefficients:
+     Estimate Std. Error t value Pr(&gt;|t|)    
+Time  0.51037    0.01161   43.95   &lt;2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 1.038 on 31 degrees of freedom
+Multiple R-squared:  0.9842,	Adjusted R-squared:  0.9837 
+F-statistic:  1931 on 1 and 31 DF,  p-value: &lt; 2.2e-16
+```
+---
+
+.pull-left[
+
+With intercept
+
+
+```r
+ggplot(crystaldata, aes(y=Size, x=Time))+geom_point(alpha=0.5) +
+  geom_abline(intercept = -0.21, slope = 0.52, colour="forestgreen", lwd=2) +
+            theme(aspect.ratio = 1)
+```
+
+![](regression4_files/figure-html/unnamed-chunk-28-1.png)&lt;!-- --&gt;
+
+]
+
+.pull-right[
+Without intercept
+
+
+```r
+ggplot(crystaldata, aes(y=Size, x=Time))+geom_point(alpha=0.5) +
+  geom_abline(intercept = 0, slope = 0.51, colour="red", lwd=2) +
+            theme(aspect.ratio = 1)
+```
+
+![](regression4_files/figure-html/unnamed-chunk-29-1.png)&lt;!-- --&gt;
+
+]
+
+Perform the residual analysis on the new model before using it.
+---
+
+class:  duke-orange, center, middle
+
+## Prediction of new observations
+
+---
+
+```r
+test &lt;- data.frame(Time = c(2, 2, 6, 6, 8, 20, 26))
+test
+```
+
+```
+  Time
+1    2
+2    2
+3    6
+4    6
+5    8
+6   20
+7   26
+```
+
+```r
+predict(mod2, newdata=test, interval="predict") 
+```
+
+```
+        fit        lwr       upr
+1  1.020746 -1.0972070  3.138699
+2  1.020746 -1.0972070  3.138699
+3  3.062237  0.9400507  5.184424
+4  3.062237  0.9400507  5.184424
+5  4.082983  1.9570988  6.208867
+6 10.207457  8.0376929 12.377222
+7 13.269695 11.0645387 15.474851
+```
 
 ---
 ## Next Lecture
