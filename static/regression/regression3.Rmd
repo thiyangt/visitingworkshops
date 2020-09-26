@@ -303,7 +303,7 @@ Measures the variation of  $y$ values around their mean.
 
 $SS_M$ - Explained variation attributable to factors other than the relationship between $x$ and $y$.
 
-$SS_{R}$ - A measure of the variability in $y$ remaining after $x$ has been considered.
+Notation: $SS_{R}$ or $SS_{E}$ - A measure of the variability in $y$ remaining after $x$ has been considered.
 
 $R^2$ - Proportion of variation explained by the regressor $x$.
 
