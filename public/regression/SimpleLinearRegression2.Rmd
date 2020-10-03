@@ -129,7 +129,7 @@ slrfit_values
 
 Write the code to plot residual vs fitted values
 
-```{r, echo=FALSE}
+```{r}
 qplot(data=slrfit_values, y=.resid, x=.fitted)
 
 ```
@@ -154,7 +154,7 @@ ggplot(slrfit_values,
 ```
 
 ```{r}
-shapiro.test(house$price)
+shapiro.test(slrfit_values$.resid)
 ```
 
 H0:
