@@ -773,6 +773,8 @@ $\beta_0$ - population mean of $Y$ when all the independent variable take the va
 
 If the data range of all the independent variables do not cover the value zero, do not interpret the intercept.
 
+
+
 --
 
 .content-box-yellow[Partial regression coefficients]
@@ -784,7 +786,11 @@ The parameter $\beta_j$ represents the mean change in the response $Y$ per unit 
 That's why $\beta_j, j=1, 2, ..p$ are often called partial regression coefficients.
 
 ---
-## Interpretation of coefficients (cont.)
+Video demonstration:
+
+
+---
+**Interpretation of coefficients (cont.)**
 
 ```{r, comment=NA, echo=FALSE}
 regHeart
@@ -792,15 +798,15 @@ regHeart
 
 $\hat{\beta_0} = 14.9847$
 
-An estimate of population mean percentage of people who have heart disease when there are zero percentage of biking people and zero percentage smoking people is approximately 14.98%.
+An estimate of population mean percentage of people who have heart disease is approximately 14.98%, when there are zero percentage of biking people and zero percentage smoking people in the town.
 
 $\hat{\beta_1} = -0.2001$
 
-The estimates in the output tell us that for every one percent increase in biking to work there is an associated 0.2 percent mean **decrease** in percentage of people with heart disease.
+This tells us that for every one percent increase in biking to work there is an associated 0.2 percent mean **decrease** in percentage of people with heart disease, when the percentage of smoking people held constant.
 
 $\hat{\beta_2} = 0.1783$
 
-For every one percent increase in smoking there is an associated .17 percent mean **increase** in  percentage of people with heart disease.
+For every one percent increase in the percentage of smoking people there is an associated .17 percent mean **increase** in  percentage of people with heart disease, when the percentage of biking to work held constant.
 
 
 ---
