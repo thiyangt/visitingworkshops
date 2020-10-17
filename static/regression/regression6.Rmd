@@ -1,6 +1,6 @@
 ---
 title: "STA 506 2.0 Linear Regression Analysis"
-subtitle: "Lecture 9: Multiple Linear Regression"
+subtitle: "Lecture 8: Multiple Linear Regression"
 author: "Dr Thiyanga S. Talagala"
 date: "2020-10-17"
 output:
