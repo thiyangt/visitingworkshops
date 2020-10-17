@@ -33,18 +33,18 @@ $$Y = \beta_0 + \beta_1X_1 + \epsilon$$
 
 In terms of the observed values, 
 
-$$y_i = \beta_0 + \beta_1x_i + \epsilon_i$$
+$$y_i = \beta_0 + \beta_1x_i + \epsilon_i  \text{   ; } i=1, 2, ...n$$
 
 
 
 ]
 .content-box-yellow[Multiple Linear Regression
 
-$$Y = \beta_0 + \beta_1X_1 + \beta_2X_2+...+\beta_pX_p +  \epsilon$$
+$$Y = \beta_0 + \beta_1X_1 + \beta_2X_2+...+\beta_pX_p +  \epsilon  $$
 
 In terms of the observed values, 
 
-$$y_i = \beta_0 + \beta_1x_{i1} + \beta_2x_{i2}+...+\beta_px_{ip} +  \epsilon_i$$
+$$y_i = \beta_0 + \beta_1x_{i1} + \beta_2x_{i2}+...+\beta_px_{ip} +  \epsilon_i \text{   ; } i=1, 2, ...n$$
 
 ]
 
@@ -57,7 +57,7 @@ $$Y = \beta_0 + \beta_1X_1 + \beta_2X_2+...+\beta_pX_p +  \epsilon$$
 
 In terms of the observed values, 
 
-$$y_i = \beta_0 + \beta_1x_{i1} + \beta_2x_{i2}+...+\beta_px_{ip} +  \epsilon_i$$
+$$y_i = \beta_0 + \beta_1x_{i1} + \beta_2x_{i2}+...+\beta_px_{ip} +  \epsilon_i \text{   ; } i=1, 2, ...n$$
 
 
 
@@ -746,7 +746,7 @@ MSE - Residual mean square
 
 
 
-A statistical measure that represents the proportion of the variance for a dependent variable that's explained by an independent variable or variables in a regression model
+Coefficient of determination is a statistical measure that represents the proportion of the variance for a dependent variable that's explained by an independent variable or variables in a regression model.
 
 ---
 
@@ -792,7 +792,7 @@ regHeart
 
 $\hat{\beta_0} = 14.9847$
 
-An estimate of population mean percentage of people who have heart disease when there are zero percentage of bike rider and zero percentage smoking people is approximately 14.98%.
+An estimate of population mean percentage of people who have heart disease when there are zero percentage of biking people and zero percentage smoking people is approximately 14.98%.
 
 $\hat{\beta_1} = -0.2001$
 
