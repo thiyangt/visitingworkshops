@@ -152,9 +152,6 @@ Total | $n-1$ | $\sum_{i=1}^{n}(y_i-\bar{y})^2$ | | | |
 
 ## Multiple Linear Regression Analysis - ANOVA
 
-$Y$ - heart.disease
-
-$X$ variables - biking and smoking
 
 ```{r, comment=NA, message=FALSE, echo=FALSE}
 regHeart <-  lm(heart.disease ~ biking+ smoking, data=heart.data)
@@ -190,7 +187,12 @@ simpleAnova(regHeart)
 
 $Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \epsilon$
 
-Your turn: Interpret the terms in the model
+$Y$ - percentage of people in each town who have heart disease
+
+$X_1$ - percentage of people in each town who bike to work
+
+$X_2$ - percentage of people in each town who smoke
+
 
 ### Test for Significance of Regression
 
@@ -213,7 +215,27 @@ summary(regHeart)
 ```
 
 ---
-## Tests on Individual Regression Coefficients (cont)
+### Tests on Individual Regression Coefficients (cont)
+
+```{r, comment=NA, message=FALSE, warning=F, echo=FALSE}
+summary(regHeart)
+
+```
+
+$H_0: \beta_1 =  0$  vs $H_1: \beta_1 \neq 0$
+
+$p-value < 0.05$, we reject $H_0$ under 0.05 level of significance and conclude that the regressor `biking` or $X_1$, contributes significantly to the model given that `smoking`, $X_2$ is also in the model.
+
+---
+
+## Partial test for smoking
+
+- Write down the hypotheses
+
+- Write the decision and conclusions
+
+
+
 ---
 ## Next Lecture
 
