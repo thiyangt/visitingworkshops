@@ -1,8 +1,8 @@
 ---
 title: "STA 506 2.0 Linear Regression Analysis"
-subtitle: "Lecture 9: Analysis of variance, or ANOVA"
+subtitle: "Lecture 9: Analysis of Variance, or ANOVA"
 author: "Dr Thiyanga S. Talagala"
-date: "2020-10-17"
+date: "2020-10-24"
 output:
   xaringan::moon_reader:
     lib_dir: libs
@@ -36,16 +36,25 @@ options(htmltools.dir.version = FALSE)
 Source of variation | DF | Sum of squares (SS) | Mean Square (MS) | F| p-value |
 ---:---:---:---:---:---|
 Regression | 1| SSM = $\sum_{i=1}^{n}(\hat{Y_i}-\bar{y})^2$| MSR = $\frac{SSR}{1}$ | $F* =\frac{MSR}{MSE}$ | $P(F>F*)$|
-Residual error | $n-2$ | SSE = $\sum_{i=1}^{n}(y_i-\hat{Y})^2$| MSE = $\frac{SSE}{(n-2)}$ | |
-Total | $n-1$ | $\sum_{i=1}^{n}(y_i-\bar{y})^2$ | | | |
+Residual error | $n-2$ | SSE = $\sum_{i=1}^{n}(y_i-\hat{Y_i})^2$| MSE = $\frac{SSE}{(n-2)}$ | |
+Total | $n-1$ | SST = $\sum_{i=1}^{n}(y_i-\bar{y})^2$ | | | |
 
 ### Hypotheses
 
-$H_0: \beta_1 = \beta_2 = ... = \beta_p = 0$
+$H_0: \beta_1 = 0$
 
-$H_1: \beta_j \neq 0 \text{ for at least one j, j=1, 2, ...p}$
+$H_1: \beta_1 \neq 0$
 
-The p -value of this test is not the same as the  p -value of the t-test for  $H_0: \beta_1 = 0$, that only happens in simple linear regression because $p=1$.
+The p -value of this test is the same as the  p -value of the t-test for  $H_0: \beta_1 = 0$, this only happens in simple linear regression.
+
+---
+### Simple Linear Regression Analysis - Data
+
+```{r, comment=NA}
+library(alr3)
+head(heights)
+dim(heights)
+```
 
 ---
 
@@ -59,22 +68,12 @@ model <- lm(Dheight ~ Mheight, data=heights)
 anova(model)
 ```
 
-![](anova.png)
+```{r, comment=NA, out.height='5%', out.width='60%', echo=FALSE}
+knitr::include_graphics("slranova.png")
+```
 
 ---
-### Simple Linear Regression Analysis
-
-Daughter's height vs Mother's height
-
-```{r, comment=NA, message=FALSE, warning=FALSE, echo=FALSE}
-library(alr3)
-model <- lm(Dheight ~ Mheight, data=heights)
-anova(model)
-```
-
-```{r, comment=NA}
-dim(heights)
-```
+### Simple Linear Regression Analysis - ANOVA
 
 Demo:
 
@@ -145,8 +144,17 @@ heart.data
 Source of variation | DF | Sum of squares (SS) | Mean Square (MS) | F| p-value |
 ---:---:---:---:---:---|
 Regression | p| SSM = $\sum_{i=1}^{n}(\hat{Y_i}-\bar{y})^2$| MSR = $\frac{SSR}{p}$ | $F* =\frac{MSR}{MSE}$ | $P(F>F*)$|
-Residual error | $n-p-1$ | SSE = $\sum_{i=1}^{n}(y_i-\hat{Y})^2$| MSE = $\frac{SSE}{(n-p-1)}$ | |
+Residual error | $n-p-1$ | SSE = $\sum_{i=1}^{n}(y_i-\hat{Y_i})^2$| MSE = $\frac{SSE}{(n-p-1)}$ | |
 Total | $n-1$ | $\sum_{i=1}^{n}(y_i-\bar{y})^2$ | | | |
+
+### Hypotheses
+
+$H_0: \beta_1 = \beta_2 = ... = \beta_p = 0$
+
+$H_1: \beta_j \neq 0 \text{ for at least one j, j=1, 2, ...p}$
+
+The p -value of this test is not the same as the  p -value of the t-test for  $H_0: \beta_1 = 0$, that only happens in simple linear regression because $p=1$.
+
 
 ---
 

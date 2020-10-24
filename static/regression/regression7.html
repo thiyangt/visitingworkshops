@@ -4,7 +4,7 @@
     <title>STA 506 2.0 Linear Regression Analysis</title>
     <meta charset="utf-8" />
     <meta name="author" content="Dr Thiyanga S. Talagala" />
-    <meta name="date" content="2020-10-17" />
+    <meta name="date" content="2020-10-24" />
     <link href="libs/remark-css/default.css" rel="stylesheet" />
     <link href="libs/remark-css/default-fonts.css" rel="stylesheet" />
     <link href="libs/remark-css/duke-blue.css" rel="stylesheet" />
@@ -17,9 +17,9 @@
 class: center, middle, inverse, title-slide
 
 # STA 506 2.0 Linear Regression Analysis
-## Lecture 9: Analysis of variance, or ANOVA
+## Lecture 9: Analysis of Variance, or ANOVA
 ### Dr Thiyanga S. Talagala
-### 2020-10-17
+### 2020-10-24
 
 ---
 
@@ -39,16 +39,54 @@ class: center, middle, inverse, title-slide
 Source of variation | DF | Sum of squares (SS) | Mean Square (MS) | F| p-value |
 ---:---:---:---:---:---|
 Regression | 1| SSM = `\(\sum_{i=1}^{n}(\hat{Y_i}-\bar{y})^2\)`| MSR = `\(\frac{SSR}{1}\)` | `\(F* =\frac{MSR}{MSE}\)` | `\(P(F&gt;F*)\)`|
-Residual error | `\(n-2\)` | SSE = `\(\sum_{i=1}^{n}(y_i-\hat{Y})^2\)`| MSE = `\(\frac{SSE}{(n-2)}\)` | |
-Total | `\(n-1\)` | `\(\sum_{i=1}^{n}(y_i-\bar{y})^2\)` | | | |
+Residual error | `\(n-2\)` | SSE = `\(\sum_{i=1}^{n}(y_i-\hat{Y_i})^2\)`| MSE = `\(\frac{SSE}{(n-2)}\)` | |
+Total | `\(n-1\)` | SST = `\(\sum_{i=1}^{n}(y_i-\bar{y})^2\)` | | | |
 
 ### Hypotheses
 
-`\(H_0: \beta_1 = \beta_2 = ... = \beta_p = 0\)`
+`\(H_0: \beta_1 = 0\)`
 
-`\(H_1: \beta_j \neq 0 \text{ for at least one j, j=1, 2, ...p}\)`
+`\(H_1: \beta_1 \neq 0\)`
 
-The p -value of this test is not the same as the  p -value of the t-test for  `\(H_0: \beta_1 = 0\)`, that only happens in simple linear regression because `\(p=1\)`.
+The p -value of this test is the same as the  p -value of the t-test for  `\(H_0: \beta_1 = 0\)`, this only happens in simple linear regression.
+
+---
+### Simple Linear Regression Analysis - Data
+
+
+```r
+library(alr3)
+```
+
+```
+Loading required package: car
+```
+
+```
+Loading required package: carData
+```
+
+```r
+head(heights)
+```
+
+```
+  Mheight Dheight
+1    59.7    55.1
+2    58.2    56.5
+3    60.6    56.0
+4    60.7    56.8
+5    61.8    56.0
+6    55.5    57.9
+```
+
+```r
+dim(heights)
+```
+
+```
+[1] 1375    2
+```
 
 ---
 
@@ -74,33 +112,10 @@ Residuals 1373 7052.0    5.14
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```
 
-![](anova.png)
+&lt;img src="slranova.png" width="60%" height="5%" /&gt;
 
 ---
-### Simple Linear Regression Analysis
-
-Daughter's height vs Mother's height
-
-
-```
-Analysis of Variance Table
-
-Response: Dheight
-            Df Sum Sq Mean Sq F value    Pr(&gt;F)    
-Mheight      1 2236.7 2236.66  435.47 &lt; 2.2e-16 ***
-Residuals 1373 7052.0    5.14                      
----
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-```
-
-
-```r
-dim(heights)
-```
-
-```
-[1] 1375    2
-```
+### Simple Linear Regression Analysis - ANOVA
 
 Demo:
 
@@ -217,8 +232,17 @@ heart.data
 Source of variation | DF | Sum of squares (SS) | Mean Square (MS) | F| p-value |
 ---:---:---:---:---:---|
 Regression | p| SSM = `\(\sum_{i=1}^{n}(\hat{Y_i}-\bar{y})^2\)`| MSR = `\(\frac{SSR}{p}\)` | `\(F* =\frac{MSR}{MSE}\)` | `\(P(F&gt;F*)\)`|
-Residual error | `\(n-p-1\)` | SSE = `\(\sum_{i=1}^{n}(y_i-\hat{Y})^2\)`| MSE = `\(\frac{SSE}{(n-p-1)}\)` | |
+Residual error | `\(n-p-1\)` | SSE = `\(\sum_{i=1}^{n}(y_i-\hat{Y_i})^2\)`| MSE = `\(\frac{SSE}{(n-p-1)}\)` | |
 Total | `\(n-1\)` | `\(\sum_{i=1}^{n}(y_i-\bar{y})^2\)` | | | |
+
+### Hypotheses
+
+`\(H_0: \beta_1 = \beta_2 = ... = \beta_p = 0\)`
+
+`\(H_1: \beta_j \neq 0 \text{ for at least one j, j=1, 2, ...p}\)`
+
+The p -value of this test is not the same as the  p -value of the t-test for  `\(H_0: \beta_1 = 0\)`, that only happens in simple linear regression because `\(p=1\)`.
+
 
 ---
 
