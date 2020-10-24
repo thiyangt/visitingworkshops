@@ -69,10 +69,15 @@ summary(model1)
 
 ---
 
-![](recap.png)
+![](recap2.png)
+
+
 
 ---
-![](S3pn3.jpg)
+![](S3pn32.PNG)
+
+
+
 ---
 ## Model assumptions
 
