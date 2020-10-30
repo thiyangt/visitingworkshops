@@ -1,0 +1,66 @@
+---
+title: "STA 506 2.0 Linear Regression Analysis"
+subtitle: "Lecture 9-ii: Transformations to Correct Model Inadequacies"
+author: "Dr Thiyanga S. Talagala"
+date: "2020-10-31"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    css: 
+      - default
+      - default-fonts
+      - duke-blue
+      - hygge-duke
+      - libs/cc-fonts.css
+      - libs/figure-captions.css
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+```
+
+
+## Introduction
+
+---
+
+## Variance-Stabilizing Transformations
+
+---
+
+## Transformations to Linearize the Model
+
+---
+
+## Transformations on Y
+
+- To correct nonnormality assumption and/or nonconstant variance assumption of the error term.
+
+## Box-Cox Method
+
+---
+
+## Transformations on X
+
+- Suppose the assumption of normally and independently distributed responses with constant variance are at least approximately satisfied, however the relationship between $Y$ and one or more of the regressor variables is nonlinear. 
+
+---
+
+class: center, middle
+
+
+
+Acknowledgement
+
+Introduction to Linear Regression Analysis, Douglas C. Montgomery, Elizabeth A. Peck, G. Geoffrey Vining
+
+
+All rights reserved by 
+
+[Dr. Thiyanga S. Talagala](https://thiyanga.netlify.app/) 
+
+
+

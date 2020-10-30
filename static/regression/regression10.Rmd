@@ -1,0 +1,66 @@
+---
+title: "STA 506 2.0 Linear Regression Analysis"
+subtitle: "Lecture 9-iii: Identifying Outliers and Influential Cases"
+author: "Dr Thiyanga S. Talagala"
+date: "2020-10-31"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    css: 
+      - default
+      - default-fonts
+      - duke-blue
+      - hygge-duke
+      - libs/cc-fonts.css
+      - libs/figure-captions.css
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+```
+
+<!--https://tillbe.github.io/outlier-influence-identification.html-->
+
+<!--https://online.stat.psu.edu/stat462/node/170/-->
+
+<!--https://stattrek.com/regression/influential-points.aspx-->
+
+## Introduction
+
+---
+
+## Leverage, discrepancy and influence
+
+---
+
+## Assessing leverage
+
+---
+
+## Assessing discrepancy
+
+---
+
+## Assessing influence
+
+
+---
+
+class: center, middle
+
+
+
+Acknowledgement
+
+Introduction to Linear Regression Analysis, Douglas C. Montgomery, Elizabeth A. Peck, G. Geoffrey Vining
+
+
+All rights reserved by 
+
+[Dr. Thiyanga S. Talagala](https://thiyanga.netlify.app/) 
+
+
+

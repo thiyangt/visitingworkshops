@@ -1,0 +1,261 @@
+---
+title: "STA 506 2.0 Linear Regression Analysis"
+subtitle: "Lecture 9-i: Confidence Intervals in Multiple Regression"
+author: "Dr Thiyanga S. Talagala"
+date: "2020-10-31"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    css: 
+      - default
+      - default-fonts
+      - duke-blue
+      - hygge-duke
+      - libs/cc-fonts.css
+      - libs/figure-captions.css
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+```
+
+## Recap
+
+
+---
+## Confidence Intervals in Multiple Regression
+
+1. Confidence intervals on the regression coefficients
+
+2. Confidence interval estimation of the mean response at a given point
+
+---
+
+## Confidence Intervals on the Regression Coefficients
+
+To construct confidence intervals for regression coefficients ( $\beta_j$ , $j=0, 1, ...p$) we will continue to assume that,
+
+- errors $\epsilon_i$ are normally and independently distributed with mean zero and variance $\sigma^2$. 
+
+Hence, before constructing the confidence intervals you need to check the validity of the assumptions. 
+
+---
+
+## Confidence Intervals on the Regression Coefficients
+
+Data set
+
+```{r, comment=NA, message=FALSE, warning=FALSE}
+library(tidyverse)
+heart.data <- read_csv("heart.data.csv")
+heart.data
+```
+
+---
+
+## Confidence Intervals on the Regression Coefficients (cont.)
+
+```{r, comment=NA, message=FALSE, warning=FALSE}
+
+regHeart <-  lm(heart.disease ~ biking+ smoking, data=heart.data)
+regHeart
+
+```
+
+Validity of the assumptions: All satisfied. We discussed in Week 8
+
+### Compute 95% confidence intervals for regression coefficients
+
+
+```{r, comment=NA, message=FALSE, warning=FALSE}
+confint(regHeart, level=0.95)
+```
+---
+
+### Compute 95% confidence intervals for regression coefficients
+
+
+```{r, comment=NA, message=FALSE, warning=FALSE}
+confint(regHeart, level=0.95)
+```
+
+### Compute 90% confidence intervals for regression coefficients
+
+
+```{r, comment=NA, message=FALSE, warning=FALSE}
+confint(regHeart, level=0.90)
+```
+
+---
+
+### Interpretation of confidence intervals for regression coefficients
+
+
+```{r, comment=NA, message=FALSE, warning=FALSE}
+confint(regHeart, level=0.95)
+```
+
+
+---
+
+### Confidence Interval Estimation of the Mean Response at a Given Point
+
+$$Y = \beta_0 + \beta_1X_1 + \beta_2X_2 + \epsilon$$
+
+where 
+
+$Y$ - percentage of people with heart disease
+
+$X_1$ - percentage of people in each town who bike to work
+
+$X_2$ - percentage of people in each town who smoke
+
+### Fitted regression model
+
+```{r, comment=NA}
+regHeart
+```
+
+
+$\hat{Y} = 14.9847 - 0.2001X_1 + 0.1783X_2$
+
+where 
+
+$\hat{Y}$ - Fitted values
+
+
+---
+
+### Confidence Interval Estimation of the Mean Response at a Given Point
+
+Suppose we have an observation $X_1 = 60$ and $X_2=20$ and we would like to find a 95% confidence interval on the percentage of people with heart disease
+
+
+**The fitted value at this point is:**
+
+$\hat{Y} = 14.9847 - 0.2001X_1 + 0.1783X_2$
+
+$\hat{Y} = 14.9847 - 0.2001(60) + 0.1783(20) = 6.54$
+
+
+**A 95% confidence interval on the mean percentage of people with heart disease at this point is:**
+
+
+```{r, comment=NA, message=FALSE, warning=FALSE}
+predict(regHeart, list(biking = 60, smoking = 20),
+interval='confidence', level=0.95)
+
+```
+
+
+**Interpretation: **
+
+---
+
+## Prediction of New Observation
+
+Suppose we want to predict construct 95% prediction interval on the percentage people with heart disease at $X_1=60$ and $X_2=20$.
+
+```{r, comment=NA, message=FALSE, warning=FALSE}
+predict(regHeart, list(biking = 60, smoking = 20),
+interval='predict', level=0.95)
+
+```
+
+<!--https://stats.stackexchange.com/questions/16493/difference-between-confidence-intervals-and-prediction-intervals-->
+
+---
+class: center, middle, duke-orange
+
+# Confidence Interval Estimation of the 
+
+# Mean Response vs. Prediction Interval 
+
+Purpose: Illustrate the difference between confidence intervals for mean and prediction intervals.
+
+---
+
+### Prediction of the mean response
+
+A 95% confidence interval on the **mean** percentage of people with heart disease at the point at $X_1=60$ and $X_2=20$.
+
+
+```{r, comment=NA, message=FALSE, warning=FALSE}
+predict(regHeart, list(biking = 60, smoking = 20),
+interval='confidence', level=0.95)
+
+```
+
+### Prediction of a future value
+
+Suppose we want to predict construct 95% **prediction interval** on the percentage people with heart disease at $X_1=60$ and $X_2=20$.
+
+```{r, comment=NA, message=FALSE, warning=FALSE}
+predict(regHeart, list(biking = 60, smoking = 20),
+interval='predict', level=0.95)
+
+```
+
+---
+
+.content-box-yellow[Prediction of the mean response]
+
+what would be the average (mean) response with characteristics $X_1=60$ and $X_2=20$ ?
+
+```{r, comment=NA, message=FALSE, warning=FALSE}
+predict(regHeart, list(biking = 60, smoking = 20),
+interval='confidence', level=0.95)
+
+```
+
+We predict the mean value of $Y$ with characteristics $X_1=60$ and $X_2=20$.
+
+.content-box-yellow[Prediction of a future value]
+
+what is the predicted value of $Y$ with characteristics $X_1=60$ and $X_2=20$?
+
+```{r, comment=NA, message=FALSE, warning=FALSE}
+predict(regHeart, list(biking = 60, smoking = 20),
+interval='predict', level=0.95)
+
+```
+
+We predict $Y$ for a specific new case that comes from the population with characteristics $X_1=60$ and $X_2=20$.
+
+---
+
+## Prediction of Set of New Observations
+
+
+```{r, comment=NA, message=FALSE}
+newheartdata <- data.frame(biking = c(30, 40, 40, 60),
+                           smoking = c(20, 30, 12, 10))
+newheartdata
+```
+
+
+```{r, comment=NA, message=FALSE}
+predict(regHeart, newdata=newheartdata , interval="predict")
+
+```
+
+---
+
+class: center, middle
+
+
+
+Acknowledgement
+
+Introduction to Linear Regression Analysis, Douglas C. Montgomery, Elizabeth A. Peck, G. Geoffrey Vining
+
+
+All rights reserved by 
+
+[Dr. Thiyanga S. Talagala](https://thiyanga.netlify.app/) 
+
+
+
