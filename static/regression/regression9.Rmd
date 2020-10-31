@@ -25,11 +25,111 @@ options(htmltools.dir.version = FALSE)
 
 ## Introduction
 
+In this section we are going to learn methods and procedures for building regression models when the assumptions are violated.
+
 ---
+class: duke-orange, middle
+
 
 ## Variance-Stabilizing Transformations
 
 ---
+
+## Data set 1
+
+We will try to model salary as a function of years of experience.
+
+```{r, comment=NA, message=FALSE, warning=FALSE}
+library(tidyverse)
+salarydata <- read_csv("salarydata.csv")
+salarydata
+```
+
+Data are obtained from: https://daviddalpiaz.github.io/appliedstats/transformations.html
+
+---
+
+## Salary vs Years of Experience
+
+```{r, comment=NA, message=FALSE, warning=FALSE, fig.height=5.3, fig.width=5.3}
+ggplot(salarydata, aes(x=years, y=salary)) + geom_point()
+cor(salarydata$years, salarydata$salary)
+```
+
+---
+## Fit a Simple Linear Regression Model
+
+```{r, comment=NA, message=FALSE, warning=FALSE}
+salary_fit <- lm(salary ~ years, data = salarydata)
+summary(salary_fit)
+
+```
+
+
+---
+
+## Compute Residuals and Fitted Values
+
+```{r, comment=NA, message=FALSE, warning=FALSE}
+library(broom)
+salary_residuals <- augment(salary_fit)
+salary_residuals
+```
+
+
+---
+
+## Residuals vs Fitted Values
+
+```{r, comment=NA, message=FALSE, warning=FALSE, fig.height=6, fig.width=6}
+ggplot(salary_residuals, aes(x=.fitted, y=.resid)) + geom_point()
+```
+
+
+---
+
+## Normality assumption
+
+
+.pull-left[
+
+```{r, comment=NA, message=FALSE, fig.height=4}
+qplot(data=salary_residuals,
+      x=.resid,)+
+  geom_histogram(color="black", 
+                 fill="lightblue")
+```
+
+```{r, comment=NA, message=FALSE}
+shapiro.test(salary_residuals$.resid)
+```
+
+
+]
+
+.pull-right[
+
+```{r, comment=NA, message=FALSE, fig.height=4}
+ggplot(salary_residuals, 
+       aes(sample=.resid))+
+  stat_qq() + 
+  stat_qq_line() +
+  labs(x="Theoretical Quantiles",
+       y="Sample Quantiles")
+```
+
+
+
+
+]
+
+
+
+---
+
+
+
+class: duke-orange, middle
 
 ## Transformations to Linearize the Model
 
