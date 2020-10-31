@@ -33,6 +33,8 @@ options(htmltools.dir.version = FALSE)
 
 ## Transformations to Linearize the Model
 
+<!--https://ademos.people.uic.edu/Chapter12.html-->
+
 ---
 
 ## Transformations on Y

@@ -27,6 +27,56 @@ class: center, middle, inverse, title-slide
 
 ## Recap
 
+1. Exploratory data analysis (scatterplot, correlation)
+
+2. Fit a regression model
+
+3. Check the validity of the assumptions/ Residual analysis
+
+4. Check `\(R^2_{adj}\)`
+
+5. Hypothesis testing: ANOVA
+
+    - Test the significance of regression
+
+6. Hypothesis testing: t-test
+
+    - Tests on individual regression coefficients
+    
+7. Interpret point estimates of coefficients
+
+8. Compute confidence intervals on the regression coefficients and mean response and interpret the results
+
+9. Prediction of new observations
+
+---
+
+## Recap
+
+1. Exploratory data analysis
+
+2. Fit a regression model
+
+3. Check the validity of the assumptions/ Residual analysis
+
+4. Check `\(R^2_{adj}\)`
+
+5. Hypothesis testing: ANOVA
+
+    - Test the significance of regression
+
+6. Hypothesis testing: t-test
+
+    - Tests on individual regression coefficients
+    
+7. Interpret point estimates of coefficients
+
+**8. Compute confidence intervals on the regression coefficients and mean response and interpret the results**
+
+**9. Prediction of new observations**
+
+
+
 
 ---
 ## Confidence Intervals in Multiple Regression
@@ -160,6 +210,34 @@ biking      -0.2028166 -0.1974495
 smoking      0.1713800  0.1852878
 ```
 
+---
+
+
+### Interpretation of confidence intervals for regression coefficients
+
+
+
+```
+                 2.5 %     97.5 %
+(Intercept) 14.8272075 15.1421084
+biking      -0.2028166 -0.1974495
+smoking      0.1713800  0.1852878
+```
+
+**Intercept: 95% Confidence Interval [14.82, 15.14]**
+
+This means that if `\(X_1\)` (`biking`) and `\(X_2\)` (`smoking`) remain at zero, we are 95% confidence that the mean percentage of people with heart disease is between 14.82% and 15.14%.
+
+
+`\(\beta_1\)`: **95% Confidence Interval [-0.20, -0.19]**
+
+
+This means that if `\(X_2\)` (`smoking`) remains fixed, we are 95% confidence that an one percent increase in `biking` is associated with a decrease in the mean percentage of people with heart disease at least 0.19 percent and not more than 0.20 percent.
+
+
+`\(\beta_2\)` **: 95% Confidence Interval [0.17, 0.19]**
+
+This means that if `\(X_1\)` (`biking`) remains fixed, we are 95% confidence that an one percent increase in `smoking` is associated with an increase in the mean percentage of people with heart disease at least 0.17 percent and not more than 0.18 percent.
 
 ---
 
@@ -231,6 +309,8 @@ interval='confidence', level=0.95)
 
 **Interpretation: **
 
+We can be 95% confident that the **mean percentage of people with heart disease** of  all towns at `\(X_1 (biking)=60\)` and `\(X_2 (smoking)=20\)` is between 6.45 and 6.63 percent.
+
 ---
 
 ## Prediction of New Observation
@@ -249,6 +329,10 @@ interval='predict', level=0.95)
 ```
 
 &lt;!--https://stats.stackexchange.com/questions/16493/difference-between-confidence-intervals-and-prediction-intervals--&gt;
+
+We can be 95% confident that the **percentage of people with heart disease** at a town at `\(X_1=60\)` and `\(X_2=20\)` will be between 5.25 and 7.83 percent.
+
+
 
 ---
 class: center, middle, duke-orange
@@ -328,6 +412,44 @@ interval='predict', level=0.95)
 
 We predict `\(Y\)` for a specific new case that comes from the population with characteristics `\(X_1=60\)` and `\(X_2=20\)`.
 
+Prediction interval for a new response.
+
+---
+
+### Interpretations
+
+.full-width[.content-box-yellow[Prediction of the mean response]]
+
+
+
+
+```r
+predict(regHeart, list(biking = 60, smoking = 20),
+interval='confidence', level=0.95)
+```
+
+```
+       fit      lwr     upr
+1 6.543353 6.454927 6.63178
+```
+
+
+.full-width[.content-box-yellow[Prediction of a future value]]
+
+
+
+```r
+predict(regHeart, list(biking = 60, smoking = 20),
+interval='predict', level=0.95)
+```
+
+```
+       fit      lwr      upr
+1 6.543353 5.255293 7.831413
+```
+
+
+
 ---
 
 ## Prediction of Set of New Observations
@@ -361,6 +483,76 @@ predict(regHeart, newdata=newheartdata , interval="predict")
 3  9.119343  7.832795 10.405891
 4  4.760014  3.471742  6.048286
 ```
+
+---
+
+## Mathematical Formula: Least-square estimator
+
+`\(Y = \beta_0 + \beta_1X_1 + \beta_2X_2 + ...+\beta_pX_p + \epsilon\)`
+
+`$$Y = \begin{bmatrix}
+Y_{1}\\
+Y_{2}\\
+.\\
+.\\
+.\\
+Y_{n}
+\end{bmatrix}$$`
+
+`$$X = \begin{bmatrix}
+1, x_{11}, x_{12}, ..., x_{1p}\\
+1, x_{21}, x_{22}, ..., x_{2p}\\
+.\\
+.\\
+.\\
+1, x_{n1}, x_{n2}, ..., x_{np}
+\end{bmatrix}$$`
+
+`$$\hat{\beta} = (X'X)^{-1}X'Y$$`
+
+
+---
+
+
+## Mathematical Formula 
+
+.full-width[.content-box-yellow[Confidence intervals on the regression coefficients]]
+
+[ `\(\hat{\beta_j} -t_{\alpha/2, n-p} \sqrt{\hat{\sigma}^2C_{jj}}\)`, `\(\hat{\beta_j} + t_{\alpha/2, n-p} \sqrt{\hat{\sigma}^2C_{jj}}\)` ]
+
+`\(C_{jj}\)` is the `\(j\)`th diagonal element of the `\((X'X)^{-1}\)`
+
+Unbiased estimator for `\(\sigma^2\)` is given by
+
+`\(\hat{\sigma}^2\)` = MSE
+
+---
+
+## Mathematical Formula 
+
+.full-width[.content-box-yellow[Prediction of the mean response ]] 
+Confidence interval for:
+
+Mean Response at `\(x_{01}, x_{02},..,x_{0p}\)`, `\(E[Y|X_1=x_{01}, X_2=x_{02}..., X_p=x_{0p}] = \mu_{Y|X_1=x_{01}, X_2=x_{02}..., X_p=x_{0p}}\)`
+
+Fitted value at `\(x_{01}, x_{02},..,x_{0p}\)`
+
+`\(\bf{[x_0]'}\)` = `\([1, x_{01}, x_{02},..., x_{0k}]\)`
+
+`\(\hat{y}_0 = \bf{x_0'} \hat{\bf{\beta}}\)`
+
+
+
+[ `\(\hat{y_0} -t_{\alpha/2, n-p} \sqrt{\hat{\sigma}^2 \bf{x_0'(X'X)^{-1}x_0}}\)`, `\(\hat{y_0} + t_{\alpha/2, n-p} \sqrt{\hat{\sigma}^2 \bf{x_0'(X'X)^{-1}x_0}}\)` ]
+
+---
+## Mathematical Formula (cont.)
+
+
+.full-width[.content-box-yellow[Prediction of a future value]]
+
+
+[ `\(\hat{y_0} -t_{\alpha/2, n-p} \sqrt{\hat{\sigma}^2 (1+\bf{x_0'(X'X)^{-1}x_0}})\)`, `\(\hat{y_0} + t_{\alpha/2, n-p} \sqrt{\hat{\sigma}^2 (1+\bf{x_0'(X'X)^{-1}x_0}})\)` ]
 
 ---
 
