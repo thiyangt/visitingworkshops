@@ -28,13 +28,472 @@ class: center, middle, inverse, title-slide
 
 ## Introduction
 
+In this section we are going to learn methods and procedures for building regression models when the assumptions are violated.
+
 ---
+class: duke-orange, middle
+
 
 ## Variance-Stabilizing Transformations
 
 ---
 
+## Dataset 1
+
+We will try to model salary as a function of years of experience.
+
+
+```r
+library(tidyverse)
+salarydata &lt;- read_csv("salarydata.csv")
+salarydata
+```
+
+```
+# A tibble: 100 x 2
+   years salary
+   &lt;dbl&gt;  &lt;dbl&gt;
+ 1     1  41504
+ 2     1  32619
+ 3     1  44322
+ 4     2  40038
+ 5     2  46147
+ 6     2  38447
+ 7     2  38163
+ 8     3  42104
+ 9     3  25597
+10     3  39599
+# … with 90 more rows
+```
+
+Data are obtained from: https://daviddalpiaz.github.io/appliedstats/transformations.html
+
+---
+
+## Salary vs Years of Experience
+
+
+```r
+ggplot(salarydata, aes(x=years, y=salary)) + geom_point()
+```
+
+![](regression9_files/figure-html/unnamed-chunk-2-1.png)&lt;!-- --&gt;
+
+```r
+cor(salarydata$years, salarydata$salary)
+```
+
+```
+[1] 0.9133066
+```
+
+---
+## Fit a Simple Linear Regression Model
+
+
+```r
+salary_fit &lt;- lm(salary ~ years, data = salarydata)
+summary(salary_fit)
+```
+
+```
+
+Call:
+lm(formula = salary ~ years, data = salarydata)
+
+Residuals:
+   Min     1Q Median     3Q    Max 
+-57225 -18104    241  15589  91332 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)     5302       5750   0.922    0.359    
+years           8637        389  22.200   &lt;2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 27360 on 98 degrees of freedom
+Multiple R-squared:  0.8341,	Adjusted R-squared:  0.8324 
+F-statistic: 492.8 on 1 and 98 DF,  p-value: &lt; 2.2e-16
+```
+
+
+---
+
+## Compute Residuals and Fitted Values
+
+
+```r
+library(broom)
+salary_residuals &lt;- augment(salary_fit)
+salary_residuals
+```
+
+```
+# A tibble: 100 x 8
+   salary years .fitted .resid .std.resid   .hat .sigma  .cooksd
+    &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt;      &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;    &lt;dbl&gt;
+ 1  41504     1  13939. 27565.      1.03  0.0391 27347. 0.0215  
+ 2  32619     1  13939. 18680.      0.697 0.0391 27428. 0.00988 
+ 3  44322     1  13939. 30383.      1.13  0.0391 27315. 0.0261  
+ 4  40038     2  22575. 17463.      0.650 0.0345 27436. 0.00753 
+ 5  46147     2  22575. 23572.      0.877 0.0345 27388. 0.0137  
+ 6  38447     2  22575. 15872.      0.590 0.0345 27447. 0.00622 
+ 7  38163     2  22575. 15588.      0.580 0.0345 27449. 0.00600 
+ 8  42104     3  31212. 10892.      0.404 0.0302 27473. 0.00255 
+ 9  25597     3  31212. -5615.     -0.208 0.0302 27490. 0.000677
+10  39599     3  31212.  8387.      0.311 0.0302 27482. 0.00151 
+# … with 90 more rows
+```
+
+
+---
+
+## Residuals vs Fitted Values
+
+
+```r
+ggplot(salary_residuals, aes(x=.fitted, y=.resid)) + geom_point()
+```
+
+![](regression9_files/figure-html/unnamed-chunk-5-1.png)&lt;!-- --&gt;
+
+
+---
+
+## Normality assumption
+
+
+.pull-left[
+
+
+```r
+qplot(data=salary_residuals,
+      x=.resid,)+
+  geom_histogram(color="black", 
+                 fill="lightblue")
+```
+
+![](regression9_files/figure-html/unnamed-chunk-6-1.png)&lt;!-- --&gt;
+
+
+```r
+shapiro.test(salary_residuals$.resid)
+```
+
+```
+
+	Shapiro-Wilk normality test
+
+data:  salary_residuals$.resid
+W = 0.98258, p-value = 0.2101
+```
+
+
+]
+
+.pull-right[
+
+
+```r
+ggplot(salary_residuals, 
+       aes(sample=.resid))+
+  stat_qq() + 
+  stat_qq_line() +
+  labs(x="Theoretical Quantiles",
+       y="Sample Quantiles")
+```
+
+![](regression9_files/figure-html/unnamed-chunk-8-1.png)&lt;!-- --&gt;
+
+
+
+
+]
+
+---
+
+## Variance - Stabilizing Transformations
+
+
+.pull-left[
+
+![](regression9_files/figure-html/unnamed-chunk-9-1.png)&lt;!-- --&gt;
+
+
+]
+
+.pull-left[
+
+- Useful variance-stabilizing transformations
+
+    - square root: `\(\sqrt{y}\)`
+  
+    - log transformation: `\(log(y)\)`
+    
+    - reciprocal: `\(y^{-1}\)`
+    
+    - reciprocal square root: `\(y^{-1/2}\)`
+
+
+]
+
+---
+
+## Apply log transformation
+
+`$$log(Y) = \beta_0 + \beta_1x_ + \epsilon$$`
+
+
+```r
+salarydata$log.salary &lt;- log(salarydata$salary)
+salarydata
+```
+
+```
+# A tibble: 100 x 3
+   years salary log.salary
+   &lt;dbl&gt;  &lt;dbl&gt;      &lt;dbl&gt;
+ 1     1  41504       10.6
+ 2     1  32619       10.4
+ 3     1  44322       10.7
+ 4     2  40038       10.6
+ 5     2  46147       10.7
+ 6     2  38447       10.6
+ 7     2  38163       10.5
+ 8     3  42104       10.6
+ 9     3  25597       10.2
+10     3  39599       10.6
+# … with 90 more rows
+```
+
+---
+## Fit a regression model with log transformation
+
+
+```r
+salary_fit_log &lt;- lm(log.salary ~ years, data = salarydata)
+salary_fit_log
+```
+
+```
+
+Call:
+lm(formula = log.salary ~ years, data = salarydata)
+
+Coefficients:
+(Intercept)        years  
+   10.48381      0.07888  
+```
+
+---
+
+## Compute Residuals and Fitted values
+
+
+```r
+salary_log_residuals &lt;- augment(salary_fit_log)
+salary_log_residuals
+```
+
+```
+# A tibble: 100 x 8
+   log.salary years .fitted  .resid .std.resid   .hat .sigma  .cooksd
+        &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;      &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;    &lt;dbl&gt;
+ 1       10.6     1    10.6  0.0709      0.370 0.0391  0.196 0.00278 
+ 2       10.4     1    10.6 -0.170      -0.887 0.0391  0.196 0.0160  
+ 3       10.7     1    10.6  0.137       0.713 0.0391  0.196 0.0103  
+ 4       10.6     2    10.6 -0.0440     -0.229 0.0345  0.196 0.000936
+ 5       10.7     2    10.6  0.0980      0.510 0.0345  0.196 0.00465 
+ 6       10.6     2    10.6 -0.0845     -0.440 0.0345  0.196 0.00346 
+ 7       10.5     2    10.6 -0.0919     -0.479 0.0345  0.196 0.00409 
+ 8       10.6     3    10.7 -0.0725     -0.377 0.0302  0.196 0.00221 
+ 9       10.2     3    10.7 -0.570      -2.96  0.0302  0.187 0.137   
+10       10.6     3    10.7 -0.134      -0.696 0.0302  0.196 0.00754 
+# … with 90 more rows
+```
+
+---
+## Residuals vs Fitted values
+
+![](regression9_files/figure-html/unnamed-chunk-13-1.png)&lt;!-- --&gt;
+
+---
+## Residuals vs Fitted
+
+.pull-left[
+
+`$$Y = \beta_0 + \beta_1x + \epsilon$$`
+
+
+![](regression9_files/figure-html/unnamed-chunk-14-1.png)&lt;!-- --&gt;
+
+
+]
+
+.pull-right[
+
+`$$log(Y) = \beta_0 + \beta_1x + \epsilon$$`
+
+![](regression9_files/figure-html/unnamed-chunk-15-1.png)&lt;!-- --&gt;
+
+
+]
+
+---
+
+## Normality assumption
+
+`\(log(Y) = \beta_0 + \beta_1x + \epsilon\)`
+
+
+
+
+```r
+qplot(data=salary_log_residuals,
+      x=.resid,)+
+  geom_histogram(color="black", 
+                 fill="lightblue")
+```
+
+![](regression9_files/figure-html/unnamed-chunk-16-1.png)&lt;!-- --&gt;
+
+---
+
+## Normality assumption (cont.)
+
+
+```r
+ggplot(salary_log_residuals, 
+       aes(sample=.resid))+
+  stat_qq() + 
+  stat_qq_line() +
+  labs(x="Theoretical Quantiles",
+       y="Sample Quantiles")
+```
+
+![](regression9_files/figure-html/unnamed-chunk-17-1.png)&lt;!-- --&gt;
+
+
+---
+
+## Normality assumption (cont.)
+
+
+```r
+shapiro.test(salary_log_residuals$.resid)
+```
+
+```
+
+	Shapiro-Wilk normality test
+
+data:  salary_log_residuals$.resid
+W = 0.98033, p-value = 0.141
+```
+
+---
+## Model Statistics
+
+
+```r
+summary(salary_fit_log)
+```
+
+```
+
+Call:
+lm(formula = log.salary ~ years, data = salarydata)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-0.57022 -0.13560  0.03048  0.14157  0.41366 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept) 10.48381    0.04108  255.18   &lt;2e-16 ***
+years        0.07888    0.00278   28.38   &lt;2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 0.1955 on 98 degrees of freedom
+Multiple R-squared:  0.8915,	Adjusted R-squared:  0.8904 
+F-statistic: 805.2 on 1 and 98 DF,  p-value: &lt; 2.2e-16
+```
+
+---
+
+## Hypothesis testing
+
+### Intercept
+
+`\(H_0: \beta_0 = 0\)` vs `\(H_1: \beta_0 \neq 0\)`
+
+Decision:
+
+p-value &lt; 0.05.  We reject `\(H_0\)` under 0.05 level of significance.
+
+
+Conclusion:
+
+### Slope
+
+
+`\(H_0: \beta_1 = 0\)` vs `\(H_1: \beta_1 \neq 0\)`
+
+Decision: 
+
+p-value &lt; 0.05.  We reject `\(H_0\)` under 0.05 level of significance.
+
+Conclusion:
+
+---
+# Re-scale
+
+### log scale  to the original scale of the data
+
+**Preliminary Maths**
+
+`$$Y=10$$`
+`$$log(10) = 2.302585$$`
+`$$e^{2.302585} = 10$$`
+`$$e^{a+b} = e^ae^b$$`
+
+### New fitted regression model
+
+`$$log(\hat{Y}) = 10.48 + 0.079X$$`
+
+Convert to original scale
+
+`$$e^{log(\hat{Y})} = e^{10.48 + 0.079X}$$`
+
+`$$Y = e^{10.48}e^{0.079X}$$`
+
+---
+## Interpretation of slope
+
+When `\(X=x_1\)`
+
+`$$Y' = e^{10.48}e^{0.079x_1}$$`
+
+When `\(X={x_1 + 1}\)`
+
+`$$Y'' = e^{10.48}e^{0.079(x_1 + 1)} = e^{10.48}e^{0.079(x_1)}e^{0.079}$$`
+
+`$$e^{0.079} = 1.0822$$`
+
+We see that for every one additional year of experience, average salary increases 1.0822 times. We are now multiplying, not adding.
+
+
+---
+
+---
+
+class: duke-orange, middle
+
 ## Transformations to Linearize the Model
+
+&lt;!--https://ademos.people.uic.edu/Chapter12.html--&gt;
 
 ---
 

@@ -38,7 +38,7 @@ class: duke-orange, middle
 
 ---
 
-## Data set 1
+## Dataset 1
 
 We will try to model salary as a function of years of experience.
 
@@ -211,11 +211,283 @@ ggplot(salary_residuals,
 
 ]
 
+---
+
+## Variance - Stabilizing Transformations
+
+
+.pull-left[
+
+![](regression9_files/figure-html/unnamed-chunk-9-1.png)&lt;!-- --&gt;
+
+
+]
+
+.pull-left[
+
+- Useful variance-stabilizing transformations
+
+    - square root: `\(\sqrt{y}\)`
+  
+    - log transformation: `\(log(y)\)`
+    
+    - reciprocal: `\(y^{-1}\)`
+    
+    - reciprocal square root: `\(y^{-1/2}\)`
+
+
+]
+
+---
+
+## Apply log transformation
+
+`$$log(Y) = \beta_0 + \beta_1x_ + \epsilon$$`
+
+
+```r
+salarydata$log.salary &lt;- log(salarydata$salary)
+salarydata
+```
+
+```
+# A tibble: 100 x 3
+   years salary log.salary
+   &lt;dbl&gt;  &lt;dbl&gt;      &lt;dbl&gt;
+ 1     1  41504       10.6
+ 2     1  32619       10.4
+ 3     1  44322       10.7
+ 4     2  40038       10.6
+ 5     2  46147       10.7
+ 6     2  38447       10.6
+ 7     2  38163       10.5
+ 8     3  42104       10.6
+ 9     3  25597       10.2
+10     3  39599       10.6
+# … with 90 more rows
+```
+
+---
+## Fit a regression model with log transformation
+
+
+```r
+salary_fit_log &lt;- lm(log.salary ~ years, data = salarydata)
+salary_fit_log
+```
+
+```
+
+Call:
+lm(formula = log.salary ~ years, data = salarydata)
+
+Coefficients:
+(Intercept)        years  
+   10.48381      0.07888  
+```
+
+---
+
+## Compute Residuals and Fitted values
+
+
+```r
+salary_log_residuals &lt;- augment(salary_fit_log)
+salary_log_residuals
+```
+
+```
+# A tibble: 100 x 8
+   log.salary years .fitted  .resid .std.resid   .hat .sigma  .cooksd
+        &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;      &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;    &lt;dbl&gt;
+ 1       10.6     1    10.6  0.0709      0.370 0.0391  0.196 0.00278 
+ 2       10.4     1    10.6 -0.170      -0.887 0.0391  0.196 0.0160  
+ 3       10.7     1    10.6  0.137       0.713 0.0391  0.196 0.0103  
+ 4       10.6     2    10.6 -0.0440     -0.229 0.0345  0.196 0.000936
+ 5       10.7     2    10.6  0.0980      0.510 0.0345  0.196 0.00465 
+ 6       10.6     2    10.6 -0.0845     -0.440 0.0345  0.196 0.00346 
+ 7       10.5     2    10.6 -0.0919     -0.479 0.0345  0.196 0.00409 
+ 8       10.6     3    10.7 -0.0725     -0.377 0.0302  0.196 0.00221 
+ 9       10.2     3    10.7 -0.570      -2.96  0.0302  0.187 0.137   
+10       10.6     3    10.7 -0.134      -0.696 0.0302  0.196 0.00754 
+# … with 90 more rows
+```
+
+---
+## Residuals vs Fitted values
+
+![](regression9_files/figure-html/unnamed-chunk-13-1.png)&lt;!-- --&gt;
+
+---
+## Residuals vs Fitted
+
+.pull-left[
+
+`$$Y = \beta_0 + \beta_1x + \epsilon$$`
+
+
+![](regression9_files/figure-html/unnamed-chunk-14-1.png)&lt;!-- --&gt;
+
+
+]
+
+.pull-right[
+
+`$$log(Y) = \beta_0 + \beta_1x + \epsilon$$`
+
+![](regression9_files/figure-html/unnamed-chunk-15-1.png)&lt;!-- --&gt;
+
+
+]
+
+---
+
+## Normality assumption
+
+`\(log(Y) = \beta_0 + \beta_1x + \epsilon\)`
+
+
+
+
+```r
+qplot(data=salary_log_residuals,
+      x=.resid,)+
+  geom_histogram(color="black", 
+                 fill="lightblue")
+```
+
+![](regression9_files/figure-html/unnamed-chunk-16-1.png)&lt;!-- --&gt;
+
+---
+
+## Normality assumption (cont.)
+
+
+```r
+ggplot(salary_log_residuals, 
+       aes(sample=.resid))+
+  stat_qq() + 
+  stat_qq_line() +
+  labs(x="Theoretical Quantiles",
+       y="Sample Quantiles")
+```
+
+![](regression9_files/figure-html/unnamed-chunk-17-1.png)&lt;!-- --&gt;
 
 
 ---
 
+## Normality assumption (cont.)
 
+
+```r
+shapiro.test(salary_log_residuals$.resid)
+```
+
+```
+
+	Shapiro-Wilk normality test
+
+data:  salary_log_residuals$.resid
+W = 0.98033, p-value = 0.141
+```
+
+---
+## Model Statistics
+
+
+```r
+summary(salary_fit_log)
+```
+
+```
+
+Call:
+lm(formula = log.salary ~ years, data = salarydata)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-0.57022 -0.13560  0.03048  0.14157  0.41366 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept) 10.48381    0.04108  255.18   &lt;2e-16 ***
+years        0.07888    0.00278   28.38   &lt;2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 0.1955 on 98 degrees of freedom
+Multiple R-squared:  0.8915,	Adjusted R-squared:  0.8904 
+F-statistic: 805.2 on 1 and 98 DF,  p-value: &lt; 2.2e-16
+```
+
+---
+
+## Hypothesis testing
+
+### Intercept
+
+`\(H_0: \beta_0 = 0\)` vs `\(H_1: \beta_0 \neq 0\)`
+
+Decision:
+
+p-value &lt; 0.05.  We reject `\(H_0\)` under 0.05 level of significance.
+
+
+Conclusion:
+
+### Slope
+
+
+`\(H_0: \beta_1 = 0\)` vs `\(H_1: \beta_1 \neq 0\)`
+
+Decision: 
+
+p-value &lt; 0.05.  We reject `\(H_0\)` under 0.05 level of significance.
+
+Conclusion:
+
+---
+# Re-scale
+
+### log scale  to the original scale of the data
+
+**Preliminary Maths**
+
+`$$Y=10$$`
+`$$log(10) = 2.302585$$`
+`$$e^{2.302585} = 10$$`
+`$$e^{a+b} = e^ae^b$$`
+
+### New fitted regression model
+
+`$$log(\hat{Y}) = 10.48 + 0.079X$$`
+
+Convert to original scale
+
+`$$e^{log(\hat{Y})} = e^{10.48 + 0.079X}$$`
+
+`$$Y = e^{10.48}e^{0.079X}$$`
+
+---
+## Interpretation of slope
+
+When `\(X=x_1\)`
+
+`$$Y' = e^{10.48}e^{0.079x_1}$$`
+
+When `\(X={x_1 + 1}\)`
+
+`$$Y'' = e^{10.48}e^{0.079(x_1 + 1)} = e^{10.48}e^{0.079(x_1)}e^{0.079}$$`
+
+`$$e^{0.079} = 1.0822$$`
+
+We see that for every one additional year of experience, average salary increases 1.0822 times. We are now multiplying, not adding.
+
+
+---
+
+---
 
 class: duke-orange, middle
 

@@ -35,7 +35,7 @@ class: duke-orange, middle
 
 ---
 
-## Data set 1
+## Dataset 1
 
 We will try to model salary as a function of years of experience.
 
@@ -123,11 +123,211 @@ ggplot(salary_residuals,
 
 ]
 
+---
+
+## Variance - Stabilizing Transformations
+
+
+.pull-left[
+
+```{r, comment=NA, message=FALSE, echo=FALSE, warning=FALSE, fig.height=6, fig.width=6}
+ggplot(salary_residuals, aes(x=.fitted, y=.resid)) + geom_point()
+```
+
+
+]
+
+.pull-left[
+
+- Useful variance-stabilizing transformations
+
+    - square root: $\sqrt{y}$
+  
+    - log transformation: $log(y)$
+    
+    - reciprocal: $y^{-1}$
+    
+    - reciprocal square root: $y^{-1/2}$
+
+
+]
+
+---
+
+## Apply log transformation
+
+$$log(Y) = \beta_0 + \beta_1x_ + \epsilon$$
+
+```{r, comment=NA, message=FALSE, warning=FALSE}
+
+salarydata$log.salary <- log(salarydata$salary)
+salarydata
+```
+
+---
+## Fit a regression model with log transformation
+
+```{r, comment=NA, message=FALSE, warning=FALSE}
+
+salary_fit_log <- lm(log.salary ~ years, data = salarydata)
+salary_fit_log
+```
+
+---
+
+## Compute Residuals and Fitted values
+
+```{r, comment=NA, message=FALSE, warning=FALSE}
+
+salary_log_residuals <- augment(salary_fit_log)
+salary_log_residuals
+```
+
+---
+## Residuals vs Fitted values
+
+```{r, comment=NA, message=FALSE, echo=FALSE, warning=FALSE, fig.height=6, fig.width=6}
+ggplot(salary_log_residuals, aes(x=.fitted, y=.resid)) + geom_point()
+```
+
+---
+## Residuals vs Fitted
+
+.pull-left[
+
+$$Y = \beta_0 + \beta_1x + \epsilon$$
+
+
+```{r, comment=NA, message=FALSE, echo=FALSE, warning=FALSE, fig.height=6, fig.width=6}
+ggplot(salary_residuals, aes(x=.fitted, y=.resid)) + geom_point()
+```
+
+
+]
+
+.pull-right[
+
+$$log(Y) = \beta_0 + \beta_1x + \epsilon$$
+
+```{r, comment=NA, message=FALSE, echo=FALSE, warning=FALSE, fig.height=6, fig.width=6}
+ggplot(salary_log_residuals, aes(x=.fitted, y=.resid)) + geom_point()
+```
+
+
+]
+
+---
+
+## Normality assumption
+
+$log(Y) = \beta_0 + \beta_1x + \epsilon$
+
+
+
+```{r, comment=NA, message=FALSE, fig.height=4}
+qplot(data=salary_log_residuals,
+      x=.resid,)+
+  geom_histogram(color="black", 
+                 fill="lightblue")
+```
+
+---
+
+## Normality assumption (cont.)
+
+```{r, comment=NA, message=FALSE, fig.height=4}
+ggplot(salary_log_residuals, 
+       aes(sample=.resid))+
+  stat_qq() + 
+  stat_qq_line() +
+  labs(x="Theoretical Quantiles",
+       y="Sample Quantiles")
+```
 
 
 ---
 
+## Normality assumption (cont.)
 
+```{r, comment=NA, message=FALSE}
+shapiro.test(salary_log_residuals$.resid)
+```
+
+---
+## Model Statistics
+
+```{r, comment=NA, message=FALSE, warning=FALSE}
+summary(salary_fit_log)
+
+```
+
+---
+
+## Hypothesis testing
+
+### Intercept
+
+$H_0: \beta_0 = 0$ vs $H_1: \beta_0 \neq 0$
+
+Decision:
+
+p-value < 0.05.  We reject $H_0$ under 0.05 level of significance.
+
+
+Conclusion:
+
+### Slope
+
+
+$H_0: \beta_1 = 0$ vs $H_1: \beta_1 \neq 0$
+
+Decision: 
+
+p-value < 0.05.  We reject $H_0$ under 0.05 level of significance.
+
+Conclusion:
+
+---
+# Re-scale
+
+### log scale  to the original scale of the data
+
+**Preliminary Maths**
+
+$$Y=10$$
+$$log(10) = 2.302585$$
+$$e^{2.302585} = 10$$
+$$e^{a+b} = e^ae^b$$
+
+### New fitted regression model
+
+$$log(\hat{Y}) = 10.48 + 0.079X$$
+
+Convert to original scale
+
+$$e^{log(\hat{Y})} = e^{10.48 + 0.079X}$$
+
+$$Y = e^{10.48}e^{0.079X}$$
+
+---
+## Interpretation of slope
+
+When $X=x_1$
+
+$$Y' = e^{10.48}e^{0.079x_1}$$
+
+When $X={x_1 + 1}$
+
+$$Y'' = e^{10.48}e^{0.079(x_1 + 1)} = e^{10.48}e^{0.079(x_1)}e^{0.079}$$
+
+$$e^{0.079} = 1.0822$$
+
+We see that for every one additional year of experience, average salary increases 1.0822 times. We are now multiplying, not adding.
+
+
+---
+
+---
 
 class: duke-orange, middle
 
