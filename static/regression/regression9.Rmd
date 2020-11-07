@@ -323,7 +323,7 @@ Convert to original scale
 
 $$e^{\hat{log(Y)}} = e^{10.48 + 0.079X}$$
 
-$$Y = e^{10.48}e^{0.079X}$$
+$$\hat{Y} = e^{10.48}e^{0.079X}$$
 
 ---
 ## Interpretation of slope
