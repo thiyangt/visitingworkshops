@@ -1,6 +1,6 @@
 ---
 title: "STA 506 2.0 Linear Regression Analysis"
-subtitle: "Lecture 9-i: Confidence Intervals in Multiple Regression"
+subtitle: "Lecture 10: Confidence Intervals in Multiple Regression"
 author: "Dr Thiyanga S. Talagala"
 date: "2020-10-31"
 output:

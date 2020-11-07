@@ -1,6 +1,6 @@
 ---
 title: "STA 506 2.0 Linear Regression Analysis"
-subtitle: "Lecture 10-i: Transformations to Correct Model Inadequacies"
+subtitle: "Lecture 11-i: Transformations to Correct Model Inadequacies"
 author: "Dr Thiyanga S. Talagala"
 date: "2020-11-07"
 output:
