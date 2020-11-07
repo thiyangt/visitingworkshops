@@ -450,7 +450,7 @@ Decision:
 p-value &lt; 0.05.  We reject `\(H_0\)` under 0.05 level of significance.
 
 
-Conclusion:
+Conclusion: We can conclude that population regression line intercept is significantly different from 0.
 
 ### Slope
 
@@ -461,7 +461,7 @@ Decision:
 
 p-value &lt; 0.05.  We reject `\(H_0\)` under 0.05 level of significance.
 
-Conclusion:
+Conclusion: The variable `years` contributes significantly to the model.
 
 ---
 # Re-scale
@@ -516,7 +516,8 @@ When `\(x=0\)`, the median of `\(Y\)` is expected to be `\(e^{\hat{\beta}_0}\)`.
 For every one unit increase in `\(x\)`, the median of `\(Y\)` is expected to multiply by a factor of `\(e^{\hat{\beta}_1}\)`.
 
 
-&lt;!--https://www2.stat.duke.edu/courses/Spring20/sta210.001/slides/lec-slides/09-transformations.html#29--&gt;
+Why median not mean?: Read here
+https://www2.stat.duke.edu/courses/Spring20/sta210.001/slides/lec-slides/09-transformations.html#29
 
 ---
 
@@ -1020,7 +1021,7 @@ can be useful for simplifying relationships with quadratic
 effects, and also for stabilizing variances (Baguley, 2012),
 this transformation does not aid in interpretation."
 
-&gt; Data Transformations for Inf ansformations for Inference with Linear Regr ence with Linear Regression: Clarifications and Recommendations.
+&gt; Data Transformations for Inference with Linear Regression: Clarifications and Recommendations.
 [J. Pek, O. Wong, A. C. Wong] 
 
 
@@ -1033,6 +1034,24 @@ Link to the paper: https://scholarworks.umass.edu/cgi/viewcontent.cgi?article=13
 
 ---
 
+## Model with transformation on X
+
+`$$\hat{Y} = \hat{\beta}_0 + \hat{\beta}_1log(x)$$`
+
+## Interpretation of intercept:
+
+When `\(log(x)=0\)`, that is `\(x=1\)`, mean of `\(Y\)` is expected to be `\(\hat{\beta_0}\)`
+
+## Interpretation of slope:
+
+When `\(X\)` is multiplied by a factor of `\(K\)`, the mean of `\(Y\)` changes by `\(\hat{\beta}_1log(K)\)`.
+
+Example: when `\(K=2\)` (some constant value)
+
+
+When `\(X\)` is multiplied by a factor of 2, the mean of `\(Y\)` changes by `\(\hat{\beta}_1log(2)\)`.
+
+---
 
 ## Help but Not  RULES
 
