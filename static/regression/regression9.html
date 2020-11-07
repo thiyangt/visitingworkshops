@@ -4,7 +4,7 @@
     <title>STA 506 2.0 Linear Regression Analysis</title>
     <meta charset="utf-8" />
     <meta name="author" content="Dr Thiyanga S. Talagala" />
-    <meta name="date" content="2020-10-31" />
+    <meta name="date" content="2020-11-07" />
     <link href="libs/remark-css/default.css" rel="stylesheet" />
     <link href="libs/remark-css/default-fonts.css" rel="stylesheet" />
     <link href="libs/remark-css/duke-blue.css" rel="stylesheet" />
@@ -17,9 +17,9 @@
 class: center, middle, inverse, title-slide
 
 # STA 506 2.0 Linear Regression Analysis
-## Lecture 9-ii: Transformations to Correct Model Inadequacies
+## Lecture 10-i: Transformations to Correct Model Inadequacies
 ### Dr Thiyanga S. Talagala
-### 2020-10-31
+### 2020-11-07
 
 ---
 
@@ -29,6 +29,22 @@ class: center, middle, inverse, title-slide
 ## Introduction
 
 In this section we are going to learn methods and procedures for building regression models when the assumptions are violated.
+
+### Transformations
+
+- Variance-stabilizing transformations
+
+- Transformations to linearize the model
+
+### How to get around the problem?
+
+- Transform  `\(X\)` variable(s)
+
+- Transform `\(Y\)`
+
+- Transformations on both `\(X\)` variable(s) or `\(Y\)`.
+
+
 
 ---
 class: duke-orange, middle
@@ -211,6 +227,8 @@ ggplot(salary_residuals,
 
 ]
 
+
+
 ---
 
 ## Variance - Stabilizing Transformations
@@ -350,10 +368,8 @@ salary_log_residuals
 
 
 ```r
-qplot(data=salary_log_residuals,
-      x=.resid,)+
-  geom_histogram(color="black", 
-                 fill="lightblue")
+qplot(data=salary_log_residuals, x=.resid,)+
+  geom_histogram(color="black", fill="lightblue")
 ```
 
 ![](regression9_files/figure-html/unnamed-chunk-16-1.png)&lt;!-- --&gt;
@@ -482,12 +498,79 @@ When `\(X={x_1 + 1}\)`
 
 `$$e^{0.079} = 1.0822$$`
 
-We see that for every one additional year of experience, average salary increases 1.0822 times. We are now multiplying, not adding.
+We see that for every one additional year of experience, average (median) salary increases 1.0822 times. We are now multiplying, not adding.
+
+---
+
+## Interpretation of slope
+
+`$$log(\hat{Y}) = \hat{\beta_0} + \hat{\beta_1}x$$`
+
+### Interpretation of `\(\hat{\beta_0}\)`
+
+When `\(x=0\)`, the median of `\(Y\)` is expected to be `\(e^{\hat{\beta}_0}\)`.
+
+
+### Interpretation of `\(\hat{\beta_1}\)`
+
+For every one unit increase in `\(x\)`, the median of `\(Y\)` is expected to multiply by a factor of `\(e^{\hat{\beta}_1}\)`.
+
+
+&lt;!--https://www2.stat.duke.edu/courses/Spring20/sta210.001/slides/lec-slides/09-transformations.html#29--&gt;
+
+---
+
+## Confidence interval for `\(\beta_j\)`
+
+The confidence interval for the coefficient of `\(x\)` describing its relationship with `\(log(Y)\)` is:
+
+- Confidence intervals `\(\beta_0\)`
+
+`$$[\hat{\beta_0} - t_{\alpha/2, n-2}se(\hat{\beta_0}), \hat{\beta_0} + t_{\alpha/2, n-2}se(\hat{\beta_0})]$$`
+
+- Confidence intervals `\(\beta_1\)`
+
+`$$[\hat{\beta_1} - t_{\alpha/2, n-2}se(\hat{\beta_1}), \hat{\beta_1} + t_{\alpha/2, n-2}se(\hat{\beta_1})]$$`
+
+
+```r
+confint(salary_fit_log, level=0.95)
+```
+
+```
+                  2.5 %      97.5 %
+(Intercept) 10.40227614 10.56533628
+years        0.07336341  0.08439611
+```
 
 
 ---
 
+## Confidence interval for `\(\beta_j\)` - backtransform
+
+- Confidence intervals `\(\beta_0\)`
+
+`$$[e^{\hat{\beta_0} - t_{\alpha/2, n-2}se(\hat{\beta_0})}, e^{\hat{\beta_0} + t_{\alpha/2, n-2}se(\hat{\beta_0})}]$$`
+
+- Confidence intervals `\(\beta_1\)`
+
+`$$[e^{\hat{\beta_1} - t_{\alpha/2, n-2}se(\hat{\beta_1})}, e^{\hat{\beta_1} + t_{\alpha/2, n-2}se(\hat{\beta_1})}]$$`
+
+
+```r
+exp(confint(salary_fit_log, level=0.95))
+```
+
+```
+                   2.5 %      97.5 %
+(Intercept) 32934.503906 38767.45083
+years           1.076122     1.08806
+```
+
+
+
 ---
+
 
 class: duke-orange, middle
 
@@ -495,21 +578,476 @@ class: duke-orange, middle
 
 &lt;!--https://ademos.people.uic.edu/Chapter12.html--&gt;
 
----
 
-## Transformations on Y
 
-- To correct nonnormality assumption and/or nonconstant variance assumption of the error term.
-
-## Box-Cox Method
 
 ---
 
-## Transformations on X
+
+
+![](coconut.png)
+
+source: https://srilankamirror.com/biz/20026-coconuts-to-be-measured-by-weight-instead-of-circumference
+
+---
+
+## Data
+
+
+```r
+coconut &lt;- read_csv("coconut.csv") # Ignore the warning message
+coconut
+```
+
+```
+# A tibble: 100 x 3
+      X1 weight circumference
+   &lt;dbl&gt;  &lt;dbl&gt;         &lt;dbl&gt;
+ 1     1   773.          27.8
+ 2     2   772.          27.8
+ 3     3   780.          27.9
+ 4     4   790.          28.1
+ 5     5   806.          28.4
+ 6     6   813.          28.5
+ 7     7   817.          28.6
+ 8     8   820.          28.6
+ 9     9   818.          28.6
+10    10   830.          28.8
+# … with 90 more rows
+```
+
+---
+## EDA
+
+.pull-left[
+
+
+```r
+qplot(data=coconut, y=weight, geom=c("boxplot"))+
+  geom_boxplot(color="black", fill="#d95f02")
+```
+
+![](regression9_files/figure-html/unnamed-chunk-23-1.png)&lt;!-- --&gt;
+
+
+
+
+]
+
+.pull-right[
+
+
+```r
+qplot(data=coconut, y=circumference, geom=c("boxplot"))+
+  geom_boxplot(color="black", fill="forestgreen")
+```
+
+![](regression9_files/figure-html/unnamed-chunk-24-1.png)&lt;!-- --&gt;
+
+
+
+]
+
+---
+## Weight vs Circumference
+
+
+```r
+ggplot(coconut, aes(x=circumference, y=weight)) + geom_point()
+```
+
+![](regression9_files/figure-html/unnamed-chunk-25-1.png)&lt;!-- --&gt;
+
+```r
+cor(coconut$circumference, coconut$weight)
+```
+
+```
+[1] 0.9996482
+```
+
+---
+
+# Fit a regression model
+
+
+```r
+coconut.lm &lt;- lm(weight ~ circumference, data=coconut)
+coconut.lm
+```
+
+```
+
+Call:
+lm(formula = weight ~ circumference, data = coconut)
+
+Coefficients:
+  (Intercept)  circumference  
+      -897.25          59.94  
+```
+
+---
+
+## Compute Residuals and Fitted Values
+
+
+
+```r
+coconut.lm.result &lt;- broom::augment(coconut.lm)
+coconut.lm.result
+```
+
+```
+# A tibble: 100 x 8
+   weight circumference .fitted .resid .std.resid   .hat .sigma  .cooksd
+    &lt;dbl&gt;         &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt;      &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;    &lt;dbl&gt;
+ 1   773.          27.8    769.  4.32       2.93  0.0602   1.46 0.275   
+ 2   772.          27.8    769.  2.57       1.74  0.0602   1.50 0.0971  
+ 3   780.          27.9    775.  4.62       3.12  0.0556   1.45 0.287   
+ 4   790.          28.1    787.  2.63       1.77  0.0470   1.50 0.0772  
+ 5   806.          28.4    805.  1.39       0.934 0.0359   1.52 0.0162  
+ 6   813.          28.5    811.  2.25       1.50  0.0326   1.51 0.0380  
+ 7   817.          28.6    817. -0.247     -0.165 0.0295   1.53 0.000413
+ 8   820.          28.6    817.  2.98       1.99  0.0295   1.50 0.0601  
+ 9   818.          28.6    817.  0.473      0.316 0.0295   1.53 0.00152 
+10   830.          28.8    829.  0.825      0.549 0.0240   1.53 0.00371 
+# … with 90 more rows
+```
+
+---
+
+## Residuals vs Fitted values
+
+![](regression9_files/figure-html/unnamed-chunk-28-1.png)&lt;!-- --&gt;
+
+---
+
+## Normality assumption
+
+
+
+```r
+qplot(data=coconut.lm.result, x=.resid, geom=c("histogram"))+
+  geom_histogram(color="black", fill="#d95f02")
+```
+
+![](regression9_files/figure-html/unnamed-chunk-29-1.png)&lt;!-- --&gt;
+
+---
+
+## Normality assumption
+
+
+
+```r
+ggplot(coconut.lm.result, aes(sample=.resid))+
+  stat_qq() + stat_qq_line() +
+  labs(x="Theoretical Quantiles",  y="Sample Quantiles")
+```
+
+![](regression9_files/figure-html/unnamed-chunk-30-1.png)&lt;!-- --&gt;
+
+---
+
+## Normality assumption (cont.)
+  
+
+```r
+shapiro.test(coconut.lm.result$.resid)
+```
+
+```
+
+	Shapiro-Wilk normality test
+
+data:  coconut.lm.result$.resid
+W = 0.95463, p-value = 0.001697
+```
+
+
+---
+
+## Transform Y
+
+`$$\sqrt(Y) = \beta_0 + \beta_1 x + \epsilon$$`
+
+
+```r
+coconut$sqrt.weight &lt;- sqrt(coconut$weight)
+coconut
+```
+
+```
+# A tibble: 100 x 4
+      X1 weight circumference sqrt.weight
+   &lt;dbl&gt;  &lt;dbl&gt;         &lt;dbl&gt;       &lt;dbl&gt;
+ 1     1   773.          27.8        27.8
+ 2     2   772.          27.8        27.8
+ 3     3   780.          27.9        27.9
+ 4     4   790.          28.1        28.1
+ 5     5   806.          28.4        28.4
+ 6     6   813.          28.5        28.5
+ 7     7   817.          28.6        28.6
+ 8     8   820.          28.6        28.6
+ 9     9   818.          28.6        28.6
+10    10   830.          28.8        28.8
+# … with 90 more rows
+```
+
+---
+
+### Estimate parameters of `\(\sqrt(Y) = \beta_0 + \beta_1 x + \epsilon\)`
+
+
+
+```r
+coconut.lm2 &lt;- lm(sqrt.weight ~ circumference, data=coconut)
+coconut.lm2
+```
+
+```
+
+Call:
+lm(formula = sqrt.weight ~ circumference, data = coconut)
+
+Coefficients:
+  (Intercept)  circumference  
+      0.01631        0.99951  
+```
+
+---
+
+## Compute Residuals and Fitted Values
+
+
+```r
+coconut.lm.result2 &lt;- broom::augment(coconut.lm2)
+coconut.lm.result2
+```
+
+```
+# A tibble: 100 x 8
+   sqrt.weight circumference .fitted    .resid .std.resid   .hat .sigma  .cooksd
+         &lt;dbl&gt;         &lt;dbl&gt;   &lt;dbl&gt;     &lt;dbl&gt;      &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;    &lt;dbl&gt;
+ 1        27.8          27.8    27.8  0.00810      0.536  0.0602 0.0157  9.20e-3
+ 2        27.8          27.8    27.8 -0.0234      -1.55   0.0602 0.0155  7.66e-2
+ 3        27.9          27.9    27.9  0.0211       1.39   0.0556 0.0155  5.69e-2
+ 4        28.1          28.1    28.1 -0.000372    -0.0244 0.0470 0.0157  1.47e-5
+ 5        28.4          28.4    28.4 -0.00373     -0.244  0.0359 0.0157  1.10e-3
+ 6        28.5          28.5    28.5  0.0166       1.08   0.0326 0.0156  1.98e-2
+ 7        28.6          28.6    28.6 -0.0221      -1.43   0.0295 0.0155  3.13e-2
+ 8        28.6          28.6    28.6  0.0343       2.23   0.0295 0.0153  7.58e-2
+ 9        28.6          28.6    28.6 -0.00946     -0.615  0.0295 0.0157  5.75e-3
+10        28.8          28.8    28.8  0.00562      0.365  0.0240 0.0157  1.64e-3
+# … with 90 more rows
+```
+
+
+---
+
+## Residuals vs Fitted values
+
+
+```r
+ggplot(coconut.lm.result2, aes(x=.fitted, y=.resid)) + geom_point()
+```
+
+![](regression9_files/figure-html/unnamed-chunk-35-1.png)&lt;!-- --&gt;
+
+---
+
+## Residuals vs Fitted values
+
+.pull-left[
+
+`\(Y = \beta_0 + \beta_1 x + \epsilon\)`
+
+![](regression9_files/figure-html/unnamed-chunk-36-1.png)&lt;!-- --&gt;
+
+
+]
+
+.pull-right[
+
+`\(\sqrt(Y) = \beta_0 + \beta_1 x + \epsilon\)`
+
+![](regression9_files/figure-html/unnamed-chunk-37-1.png)&lt;!-- --&gt;
+
+
+]
+
+---
+
+## Normality assumption
+
+
+
+```r
+qplot(data=coconut.lm.result2, x=.resid, geom=c("histogram"))+
+  geom_histogram(color="black", fill="#d95f02")
+```
+
+![](regression9_files/figure-html/unnamed-chunk-38-1.png)&lt;!-- --&gt;
+
+---
+
+## Normality assumption
+
+
+
+```r
+ggplot(coconut.lm.result2, aes(sample=.resid))+
+  stat_qq() + stat_qq_line() +
+  labs(x="Theoretical Quantiles",  y="Sample Quantiles")
+```
+
+![](regression9_files/figure-html/unnamed-chunk-39-1.png)&lt;!-- --&gt;
+
+---
+
+## Normality assumption (cont.)
+  
+
+```r
+shapiro.test(coconut.lm.result2$.resid)
+```
+
+```
+
+	Shapiro-Wilk normality test
+
+data:  coconut.lm.result2$.resid
+W = 0.98624, p-value = 0.3885
+```
+
+---
+
+## Normality test
+
+.pull-left[
+
+`\(Y = \beta_0 + \beta_1 x + \epsilon\)`
+
+![](regression9_files/figure-html/unnamed-chunk-41-1.png)&lt;!-- --&gt;
+
+  
+
+```
+
+	Shapiro-Wilk normality test
+
+data:  coconut.lm.result$.resid
+W = 0.95463, p-value = 0.001697
+```
+
+
+
+]
+
+
+.pull-right[
+
+`\(\sqrt(Y) = \beta_0 + \beta_1 x + \epsilon\)`
+
+![](regression9_files/figure-html/unnamed-chunk-43-1.png)&lt;!-- --&gt;
+
+  
+
+```
+
+	Shapiro-Wilk normality test
+
+data:  coconut.lm.result2$.resid
+W = 0.98624, p-value = 0.3885
+```
+
+
+]
+
+---
+
+### Your turn: Tests on individual regression coefficients
+
+
+```r
+summary(coconut.lm2)
+```
+
+```
+
+Call:
+lm(formula = sqrt.weight ~ circumference, data = coconut)
+
+Residuals:
+      Min        1Q    Median        3Q       Max 
+-0.054212 -0.009988  0.000234  0.008474  0.034324 
+
+Coefficients:
+              Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)   0.016311   0.049346   0.331    0.742    
+circumference 0.999507   0.001648 606.382   &lt;2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 0.0156 on 98 degrees of freedom
+Multiple R-squared:  0.9997,	Adjusted R-squared:  0.9997 
+F-statistic: 3.677e+05 on 1 and 98 DF,  p-value: &lt; 2.2e-16
+```
+
+---
+
+## Back transformation: sqrt
+
+- The back transformation is to square the number. If you have negative numbers, you can't take the square root; you should add a constant to each number to make them all positive.
+
+- Square-root transformation when the variable is a count of something, or the variables that can take positive values.
+
+---
+
+
+## Back transformation: sqrt
+
+`$$\sqrt(Y) = 0.016 + 0.99x$$`
+
+`$$Y = (0.016 + 0.99x)^2$$`
+
+`$$Y = 0.016^2 + 2(0.016 \times0.99)x + (0.99x)^2$$`
+
+
+
+&gt; "Although the popular square root transformation
+can be useful for simplifying relationships with quadratic
+effects, and also for stabilizing variances (Baguley, 2012),
+this transformation does not aid in interpretation."
+
+&gt; Data Transformations for Inf ansformations for Inference with Linear Regr ence with Linear Regression: Clarifications and Recommendations.
+[J. Pek, O. Wong, A. C. Wong] 
+
+
+Link to the paper: https://scholarworks.umass.edu/cgi/viewcontent.cgi?article=1360&amp;context=pare
+
+---
+# Note
+
+- When the model is presented to the professional community or to the general public/ when making preidctions, transformations done to the dependent variable `\(Y\)` should be transformed back to the **original units**  
+
+---
+
+
+## Help but Not  RULES
+
+
+### Transformations on X
 
 - Suppose the assumption of normally and independently distributed responses with constant variance are at least approximately satisfied, however the relationship between `\(Y\)` and one or more of the regressor variables is nonlinear. 
 
+### Transformations on Y
+
+- To correct nonnormality assumption and/or nonconstant variance assumption of the error term.
+
 ---
+
+
 
 class: center, middle
 

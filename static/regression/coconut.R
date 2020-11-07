@@ -3,7 +3,7 @@ circumference <- sort(round(rnorm(100, 30, 1), 1))
 weight <- (circumference^2) + rnorm(100)
 plot(circumference, weight)
 coconut <- data.frame(weight=weight, circumference=circumference)
-save(coconut, file="coconut.csv")
+write.csv(coconut, file="static/regression/coconut.csv")
 
 ## Regression
 coconut.lm <- lm(weight ~ circumference, data=coconut)
