@@ -2,7 +2,7 @@
 title: "STA 506 2.0 Linear Regression Analysis"
 subtitle: "Lecture 12-i: Identifying Outliers and Influential Cases"
 author: "Dr Thiyanga S. Talagala"
-date: "2020-11-20"
+date: "2020-11-21"
 output:
   xaringan::moon_reader:
     lib_dir: libs
