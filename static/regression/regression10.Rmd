@@ -474,7 +474,7 @@ This cut off does not apply $\frac{2p}{n} > 1$.
 
 .pull-left[
 
-**All points**
+**All points (red)**
 
 ```{r, echo=FALSE, comment=NA, message=FALSE, warning=FALSE, fig.height=5, fig.width=5}
 library(tidyverse)
@@ -491,7 +491,7 @@ ggplot2::ggplot(data, aes(y=y, x=x, col=z)) + geom_point(size=4) + scale_colour_
 
 .pull-right[
 
-**Only black points**
+**Only black points (green)**
 
 ```{r, echo=FALSE, comment=NA, message=FALSE, warning=FALSE, fig.height=5, fig.width=5}
 library(tidyverse)
