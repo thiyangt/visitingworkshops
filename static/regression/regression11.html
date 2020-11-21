@@ -40,7 +40,7 @@ class: center, middle, inverse, title-slide
 
 - Categorical variables can be incorporated into regression through **indicator variables**.
 
-- Sometimes indicator variables are calle **dummy variable.**
+- Sometimes indicator variables are called **dummy variable.**
 
 
 ---
@@ -107,6 +107,7 @@ Indicator variable for `Gender`
 Regression equation
 
 `$$y_i = \beta_0 + \beta_1 x_i + \beta_2D_i + \epsilon_i,$$`
+where `\(x\)` represents the variable `BMI`.
 
 ---
 
@@ -135,6 +136,7 @@ where `\(x\)` represents the variable `BMI`.
 ---
 ## Regression equation (cont.)
 
+.pull-left[
 Regression equation for **males**, `\(D_i = 1\)`
 
 `$$y_i = (\beta_0 +  \beta_2) + \beta_1 x_i + \epsilon_i,$$`
@@ -142,10 +144,16 @@ Regression equation for **males**, `\(D_i = 1\)`
 Regression equation for **females**, `\(D_i = 0\)`
 
 `$$y_i = \beta_0 + \beta_1 x_i + \epsilon_i,$$`
+]
 
+.pull-right[
+![height=1](dummy.PNG)
+]
 ---
 
 .pull-left[
+
+![](dummy.PNG)
 
 
 ]
@@ -160,7 +168,7 @@ Regression equation for **females**, `\(D_i = 0\)`
 
 
 
-- `\(\beta_1\)` - Change in the mean response, `\(\mu_Y\)` for each additional unit increase in the BMI when other variables held at constant.
+- `\(\beta_1\)` - Change in the mean response, `\(\mu_Y\)`, for each additional unit increase in the BMI when other variables held at constant.
 
 - `\(\beta_2\)` is a measure of how much higher (or lower) the mean response of the male group is than that of the female group.
 
@@ -176,15 +184,15 @@ In general, a qualitative variable with `\(k\)` levels is represented by `\(k-1\
 .pull-left[
 
 ```
-   IQ      Gender  BMI D1 D2
-1  10      Normal 20.2  0  1
-2  20      Normal 20.5  0  1
-3 100       Obese 18.5  0  0
-4  98       Obese 25.0  0  0
-5 100 Underweight 24.9  1  0
-6  11 Underweight 31.0  1  0
-7  50 Underweight 18.5  1  0
-8  70 Underweight 20.0  1  0
+   IQ         BMI headcir D1 D2
+1  10      Normal    50.2  0  1
+2  20      Normal    50.5  0  1
+3 100       Obese    58.5  0  0
+4  98       Obese    55.0  0  0
+5 100 Underweight    54.9  1  0
+6  11 Underweight    40.0  1  0
+7  50 Underweight    48.5  1  0
+8  70 Underweight    50.0  1  0
 ```
 ]
 
@@ -218,6 +226,19 @@ In general, a qualitative variable with `\(k\)` levels is represented by `\(k-1\
 ## Your turn
 
 Write the regression equations for the three levels.
+
+
+```
+   IQ headcir D1 D2
+1  10    50.2  0  1
+2  20    50.5  0  1
+3 100    58.5  0  0
+4  98    55.0  0  0
+5 100    54.9  1  0
+6  11    40.0  1  0
+7  50    48.5  1  0
+8  70    50.0  1  0
+```
 
 ---
 
