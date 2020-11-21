@@ -1,8 +1,8 @@
 ---
 title: "STA 506 2.0 Linear Regression Analysis"
-subtitle: "Lecture 9-iii: Identifying Outliers and Influential Cases"
+subtitle: "Lecture 12-i: Identifying Outliers and Influential Cases"
 author: "Dr Thiyanga S. Talagala"
-date: "2020-10-31"
+date: "2020-11-20"
 output:
   xaringan::moon_reader:
     lib_dir: libs
@@ -28,23 +28,575 @@ options(htmltools.dir.version = FALSE)
 
 <!--https://stattrek.com/regression/influential-points.aspx-->
 
-## Introduction
+
+
+
+## What exactly is an outlier?
+
+- No hard and fast definition.
+
+- An outlier is a data point which is very far, somehow, from the rest of the data.
+
+### Would you consider the red point in either plot as outliers?
+
+.pull-left[
+
+```{r, echo=FALSE, comment=NA, message=FALSE, warning=FALSE}
+library(tidyverse)
+x <- c(1, 1, 2, 3, 3.5, 4, 6, 6.5, 6.5, 7, 7.2, 8.2, 8.5, 9, 10, 20)
+set.seed(2020)
+y <- (5 + 10*x) + rnorm(16)
+z <- factor(c(rep(1, 15), rep(2, 1)))
+data <- data.frame(y=y, x=x, z=z)
+ggplot2::ggplot(data, aes(y=y, x=x, col=z)) + geom_point(size=4) + scale_colour_manual(values = c("black", "red")) + theme(legend.position = "none")
+
+```
+
+
+
+
+]
+
+.pull-right[
+
+```{r, echo=FALSE, comment=NA, message=FALSE, warning=FALSE}
+library(tidyverse)
+x <- c(1, 1, 2, 3, 3.5, 4, 6, 6.5, 6.5, 7, 7.2, 8.2, 8.5, 9, 10, 10)
+set.seed(2020)
+y <- (5 + 10*x[1:15]) + rnorm(15)
+y <- c(y, 10)
+z <- factor(c(rep(1, 15), rep(2, 1)))
+data <- data.frame(y=y, x=x, z=z)
+ggplot2::ggplot(data, aes(y=y, x=x, col=z)) + geom_point(size=4) + scale_colour_manual(values = c("black", "red")) + 
+  theme(legend.position = "none")
+
+```
+
+]
 
 ---
 
-## Leverage, discrepancy and influence
+
+## Outliers should be carefully studied for
+
+1. why they occurred and 
+
+2. whether they should be retained in the model.
 
 ---
+
+##Types of outliers that occur in the context of regression
+
+1. regression outlier
+
+2. residual outlier
+
+3. x-space outlier
+
+4. y-space outlier
+
+5. x- and y-space outlier
+
+---
+
+## 1. Regression outlier
+
+- lies off the line fit to the other 15 observations
+
+- determined from the remaining $(n-1)$ observations.
+
+```{r, echo=FALSE, comment=NA, message=FALSE, warning=FALSE, fig.height=5, fig.width=5}
+library(tidyverse)
+x <- c(1, 1, 2, 3, 3.5, 4, 6, 6.5, 6.5, 7, 7.2, 8.2, 8.5, 9, 10, 20)
+set.seed(2020)
+y <- (5 + 10*x) + rnorm(16)
+z <- factor(c(rep(1, 15), rep(2, 1)))
+data <- data.frame(y=y, x=x, z=z)
+ggplot(data, aes(y=y, x=x, col=z)) + geom_point(size=4) +
+  geom_smooth(method="lm")+
+  scale_colour_manual(values = c("black", "red")) + theme(legend.position = "none") 
+
+```
+
+---
+
+## 2. Residual outlier 
+
+A point that has large standardized or studentized residual when it is used with all $n$ observations to fit a model.
+
+
+.pull-left[
+```{r, echo=FALSE, comment=NA, message=FALSE, warning=FALSE, fig.height=6, fig.width=6}
+library(tidyverse)
+x <- c(1, 1, 2, 3, 3.5, 4, 6, 6.5, 6.5, 7, 7.2, 8.2, 8.5, 9, 10, 20)
+set.seed(2020)
+y <- c((5 + 10*x[1:15]) + rnorm(15), 500)
+z <- factor(c(rep(1, 15), rep(2, 1)))
+data <- data.frame(y=y, x=x, z=z)
+ggplot2::ggplot(data, aes(y=y, x=x, col=z)) + geom_point(size=4) + scale_colour_manual(values = c("black", "red")) + theme(legend.position = "none")
+example.data <- data.frame(y=y, x=x)
+
+```
+
+
+]
+
+
+.pull-right[
+```{r, echo=FALSE, comment=NA, message=FALSE, warning=FALSE}
+example.data
+```
+
+]
+
+
+
+---
+
+## 2. Residual outlier (cont.)
+
+
+```{r, comment=NA, message=FALSE, warning=F, fig.height=5, fig.width=5}
+lmfit <- lm(y~x, data=example.data)
+library(broom)
+augment(lmfit)
+
+```
+
+---
+
+## 2. Residual outlier (cont.)
+
+Distribution of `.std.resid` in the previous output.
+
+```{r, comment=NA, message=FALSE, warning=F, fig.height=5, fig.width=5, echo=FALSE}
+a <- augment(lmfit)
+ggplot(data=a, aes(y=.std.resid, x="")) + geom_boxplot() + xlab("")
+
+```
+
+---
+
+## 3. X-space outlier
+
+.pull-left[
+```{r, echo=FALSE, comment=NA, message=FALSE, warning=FALSE}
+library(tidyverse)
+x <- c(1, 1, 2, 3, 3.5, 4, 6, 6.5, 6.5, 7, 7.2, 8.2, 8.5, 9, 10, 20)
+set.seed(2020)
+y <- c((5 + 10*x[1:15]) + rnorm(15), 50)
+z <- factor(c(rep(1, 15), rep(2, 1)))
+data <- data.frame(y=y, x=x, z=z)
+ggplot2::ggplot(data, aes(y=y, x=x, col=z)) + geom_point(size=4) + scale_colour_manual(values = c("black", "red")) + theme(legend.position = "none")
+
+```
+]
+
+.pull-right[
+
+### Hight leverage point
+
+A data point can be unusual in its x variables.
+
+]
+
+---
+
+## 4. Y-space outlier
+
+.pull-left[
+
+```{r, echo=FALSE, comment=NA, message=FALSE, warning=FALSE}
+library(tidyverse)
+x <- c(1, 1, 2, 3, 3.5, 4, 6, 6.5, 6.5, 7, 7.2, 8.2, 8.5, 9, 10, 9)
+set.seed(2020)
+y <- c((5 + 10*x[1:15]) + rnorm(15), 300)
+z <- factor(c(rep(1, 15), rep(2, 1)))
+data <- data.frame(y=y, x=x, z=z)
+ggplot2::ggplot(data, aes(y=y, x=x, col=z)) + geom_point(size=4) + scale_colour_manual(values = c("black", "red")) + theme(legend.position = "none")
+
+```
+
+]
+
+
+.pull-right[
+
+### High discrepancy point
+
+
+A point has an unusual y-value given its x-value.
+
+
+]
+
+
+---
+## 5. X- and Y-space outlier
+
+
+.pull-left[
+```{r, echo=FALSE, comment=NA, message=FALSE, warning=FALSE}
+library(tidyverse)
+x <- c(1, 1, 2, 3, 3.5, 4, 6, 6.5, 6.5, 7, 7.2, 8.2, 8.5, 9, 10, 20)
+set.seed(2020)
+y <- c((5 + 10*x[1:15]) + rnorm(15), 500)
+z <- factor(c(rep(1, 15), rep(2, 1)))
+data <- data.frame(y=y, x=x, z=z)
+ggplot2::ggplot(data, aes(y=y, x=x, col=z)) + geom_point(size=4) + scale_colour_manual(values = c("black", "red")) + theme(legend.position = "none")
+
+```
+
+]
+
+
+.pull-right[
+
+point that has both high leverage and high discrepancy
+
+]
+
+---
+
+
+## Least-squares regression fit
+
+
+
+
+
+.pull-left[
+
+```{r, echo=FALSE, comment=NA, message=FALSE, warning=FALSE}
+library(tidyverse)
+x <- c(1, 1, 2, 3, 3.5, 4, 6, 6.5, 6.5, 7, 7.2, 8.2, 8.5, 9, 10, 20)
+set.seed(2020)
+y <- (5 + 10*x) + rnorm(16)
+z <- factor(c(rep(1, 15), rep(2, 1)))
+data <- data.frame(y=y, x=x, z=z)
+ggplot2::ggplot(data, aes(y=y, x=x, col=z)) + geom_point(size=4) + scale_colour_manual(values = c("black", "red")) + theme(legend.position = "none") + geom_abline(slope=10.11, intercept=4.326, col="red", lwd=2)
+
+```
+
+]
+
+.pull-right[
+
+```{r, echo=FALSE, comment=NA, message=FALSE, warning=FALSE}
+library(tidyverse)
+x <- c(1, 1, 2, 3, 3.5, 4, 6, 6.5, 6.5, 7, 7.2, 8.2, 8.5, 9, 10, 10)
+set.seed(2020)
+y <- (5 + 10*x[1:15]) + rnorm(15)
+y <- c(y, 10)
+z <- factor(c(rep(1, 15), rep(2, 1)))
+data <- data.frame(y=y, x=x, z=z)
+ggplot2::ggplot(data, aes(y=y, x=x, col=z)) + geom_point(size=4) + scale_colour_manual(values = c("black", "red")) + 
+  theme(legend.position = "none") + geom_abline(slope=7.267, intercept = 15.002, col="red", lwd=2) 
+
+```
+
+]
+
+Red line: all data including the  red point.
+
+---
+
+## Least-squares regression fit
+
+.pull-left[
+
+```{r, echo=FALSE, comment=NA, message=FALSE, warning=FALSE}
+library(tidyverse)
+x <- c(1, 1, 2, 3, 3.5, 4, 6, 6.5, 6.5, 7, 7.2, 8.2, 8.5, 9, 10, 20)
+set.seed(2020)
+y <- (5 + 10*x) + rnorm(16)
+z <- factor(c(rep(1, 15), rep(2, 1)))
+data <- data.frame(y=y, x=x, z=z)
+ggplot2::ggplot(data, aes(y=y, x=x, col=z)) + geom_point(size=4) + scale_colour_manual(values = c("black", "red")) + theme(legend.position = "none") + geom_abline(slope=10.11, intercept=4.326, col="red", lwd=3, alpha=0.8) + 
+  geom_abline(slope=10.108, intercept=4.383, col="forestgreen", lwd=3, alpha=0.8)
+
+```
+
+
+
+
+]
+
+.pull-right[
+
+```{r, echo=FALSE, comment=NA, message=FALSE, warning=FALSE}
+
+library(tidyverse)
+x <- c(1, 1, 2, 3, 3.5, 4, 6, 6.5, 6.5, 7, 7.2, 8.2, 8.5, 9, 10, 10)
+set.seed(2020)
+y <- (5 + 10*x[1:15]) + rnorm(15)
+y <- c(y, 10)
+z <- factor(c(rep(1, 15), rep(2, 1)))
+data <- data.frame(y=y, x=x, z=z)
+ggplot2::ggplot(data, aes(y=y, x=x, col=z)) + geom_point(size=4) + scale_colour_manual(values = c("black", "red")) + 
+  theme(legend.position = "none") + geom_abline(slope=7.267, intercept = 15.002, col="red", lwd=3) +
+  geom_abline(slope=10.108, intercept = 4.383, col="forestgreen", lwd=3) 
+
+```
+
+]
+
+Red line: all data including the  red point.
+
+Green line: for all black point (without red point).
+
+---
+
 
 ## Assessing leverage
 
+**Hat value:** Helps  to identify extreme $X$ values.
+
+**In simple linear regression**
+
+$$h_{ii} = \frac{1}{n} + \frac{(x_i-\bar{x})^2}{\sum_{j=1}^n(x_j - \bar{x})^2},$$
+
+where $i = 1, 2, ... n$
+
+Hat value is bound between $1/n$ and 1, with 1 denoting highest leverage.
+
+n - total number of points
+
 ---
 
-## Assessing discrepancy
+
+## Assessing leverage (cont.)
+
+**In multiple linear regression**
+
+
+$Y = \beta_0 + \beta_1X_1 + \beta_2X_2 + ...+\beta_pX_p + \epsilon$
+
+.pull-left[
+
+$$Y = \begin{bmatrix}
+Y_{1}\\
+Y_{2}\\
+.\\
+.\\
+.\\
+Y_{n}
+\end{bmatrix}$$
+
+]
+
+.pull-right[
+
+$$X = \begin{bmatrix}
+1 \text{ } x_{11} \text{ } x_{12} \text{ } ... \text{ } x_{1p}\\
+1 \text{ } x_{21} \text{ } x_{22} \text{ } ... \text{ }x_{2p}\\
+.\\
+.\\
+.\\
+1 \text{ } x_{n1} \text{ } x_{n2} \text{ }...\text{ } x_{np}
+\end{bmatrix}$$
+
+]
+
+$$H = X(X'X)^{-1}X'$$
+
+
+Hat matrix diagonal is a standardized measure of the distance of the $i$th observation from the center (or centroid) of the $x-$space.
+
+The leverage value $h_{ii}$ does not depend on the response $Y_i$.
+---
+
+## Assessing leverage: Example
+
+.pull-left[
+```{r, echo=FALSE, comment=NA, message=FALSE, warning=FALSE}
+library(tidyverse)
+x <- c(1, 1, 2, 3, 3.5, 4, 6, 6.5, 6.5, 7, 7.2, 8.2, 8.5, 9, 10, 20)
+set.seed(2020)
+y <- c((5 + 10*x[1:15]) + rnorm(15), 500)
+z <- factor(c(rep(1, 15), rep(2, 1)))
+data <- data.frame(y=y, x=x, z=z)
+ggplot2::ggplot(data, aes(y=y, x=x, col=z)) + geom_point(size=4) + scale_colour_manual(values = c("black", "red")) + theme(legend.position = "none")
+example.data <- data.frame(y=y, x=x)
+```
+]
+
+.pull-right[
+
+```{r, echo=FALSE, comment=NA, message=FALSE, warning=FALSE}
+
+example.data
+```
+
+
+]
 
 ---
 
-## Assessing influence
+## Assessing leverage: Example (cont)
+
+```{r, comment=NA, message=FALSE, warning=FALSE}
+library(broom)
+data.fit <- lm(y ~x, data=example.data)
+augment(data.fit)
+```
+
+---
+
+## Assessing leverage: Example (cont)
+
+
+$$\text{cut off} = \frac{2p}{n},$$
+
+$p$ - number of predictors/ x- variables.
+
+$n$ - number of observations.
+
+In this case $$\text{cut off} = \frac{2p}{n} = \frac{2 \times 1}{16} = 0.125$$
+
+We say a point is a high leverage point if
+
+$$h_{ii} > \frac{2p}{n}$$
+
+This cut off does not apply $\frac{2p}{n} > 1$.
+
+---
+
+## What to do when you find outliers?
+
+- Explore! (data entry errors, recording errors, etc.)
+
+---
+
+## Influence
+
+- a point with high leverage can dramatically impact the regression model.
+
+.pull-left[
+
+**All points**
+
+```{r, echo=FALSE, comment=NA, message=FALSE, warning=FALSE, fig.height=5, fig.width=5}
+library(tidyverse)
+x <- c(1, 1, 2, 3, 3.5, 4, 6, 6.5, 6.5, 7, 7.2, 8.2, 8.5, 9, 10, 20)
+set.seed(2020)
+y <- c((5 + 10*x[1:15]) + rnorm(15), 500)
+z <- factor(c(rep(1, 15), rep(2, 1)))
+data <- data.frame(y=y, x=x, z=z)
+ggplot2::ggplot(data, aes(y=y, x=x, col=z)) + geom_point(size=4) + scale_colour_manual(values = c("black", "red")) + theme(legend.position = "none") + geom_abline(slope=22.65, intercept=-58.30, col="red", lwd=2) 
+
+```
+
+]
+
+.pull-right[
+
+**Only black points**
+
+```{r, echo=FALSE, comment=NA, message=FALSE, warning=FALSE, fig.height=5, fig.width=5}
+library(tidyverse)
+x <- c(1, 1, 2, 3, 3.5, 4, 6, 6.5, 6.5, 7, 7.2, 8.2, 8.5, 9, 10, 20)
+set.seed(2020)
+y <- c((5 + 10*x[1:15]) + rnorm(15), 500)
+z <- factor(c(rep(1, 15), rep(2, 1)))
+data <- data.frame(y=y, x=x, z=z)
+ggplot2::ggplot(data, aes(y=y, x=x, col=z)) + geom_point(size=4) + scale_colour_manual(values = c("black", "red")) + theme(legend.position = "none") + geom_abline(slope=22.65, intercept=-58.30, col="red", lwd=2) + 
+  geom_abline(slope=10.108, intercept=4.383, col="forestgreen", lwd=2)
+
+```
+
+
+]
+
+- Influence - measures how much impact a point has on the regression mode
+
+---
+
+## Measure of Influence (cont.)
+
+[Cook's distance](https://en.wikipedia.org/wiki/Cook%27s_distance), $D_i$, is a measure of influence.
+
+
+```{r, comment=NA, message=FALSE, warning=FALSE}
+augment(data.fit)
+```
+
+
+
+---
+
+## Measure of Influence (cont.)
+
+ - We usually consider points for which  $D_i > 1$ to be influential (Montgomery, et al.).
+ 
+```{r, comment=NA, message=FALSE, warning=FALSE, echo=FALSE}
+augment(data.fit)
+```
+
+<!--Interpretations: page 213-->
+
+---
+## Leverage and Influence 
+
+Remember that leverage alone does not mean a point exerts high influence, but it certainly means it's worth investigating. 
+
+
+---
+## Influence
+
+- An **influence point**, can make a noticeable impact on the model coefficients in that it pulls the regression model in its direction.
+
+.pull-left[
+
+**All points**
+
+```{r, echo=FALSE, comment=NA, message=FALSE, warning=FALSE, fig.height=5, fig.width=5}
+library(tidyverse)
+x <- c(1, 1, 2, 3, 3.5, 4, 6, 6.5, 6.5, 7, 7.2, 8.2, 8.5, 9, 10, 20)
+set.seed(2020)
+y <- c((5 + 10*x[1:15]) + rnorm(15), 500)
+z <- factor(c(rep(1, 15), rep(2, 1)))
+data <- data.frame(y=y, x=x, z=z)
+ggplot2::ggplot(data, aes(y=y, x=x, col=z)) + geom_point(size=4) + scale_colour_manual(values = c("black", "red")) + theme(legend.position = "none") + geom_abline(slope=22.65, intercept=-58.30, col="red", lwd=2) 
+
+```
+
+]
+
+.pull-right[
+
+**Only black points (green)**
+
+```{r, echo=FALSE, comment=NA, message=FALSE, warning=FALSE, fig.height=5, fig.width=5}
+library(tidyverse)
+x <- c(1, 1, 2, 3, 3.5, 4, 6, 6.5, 6.5, 7, 7.2, 8.2, 8.5, 9, 10, 20)
+set.seed(2020)
+y <- c((5 + 10*x[1:15]) + rnorm(15), 500)
+z <- factor(c(rep(1, 15), rep(2, 1)))
+data <- data.frame(y=y, x=x, z=z)
+ggplot2::ggplot(data, aes(y=y, x=x, col=z)) + geom_point(size=4) + scale_colour_manual(values = c("black", "red")) + theme(legend.position = "none") + geom_abline(slope=22.65, intercept=-58.30, col="red", lwd=2) + 
+  geom_abline(slope=10.108, intercept=4.383, col="forestgreen", lwd=2)
+
+```
+
+
+]
+
+---
+
+## Other Measures of Influence
+
+- DEFITS and DFBEATAS
+
+## Treatment of Influential Observations
+
+- Should influential points ever be discarded? If there is a recording error, measurement error, or if the sample point is invalid or not part of the population that was intended to be sampled, then deleting the point is appropriate. 
+
+- The field of **robust statistics** is concerned with more advanced methods of dealing with influential outliers. For e.g.: **down weight** observations in proportional to residual magnitude or influence. Then highly influential observations will receive less weight that they would in a least-squares fit. 
+e.g: Robust regression 
+
+<!--The field of robust statistics is concerned with more sophisticated ways of dealing with outliers-->
+
 
 
 ---
