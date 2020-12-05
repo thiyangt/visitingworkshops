@@ -85,7 +85,7 @@ car::vif(model)
 
 ## 1.1: note
 
-Multicollinearity occurrs if we do not treat this appropriately.
+Multicollinearity occurs if we do not treat this appropriately.
 
 
 ### 1.2 Model with only quantitative variables: VIF
@@ -115,3 +115,5 @@ summary(model)
 ```
 
 \newpage
+
+cont.

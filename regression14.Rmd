@@ -1,0 +1,26 @@
+---
+title: "Bootstrap for Regression"
+date: "05/12/2020"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Introduction
+
+- Bootstrapping is a computer-intensive procedure.
+
+- Allows us to estimate the sampling distribution of a statistic
+
+## Inclass discussion
+
+```{r, comment=NA, message=FALSE, warning=FALSE}
+library(readr)
+bloodpressure <- read_csv("bloodpressure.csv")
+bloodpressure
+
+
+```
+

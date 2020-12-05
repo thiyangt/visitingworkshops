@@ -1,6 +1,8 @@
 ---
 title: Multicollinearity
 output: pdf_document
+author: "Thiyanga S. Talagala"
+date: "2020-12-05 (live zoom)"
 ---
 
 ```{r setup, include=FALSE}
