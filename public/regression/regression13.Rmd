@@ -9,7 +9,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## 1. Introduction
 
-Multicollinearity refers to a situation in which two or more explanatory variables in a multiple regression model are highly linearly related. 
+Multicollinearity refers to a situation in which two or more **explanatory variables** in a multiple regression model are highly linearly related. 
 
 ## 2. Data
 

@@ -1,0 +1,117 @@
+---
+title: "Multicollinearity: Question"
+subtitle: "STA 506 2.0 Linear Regression Analysis"
+author: "Thiyanga S. Talagala"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Data
+
+```{r, comment=NA, message=FALSE, warning=FALSE}
+library(tidyverse)
+realestate <- read.csv("real-estate.csv")
+head(realestate)
+
+```
+
+
+```{r, comment=NA, message=FALSE, warning=FALSE}
+glimpse(realestate)
+```
+
+\newpage
+
+## Q1: Identify qualitative and quantitative variables.
+
+```{r, comment=NA,message=FALSE, warning=FALSE, echo=FALSE, fig.width=10, fig.height=10}
+library(GGally)
+realestate$Airconditioning <- factor(realestate$Airconditioning)
+realestate$Pool <- factor(realestate$Pool)
+realestate$AdjHighway <- factor(realestate$AdjHighway)
+realestate$Quality <- factor(realestate$Quality)
+summary(realestate)
+```
+
+\newpage
+
+## Q2: What is wrong with the following graph?
+
+```{r, comment=NA,message=FALSE, warning=FALSE, echo=FALSE, fig.width=10, fig.height=10, fig.cap="Pairwise correlation plot"}
+realestate <- read.csv("real-estate.csv")
+library(GGally)
+ggpairs(realestate)
+
+```
+
+\newpage
+
+## Q3: Figure 1 is modified as follows. Now what can you say about the graph?
+
+```{r, comment=NA,message=FALSE, warning=FALSE, echo=FALSE, fig.width=10, fig.height=10, fig.cap="Pairwise correlation plot"}
+library(GGally)
+realestate$Airconditioning <- factor(realestate$Airconditioning)
+realestate$Pool <- factor(realestate$Pool)
+realestate$AdjHighway <- factor(realestate$AdjHighway)
+realestate$Quality <- factor(realestate$Quality)
+ggpairs(realestate[, -c(1, 6, 8, 10, 12)])
+
+```
+
+\newpage
+
+## Q4: What can you say about the source of multicollinearity in these data?
+
+```{r, comment=NA, message=FALSE, warning=FALSE}
+realestate$Airconditioning <- factor(realestate$Airconditioning)
+realestate$Pool <- factor(realestate$Pool)
+realestate$AdjHighway <- factor(realestate$AdjHighway)
+realestate$Quality <- factor(realestate$Quality)
+realestate <- realestate[, -1]
+summary(realestate)
+model <- lm(Price ~ . , data=realestate)
+summary(model)
+library(car)
+car::vif(model)
+```
+
+
+\newpage
+
+# Note: 
+
+## 1.1: note
+
+Multicollinearity occurrs if we do not treat this appropriately.
+
+
+### 1.2 Model with only quantitative variables: VIF
+
+```{r, comment=NA, message=FALSE}
+summary(Duncan)
+m1 <- lm(prestige ~ income + education, data=Duncan)
+vif(m1)
+```
+
+### 1.3 Model with only quantitative variables and qualitative variables:  Generalized variance-inflation factors 
+
+```{r, comment=NA, message=FALSE}
+m2 <- lm(prestige ~ income + education + type, data=Duncan)
+vif(m2)
+```
+
+\newpage
+
+
+\newpage
+
+## Q5: Write down the estimated model.
+
+```{r, comment=NA, message=FALSE}
+summary(model)
+```
+
+\newpage
