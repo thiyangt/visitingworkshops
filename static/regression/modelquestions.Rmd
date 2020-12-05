@@ -110,7 +110,7 @@ iii) Write the hypotheses that should be tested to find whether the two machines
 
 ## Question 3
 
-A group of new graduates who have studied Statistics, Mathematics and Computer Science at the Faculty of Applied Sciences of University of Jayewardenepura joined a company. They were given three tests in the three subjects they have studied for the degree at the final interview at which they were selected for the job. After three months of a probationary period, their proficiency for the job was measured. The tests scores and the measure of proficiency were analyzed to find a model to predict proficiency by the test scores. Some results are shown below. 
+A group of new graduates who have studied Statistics, Mathematics and Computer Science at the Faculty of Applied Sciences of University of Jayewardenepura joined a company. They were given three tests in the three subjects they have studied for the degree at the final interview at which they were selected for the job. After three months of a probationary period, their proficiency for the job was measured. The tests scores and the measure of proficiency were analysed to find a model to predict proficiency by the test scores. Some results are shown below. 
 
 ```{r, comment=NA, message=FALSE, warning=FALSE, echo=FALSE, fig.height=7, fig.width=7}
 set.seed(1)
@@ -139,7 +139,18 @@ i) What is meant by multicollinearity?
 
 ii) Do you agree with statistician claim. Justify your answer.
 
-iii) 
+The following outputs are obtained using R
+
+```{r, comment=NA, message=FALSE, warning=FALSE}
+as.data.frame(augment(model.sjp))
+
+```
+
+iii) Are there any observations that have high leverage values? If so, what are the observation numbers.
+
+iv) Are there any observations that are outliers? If so, what are the sample observation numbers?
+
+
 
 ## Question 4
 
@@ -153,7 +164,7 @@ iii) The estimated regression model in part (ii) satisfied all of the assumption
 
 ## Question 5
 
-An experiment was conducted to determine the influence of sulfide concentration ($X_1$) on the whiteness of rayon ($Y$). The results obtained through R are given below.
+An experiment was conducted to determine the influence of sulphide concentration ($X_1$) on the whiteness of rayon ($Y$). The results obtained through R are given below.
 
 ```{r, comment=NA, message=FALSE}
 x1 <- rnorm(15, mean=40)
@@ -171,7 +182,7 @@ anova(mod5)
 
 i) Construct the ANOVA table using the above results.
 
-ii) Wtite the hypothesis to be tested in the ANOVA in part i.
+ii) Write the hypothesis to be tested in the ANOVA in part i.
 
 iii) What is your decision about the fitted model.
 
