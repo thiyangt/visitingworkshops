@@ -104,7 +104,7 @@ $X_1$ is line speed and
 
  i)	Draw a sketch of the scatter plot which is expected with the above model.
  
-ii)	Write the model for each machine.
+ii)	Write the model for each line.
 
 iii) Write the hypotheses that should be tested to find whether the two machines have the same regression model or not, i.e. whether both the intercept and the slope are the same of the two models you wrote in ii) in the above. 
 
