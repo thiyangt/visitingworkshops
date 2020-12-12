@@ -263,9 +263,15 @@ i) Construct the ANOVA table using the above results.
 
 ii) Write the hypothesis to be tested in the ANOVA in part i.
 
+![](ANOVA.png)
+
+\textcolor{blue}{Answer}
+
 \newpage
 
 \textcolor{blue}{Answer}
+
+\newpage
 
 iii) What is your decision about the fitted model.
 
