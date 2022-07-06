@@ -20,3 +20,7 @@ date: "2016-05-05T21:48:51-07:00"
 # Other
 
 [Regression](/reg2020/)
+
+## 2022
+
+[EES 211 2.0 Data Analysis and Modeling](/ees211/)

@@ -1,0 +1,40 @@
+---
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, comment = NA)
+```
+
+## Exploratory Data Analysis - Summary Report
+
+
+
+## 1. Data Overview
+
+**Table 1: Composition of the sample**
+```{r, message=FALSE, warning=FALSE}
+library(tidyverse)
+library(palmerpenguins)
+data(penguines)
+summary(penguins)
+```
+
+According to the Table 1 the majority of penguins are Adelie and the majority of penguins are caught from Biscoe isaland. Except, in the variables species and island there are 2 missing values in other variables.
+
+
+## 2. Composition of the sample
+
+```{r, fig.cap="Composition of sample by Species", fig.height=2, fig.width=3}
+ggplot(penguins) + geom_bar(aes(species))
+
+```
+
+\newpage
+
+Sometimes, you will see row names as a variable. Then you will get multiple bars like this. Here is an example. See Figure 2. Do not include those types of charts to the report. 
+
+```{r, echo=FALSE, fig.cap="Do not include these types ofgraphs "}
+data("msleep")
+ggplot(msleep) + geom_bar(aes(name))
+```
