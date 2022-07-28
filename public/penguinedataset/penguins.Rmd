@@ -1,0 +1,150 @@
+---
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, comment = NA)
+```
+
+## Exploratory Data Analysis - Summary Report
+
+
+
+## 1. Data Overview
+
+**Table 1: Composition of the sample**
+```{r, message=FALSE, warning=FALSE}
+library(tidyverse)
+library(palmerpenguins)
+data(penguines)
+summary(penguins)
+```
+
+According to the Table 1 the majority of penguins are Adelie and the majority of penguins are caught from Biscoe isaland. Except, species and island there are 2 missing values in other variables.
+
+
+## 2. Composition of the sample 
+
+
+
+Sometimes table does not give the counts for the levels of the categorical variable. Then you can take bar charts to view individual counts. Here, is the command.
+
+```{r, fig.cap="Composition of sample by Species", fig.height=2, fig.width=3}
+ggplot(penguins) + geom_bar(aes(species))
+
+```
+
+You can do the same for other qualitative variables if necessary.
+
+\newpage
+
+**Important note:**
+
+Sometimes, you will see row names as a variable. Then you will get multiple bars like this (Figure 2). Here is an example. See Figure 2. Do not include those types of charts to the report. 
+
+```{r, echo=FALSE, fig.cap="Do not include these types ofgraphs", fig.height=4, fig.width=4}
+data("msleep")
+ggplot(msleep) + geom_bar(aes(name))
+```
+
+\newpage
+
+**Composition of the sample by sex and island**
+
+```{r, fig.cap="Composition of sample by species and gender"}
+tablecount <- penguins %>%
+  drop_na() %>%
+  count(sex, species) 
+tablecount
+  ggplot(tablecount) + geom_col(aes(x = species, y = n, fill = species)) +
+  geom_label(aes(x = species, y = n, label = n)) +
+  scale_fill_manual(values = c("darkorange","purple","cyan4")) +
+  facet_wrap(~sex) +
+  labs(title = 'Penguins Species ~ Gender')
+
+```
+
+According to Figure 3, the distribution of species type within male and female groups are approximately same.
+
+## 3. Distribution of body characteristics variables by qualitative variables
+
+```{r, comment=NA, message=FALSE, warning=FALSE, fig.height=3, fig.width=5, fig.cap="Distribution of flipper length by gender"}
+penguins2 <- penguins %>% drop_na()
+ggplot(data = penguins2, 
+       aes(y = flipper_length_mm,
+           x = sex,
+           fill=sex)) +
+  geom_boxplot() 
+
+```
+
+According to figure 4 the flipper length of male penguins are higher than female penguins.
+
+```{r, comment=NA, message=FALSE, warning=FALSE, fig.height=3, fig.width=5, fig.cap="Distribution of flipper length by island"}
+penguins2 <- penguins %>% drop_na()
+ggplot(data = penguins2, 
+       aes(y = flipper_length_mm,
+           x = island,
+           fill=island)) +
+  geom_boxplot() 
+
+```
+
+According to figure 5 the flipper length of Biscoe is the highest when compared that with Dream and Torgersen penguins.
+
+\newpage
+
+## 4. Relationship between body-characteristics 
+
+
+
+```{r, fig.cap="Relationship between body characteristics variables", warning=FALSE, message=FALSE}
+body1 <- select(penguins, c(bill_length_mm, bill_depth_mm,
+                           flipper_length_mm,
+                           body_mass_g))
+library(GGally)
+ggpairs(body1)
+```
+
+According to the figure 6, there is a strong positive relationship between body mass and flipper length.
+
+\newpage
+
+```{r, fig.cap="Relationship between body characteristics variables by species", warning=FALSE, message=FALSE}
+body2 <- select(penguins, c(bill_length_mm, bill_depth_mm,
+                           flipper_length_mm,
+                           body_mass_g, species))
+ggpairs(data=body2, aes(color = species),
+          columns = c("flipper_length_mm", "body_mass_g",
+                      "bill_length_mm", "bill_depth_mm"))
+```
+
+According to the figure 7, the strength of the relationship between bill depth and flipper length vary according to the species type.
+
+\newpage
+
+```{r, fig.cap="Relationship between body characteristics variables by sex", warning=FALSE, message=FALSE}
+body3 <- select(penguins, c(bill_length_mm, bill_depth_mm,
+                           flipper_length_mm,
+                           body_mass_g, sex))
+ggpairs(data=body3, aes(color = sex),
+          columns = c("flipper_length_mm", "body_mass_g",
+                      "bill_length_mm", "bill_depth_mm"))
+```
+
+According to the Figure 8, there is a strong positive linear relationship between flipper length and body mass index. The pearson's correlation coefficients  between flipper length and body mass index are approximately same for female and male penguins.
+
+\newpage
+
+## Few other useful commands for plots.
+
+
+```{r, comment=NA}
+ggplot(penguins)+ 
+  geom_point(aes(bill_length_mm, bill_depth_mm))+facet_wrap(~island)
+```
+
+```{r, comment=NA}
+ggplot(penguins)+ 
+  geom_point(aes(bill_length_mm, bill_depth_mm, col=species))
+```

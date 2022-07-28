@@ -1,0 +1,1210 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>STA 506 2.0 Linear Regression Analysis</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Dr Thiyanga S. Talagala" />
+    <script src="libs/header-attrs/header-attrs.js"></script>
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
+    <link href="libs/remark-css/default-fonts.css" rel="stylesheet" />
+    <link href="libs/remark-css/duke-blue.css" rel="stylesheet" />
+    <link href="libs/remark-css/hygge-duke.css" rel="stylesheet" />
+    <link rel="stylesheet" href="libs/cc-fonts.css" type="text/css" />
+    <link rel="stylesheet" href="libs/figure-captions.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# STA 506 2.0 Linear Regression Analysis
+## Lecture 11-i: Transformations to Correct Model Inadequacies
+### Dr Thiyanga S. Talagala
+
+---
+
+
+
+
+## Introduction
+
+In this section we are going to learn methods and procedures for building regression models when the assumptions are violated.
+
+### Transformations
+
+- Variance-stabilizing transformations
+
+- Transformations to linearize the model
+
+### How to get around the problem?
+
+- Transform  `\(X\)` variable(s)
+
+- Transform `\(Y\)`
+
+- Transformations on both `\(X\)` variable(s) and `\(Y\)`.
+
+
+
+---
+class: duke-orange, middle
+
+
+## Variance-Stabilizing Transformations
+
+---
+
+## Dataset 1
+
+We will try to model salary as a function of years of experience.
+
+
+```r
+library(tidyverse)
+salarydata &lt;- read_csv("salarydata.csv")
+salarydata
+```
+
+```
+# A tibble: 100 × 2
+   years salary
+   &lt;dbl&gt;  &lt;dbl&gt;
+ 1     1  41504
+ 2     1  32619
+ 3     1  44322
+ 4     2  40038
+ 5     2  46147
+ 6     2  38447
+ 7     2  38163
+ 8     3  42104
+ 9     3  25597
+10     3  39599
+# … with 90 more rows
+```
+
+Data are obtained from: https://daviddalpiaz.github.io/appliedstats/transformations.html
+
+---
+
+## Salary vs Years of Experience
+
+
+```r
+ggplot(salarydata, aes(x=years, y=salary)) + geom_point()
+```
+
+![](regression9_files/figure-html/unnamed-chunk-2-1.png)&lt;!-- --&gt;
+
+```r
+cor(salarydata$years, salarydata$salary)
+```
+
+```
+[1] 0.9133066
+```
+
+---
+## Fit a Simple Linear Regression Model
+
+
+```r
+salary_fit &lt;- lm(salary ~ years, data = salarydata)
+summary(salary_fit)
+```
+
+```
+
+Call:
+lm(formula = salary ~ years, data = salarydata)
+
+Residuals:
+   Min     1Q Median     3Q    Max 
+-57225 -18104    241  15589  91332 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)     5302       5750   0.922    0.359    
+years           8637        389  22.200   &lt;2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 27360 on 98 degrees of freedom
+Multiple R-squared:  0.8341,	Adjusted R-squared:  0.8324 
+F-statistic: 492.8 on 1 and 98 DF,  p-value: &lt; 2.2e-16
+```
+
+
+---
+
+## Compute Residuals and Fitted Values
+
+
+```r
+library(broom)
+salary_residuals &lt;- augment(salary_fit)
+salary_residuals
+```
+
+```
+# A tibble: 100 × 8
+   salary years .fitted .resid   .hat .sigma  .cooksd .std.resid
+    &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;    &lt;dbl&gt;      &lt;dbl&gt;
+ 1  41504     1  13939. 27565. 0.0391 27347. 0.0215        1.03 
+ 2  32619     1  13939. 18680. 0.0391 27428. 0.00988       0.697
+ 3  44322     1  13939. 30383. 0.0391 27315. 0.0261        1.13 
+ 4  40038     2  22575. 17463. 0.0345 27436. 0.00753       0.650
+ 5  46147     2  22575. 23572. 0.0345 27388. 0.0137        0.877
+ 6  38447     2  22575. 15872. 0.0345 27447. 0.00622       0.590
+ 7  38163     2  22575. 15588. 0.0345 27449. 0.00600       0.580
+ 8  42104     3  31212. 10892. 0.0302 27473. 0.00255       0.404
+ 9  25597     3  31212. -5615. 0.0302 27490. 0.000677     -0.208
+10  39599     3  31212.  8387. 0.0302 27482. 0.00151       0.311
+# … with 90 more rows
+```
+
+
+---
+
+## Residuals vs Fitted Values
+
+
+```r
+ggplot(salary_residuals, aes(x=.fitted, y=.resid)) + geom_point()
+```
+
+![](regression9_files/figure-html/unnamed-chunk-5-1.png)&lt;!-- --&gt;
+
+
+---
+
+## Normality assumption
+
+
+.pull-left[
+
+
+```r
+qplot(data=salary_residuals,
+      x=.resid,)+
+  geom_histogram(color="black", 
+                 fill="lightblue")
+```
+
+![](regression9_files/figure-html/unnamed-chunk-6-1.png)&lt;!-- --&gt;
+
+
+```r
+shapiro.test(salary_residuals$.resid)
+```
+
+```
+
+	Shapiro-Wilk normality test
+
+data:  salary_residuals$.resid
+W = 0.98258, p-value = 0.2101
+```
+
+
+]
+
+.pull-right[
+
+
+```r
+ggplot(salary_residuals, 
+       aes(sample=.resid))+
+  stat_qq() + 
+  stat_qq_line() +
+  labs(x="Theoretical Quantiles",
+       y="Sample Quantiles")
+```
+
+![](regression9_files/figure-html/unnamed-chunk-8-1.png)&lt;!-- --&gt;
+
+
+
+
+]
+
+
+
+---
+
+## Variance - Stabilizing Transformations
+
+
+.pull-left[
+
+![](regression9_files/figure-html/unnamed-chunk-9-1.png)&lt;!-- --&gt;
+
+
+]
+
+.pull-left[
+
+- Useful variance-stabilizing transformations
+
+    - square root: `\(\sqrt{y}\)`
+  
+    - log transformation: `\(log(y)\)`
+    
+    - reciprocal: `\(y^{-1}\)`
+    
+    - reciprocal square root: `\(y^{-1/2}\)`
+
+
+]
+
+---
+
+## Apply log transformation
+
+`$$log(Y) = \beta_0 + \beta_1x_ + \epsilon$$`
+
+
+```r
+salarydata$log.salary &lt;- log(salarydata$salary)
+salarydata
+```
+
+```
+# A tibble: 100 × 3
+   years salary log.salary
+   &lt;dbl&gt;  &lt;dbl&gt;      &lt;dbl&gt;
+ 1     1  41504       10.6
+ 2     1  32619       10.4
+ 3     1  44322       10.7
+ 4     2  40038       10.6
+ 5     2  46147       10.7
+ 6     2  38447       10.6
+ 7     2  38163       10.5
+ 8     3  42104       10.6
+ 9     3  25597       10.2
+10     3  39599       10.6
+# … with 90 more rows
+```
+
+---
+## Fit a regression model with log transformation
+
+
+```r
+salary_fit_log &lt;- lm(log.salary ~ years, data = salarydata)
+salary_fit_log
+```
+
+```
+
+Call:
+lm(formula = log.salary ~ years, data = salarydata)
+
+Coefficients:
+(Intercept)        years  
+   10.48381      0.07888  
+```
+
+---
+
+## Compute Residuals and Fitted values
+
+
+```r
+salary_log_residuals &lt;- augment(salary_fit_log)
+salary_log_residuals
+```
+
+```
+# A tibble: 100 × 8
+   log.salary years .fitted  .resid   .hat .sigma  .cooksd .std.resid
+        &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;    &lt;dbl&gt;      &lt;dbl&gt;
+ 1       10.6     1    10.6  0.0709 0.0391  0.196 0.00278       0.370
+ 2       10.4     1    10.6 -0.170  0.0391  0.196 0.0160       -0.887
+ 3       10.7     1    10.6  0.137  0.0391  0.196 0.0103        0.713
+ 4       10.6     2    10.6 -0.0440 0.0345  0.196 0.000936     -0.229
+ 5       10.7     2    10.6  0.0980 0.0345  0.196 0.00465       0.510
+ 6       10.6     2    10.6 -0.0845 0.0345  0.196 0.00346      -0.440
+ 7       10.5     2    10.6 -0.0919 0.0345  0.196 0.00409      -0.479
+ 8       10.6     3    10.7 -0.0725 0.0302  0.196 0.00221      -0.377
+ 9       10.2     3    10.7 -0.570  0.0302  0.187 0.137        -2.96 
+10       10.6     3    10.7 -0.134  0.0302  0.196 0.00754      -0.696
+# … with 90 more rows
+```
+
+---
+## Residuals vs Fitted values
+
+![](regression9_files/figure-html/unnamed-chunk-13-1.png)&lt;!-- --&gt;
+
+---
+## Residuals vs Fitted
+
+.pull-left[
+
+`$$Y = \beta_0 + \beta_1x + \epsilon$$`
+
+
+![](regression9_files/figure-html/unnamed-chunk-14-1.png)&lt;!-- --&gt;
+
+
+]
+
+.pull-right[
+
+`$$log(Y) = \beta_0 + \beta_1x + \epsilon$$`
+
+![](regression9_files/figure-html/unnamed-chunk-15-1.png)&lt;!-- --&gt;
+
+
+]
+
+---
+
+## Normality assumption
+
+`\(log(Y) = \beta_0 + \beta_1x + \epsilon\)`
+
+
+
+
+```r
+qplot(data=salary_log_residuals, x=.resid,)+
+  geom_histogram(color="black", fill="lightblue")
+```
+
+![](regression9_files/figure-html/unnamed-chunk-16-1.png)&lt;!-- --&gt;
+
+---
+
+## Normality assumption (cont.)
+
+
+```r
+ggplot(salary_log_residuals, 
+       aes(sample=.resid))+
+  stat_qq() + 
+  stat_qq_line() +
+  labs(x="Theoretical Quantiles",
+       y="Sample Quantiles")
+```
+
+![](regression9_files/figure-html/unnamed-chunk-17-1.png)&lt;!-- --&gt;
+
+
+---
+
+## Normality assumption (cont.)
+
+
+```r
+shapiro.test(salary_log_residuals$.resid)
+```
+
+```
+
+	Shapiro-Wilk normality test
+
+data:  salary_log_residuals$.resid
+W = 0.98033, p-value = 0.141
+```
+
+---
+## Model Statistics
+
+
+```r
+summary(salary_fit_log)
+```
+
+```
+
+Call:
+lm(formula = log.salary ~ years, data = salarydata)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-0.57022 -0.13560  0.03048  0.14157  0.41366 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept) 10.48381    0.04108  255.18   &lt;2e-16 ***
+years        0.07888    0.00278   28.38   &lt;2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 0.1955 on 98 degrees of freedom
+Multiple R-squared:  0.8915,	Adjusted R-squared:  0.8904 
+F-statistic: 805.2 on 1 and 98 DF,  p-value: &lt; 2.2e-16
+```
+
+---
+
+## Hypothesis testing
+
+### Intercept
+
+`\(H_0: \beta_0 = 0\)` vs `\(H_1: \beta_0 \neq 0\)`
+
+Decision:
+
+p-value &lt; 0.05.  We reject `\(H_0\)` under 0.05 level of significance.
+
+
+Conclusion: We can conclude that population regression line intercept is significantly different from 0.
+
+### Slope
+
+
+`\(H_0: \beta_1 = 0\)` vs `\(H_1: \beta_1 \neq 0\)`
+
+Decision: 
+
+p-value &lt; 0.05.  We reject `\(H_0\)` under 0.05 level of significance.
+
+Conclusion: The variable `years` contributes significantly to the model.
+
+---
+# Re-scale
+
+### log scale  to the original scale of the data
+
+**Preliminary Maths**
+
+`$$Y=10$$`
+`$$log(10) = 2.302585$$`
+`$$e^{2.302585} = 10$$`
+`$$e^{a+b} = e^ae^b$$`
+
+### New fitted regression model
+
+`$$\hat{log(Y)} = 10.48 + 0.079X$$`
+
+Convert to original scale
+
+`$$e^{\hat{log(Y)}} = e^{10.48 + 0.079X}$$`
+
+`$$\hat{Y} = e^{10.48}e^{0.079X}$$`
+
+---
+## Interpretation of slope
+
+When `\(X=x_1\)`
+
+`$$Y' = e^{10.48}e^{0.079x_1}$$`
+
+When `\(X={x_1 + 1}\)`
+
+`$$Y'' = e^{10.48}e^{0.079(x_1 + 1)} = e^{10.48}e^{0.079(x_1)}e^{0.079}$$`
+
+`$$e^{0.079} = 1.0822$$`
+
+We see that for every one additional year of experience, average (median) salary increases 1.0822 times. We are now multiplying, not adding.
+
+---
+
+## Interpretation of slope
+
+`$$\hat{log(Y)} = \hat{\beta_0} + \hat{\beta_1}x$$`
+
+### Interpretation of `\(\hat{\beta_0}\)`
+
+When `\(x=0\)`, the median of `\(Y\)` is expected to be `\(e^{\hat{\beta}_0}\)`.
+
+
+### Interpretation of `\(\hat{\beta_1}\)`
+
+For every one unit increase in `\(x\)`, the median of `\(Y\)` is expected to multiply by a factor of `\(e^{\hat{\beta}_1}\)`.
+
+
+Why median not mean?: Read here
+https://www2.stat.duke.edu/courses/Spring20/sta210.001/slides/lec-slides/09-transformations.html#29
+
+---
+
+## Confidence interval for `\(\beta_j\)`
+
+The confidence interval for the coefficient of `\(x\)` describing its relationship with `\(Y\)` is:
+
+- Confidence intervals `\(\beta_0\)`
+
+`$$[\hat{\beta_0} - t_{\alpha/2, n-2}se(\hat{\beta_0}), \hat{\beta_0} + t_{\alpha/2, n-2}se(\hat{\beta_0})]$$`
+
+- Confidence intervals `\(\beta_1\)`
+
+`$$[\hat{\beta_1} - t_{\alpha/2, n-2}se(\hat{\beta_1}), \hat{\beta_1} + t_{\alpha/2, n-2}se(\hat{\beta_1})]$$`
+
+
+```r
+confint(salary_fit_log, level=0.95)
+```
+
+```
+                  2.5 %      97.5 %
+(Intercept) 10.40227614 10.56533628
+years        0.07336341  0.08439611
+```
+
+
+---
+
+## Confidence interval for `\(\beta_j\)` - backtransform
+
+
+The confidence interval for the coefficient of `\(x\)` describing its relationship with `\(log(Y)\)` is:
+
+- Confidence intervals `\(\beta_0\)`
+
+`$$[e^{\hat{\beta_0} - t_{\alpha/2, n-2}se(\hat{\beta_0})}, e^{\hat{\beta_0} + t_{\alpha/2, n-2}se(\hat{\beta_0})}]$$`
+
+- Confidence intervals `\(\beta_1\)`
+
+`$$[e^{\hat{\beta_1} - t_{\alpha/2, n-2}se(\hat{\beta_1})}, e^{\hat{\beta_1} + t_{\alpha/2, n-2}se(\hat{\beta_1})}]$$`
+
+
+```r
+exp(confint(salary_fit_log, level=0.95))
+```
+
+```
+                   2.5 %      97.5 %
+(Intercept) 32934.503906 38767.45083
+years           1.076122     1.08806
+```
+
+
+
+---
+
+
+class: duke-orange, middle
+
+## Transformations to Linearize the Model
+
+&lt;!--https://ademos.people.uic.edu/Chapter12.html--&gt;
+
+
+
+
+---
+
+
+
+![](coconut.png)
+
+source: https://srilankamirror.com/biz/20026-coconuts-to-be-measured-by-weight-instead-of-circumference
+
+---
+
+## Data
+
+
+```r
+coconut &lt;- read_csv("coconut.csv") # Ignore the warning message
+coconut
+```
+
+```
+# A tibble: 100 × 3
+    ...1 weight circumference
+   &lt;dbl&gt;  &lt;dbl&gt;         &lt;dbl&gt;
+ 1     1   773.          27.8
+ 2     2   772.          27.8
+ 3     3   780.          27.9
+ 4     4   790.          28.1
+ 5     5   806.          28.4
+ 6     6   813.          28.5
+ 7     7   817.          28.6
+ 8     8   820.          28.6
+ 9     9   818.          28.6
+10    10   830.          28.8
+# … with 90 more rows
+```
+
+---
+## EDA
+
+.pull-left[
+
+
+```r
+qplot(data=coconut, y=weight, geom=c("boxplot"))+
+  geom_boxplot(color="black", fill="#d95f02")
+```
+
+![](regression9_files/figure-html/unnamed-chunk-23-1.png)&lt;!-- --&gt;
+
+
+
+
+]
+
+.pull-right[
+
+
+```r
+qplot(data=coconut, y=circumference, geom=c("boxplot"))+
+  geom_boxplot(color="black", fill="forestgreen")
+```
+
+![](regression9_files/figure-html/unnamed-chunk-24-1.png)&lt;!-- --&gt;
+
+
+
+]
+
+---
+## Weight vs Circumference
+
+
+```r
+ggplot(coconut, aes(x=circumference, y=weight)) + geom_point()
+```
+
+![](regression9_files/figure-html/unnamed-chunk-25-1.png)&lt;!-- --&gt;
+
+```r
+cor(coconut$circumference, coconut$weight)
+```
+
+```
+[1] 0.9996482
+```
+
+---
+
+# Fit a regression model
+
+
+```r
+coconut.lm &lt;- lm(weight ~ circumference, data=coconut)
+coconut.lm
+```
+
+```
+
+Call:
+lm(formula = weight ~ circumference, data = coconut)
+
+Coefficients:
+  (Intercept)  circumference  
+      -897.25          59.94  
+```
+
+---
+
+## Compute Residuals and Fitted Values
+
+
+
+```r
+coconut.lm.result &lt;- broom::augment(coconut.lm)
+coconut.lm.result
+```
+
+```
+# A tibble: 100 × 8
+   weight circumference .fitted .resid   .hat .sigma  .cooksd .std.resid
+    &lt;dbl&gt;         &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;    &lt;dbl&gt;      &lt;dbl&gt;
+ 1   773.          27.8    769.  4.32  0.0602   1.46 0.275         2.93 
+ 2   772.          27.8    769.  2.57  0.0602   1.50 0.0971        1.74 
+ 3   780.          27.9    775.  4.62  0.0556   1.45 0.287         3.12 
+ 4   790.          28.1    787.  2.63  0.0470   1.50 0.0772        1.77 
+ 5   806.          28.4    805.  1.39  0.0359   1.52 0.0162        0.934
+ 6   813.          28.5    811.  2.25  0.0326   1.51 0.0380        1.50 
+ 7   817.          28.6    817. -0.247 0.0295   1.53 0.000413     -0.165
+ 8   820.          28.6    817.  2.98  0.0295   1.50 0.0601        1.99 
+ 9   818.          28.6    817.  0.473 0.0295   1.53 0.00152       0.316
+10   830.          28.8    829.  0.825 0.0240   1.53 0.00371       0.549
+# … with 90 more rows
+```
+
+---
+
+## Residuals vs Fitted values
+
+![](regression9_files/figure-html/unnamed-chunk-28-1.png)&lt;!-- --&gt;
+
+---
+
+## Normality assumption
+
+
+
+```r
+qplot(data=coconut.lm.result, x=.resid, geom=c("histogram"))+
+  geom_histogram(color="black", fill="#d95f02")
+```
+
+![](regression9_files/figure-html/unnamed-chunk-29-1.png)&lt;!-- --&gt;
+
+---
+
+## Normality assumption
+
+
+
+```r
+ggplot(coconut.lm.result, aes(sample=.resid))+
+  stat_qq() + stat_qq_line() +
+  labs(x="Theoretical Quantiles",  y="Sample Quantiles")
+```
+
+![](regression9_files/figure-html/unnamed-chunk-30-1.png)&lt;!-- --&gt;
+
+---
+
+## Normality assumption (cont.)
+  
+
+```r
+shapiro.test(coconut.lm.result$.resid)
+```
+
+```
+
+	Shapiro-Wilk normality test
+
+data:  coconut.lm.result$.resid
+W = 0.95463, p-value = 0.001697
+```
+
+
+---
+
+## Transform Y
+
+`$$\sqrt(Y) = \beta_0 + \beta_1 x + \epsilon$$`
+
+
+```r
+coconut$sqrt.weight &lt;- sqrt(coconut$weight)
+coconut
+```
+
+```
+# A tibble: 100 × 4
+    ...1 weight circumference sqrt.weight
+   &lt;dbl&gt;  &lt;dbl&gt;         &lt;dbl&gt;       &lt;dbl&gt;
+ 1     1   773.          27.8        27.8
+ 2     2   772.          27.8        27.8
+ 3     3   780.          27.9        27.9
+ 4     4   790.          28.1        28.1
+ 5     5   806.          28.4        28.4
+ 6     6   813.          28.5        28.5
+ 7     7   817.          28.6        28.6
+ 8     8   820.          28.6        28.6
+ 9     9   818.          28.6        28.6
+10    10   830.          28.8        28.8
+# … with 90 more rows
+```
+
+---
+
+### Estimate parameters of `\(\sqrt(Y) = \beta_0 + \beta_1 x + \epsilon\)`
+
+
+
+```r
+coconut.lm2 &lt;- lm(sqrt.weight ~ circumference, data=coconut)
+coconut.lm2
+```
+
+```
+
+Call:
+lm(formula = sqrt.weight ~ circumference, data = coconut)
+
+Coefficients:
+  (Intercept)  circumference  
+      0.01631        0.99951  
+```
+
+---
+
+## Compute Residuals and Fitted Values
+
+
+```r
+coconut.lm.result2 &lt;- broom::augment(coconut.lm2)
+coconut.lm.result2
+```
+
+```
+# A tibble: 100 × 8
+   sqrt.weight circumference .fitted    .resid   .hat .sigma  .cooksd .std.resid
+         &lt;dbl&gt;         &lt;dbl&gt;   &lt;dbl&gt;     &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;    &lt;dbl&gt;      &lt;dbl&gt;
+ 1        27.8          27.8    27.8  0.00810  0.0602 0.0157  9.20e-3     0.536 
+ 2        27.8          27.8    27.8 -0.0234   0.0602 0.0155  7.66e-2    -1.55  
+ 3        27.9          27.9    27.9  0.0211   0.0556 0.0155  5.69e-2     1.39  
+ 4        28.1          28.1    28.1 -0.000372 0.0470 0.0157  1.47e-5    -0.0244
+ 5        28.4          28.4    28.4 -0.00373  0.0359 0.0157  1.10e-3    -0.244 
+ 6        28.5          28.5    28.5  0.0166   0.0326 0.0156  1.98e-2     1.08  
+ 7        28.6          28.6    28.6 -0.0221   0.0295 0.0155  3.13e-2    -1.43  
+ 8        28.6          28.6    28.6  0.0343   0.0295 0.0153  7.58e-2     2.23  
+ 9        28.6          28.6    28.6 -0.00946  0.0295 0.0157  5.75e-3    -0.615 
+10        28.8          28.8    28.8  0.00562  0.0240 0.0157  1.64e-3     0.365 
+# … with 90 more rows
+```
+
+
+---
+
+## Residuals vs Fitted values
+
+
+```r
+ggplot(coconut.lm.result2, aes(x=.fitted, y=.resid)) + geom_point()
+```
+
+![](regression9_files/figure-html/unnamed-chunk-35-1.png)&lt;!-- --&gt;
+
+---
+
+## Residuals vs Fitted values
+
+.pull-left[
+
+`\(Y = \beta_0 + \beta_1 x + \epsilon\)`
+
+![](regression9_files/figure-html/unnamed-chunk-36-1.png)&lt;!-- --&gt;
+
+
+]
+
+.pull-right[
+
+`\(\sqrt(Y) = \beta_0 + \beta_1 x + \epsilon\)`
+
+![](regression9_files/figure-html/unnamed-chunk-37-1.png)&lt;!-- --&gt;
+
+
+]
+
+---
+
+## Normality assumption
+
+
+
+```r
+qplot(data=coconut.lm.result2, x=.resid, geom=c("histogram"))+
+  geom_histogram(color="black", fill="#d95f02")
+```
+
+![](regression9_files/figure-html/unnamed-chunk-38-1.png)&lt;!-- --&gt;
+
+---
+
+## Normality assumption
+
+
+
+```r
+ggplot(coconut.lm.result2, aes(sample=.resid))+
+  stat_qq() + stat_qq_line() +
+  labs(x="Theoretical Quantiles",  y="Sample Quantiles")
+```
+
+![](regression9_files/figure-html/unnamed-chunk-39-1.png)&lt;!-- --&gt;
+
+---
+
+## Normality assumption (cont.)
+  
+
+```r
+shapiro.test(coconut.lm.result2$.resid)
+```
+
+```
+
+	Shapiro-Wilk normality test
+
+data:  coconut.lm.result2$.resid
+W = 0.98624, p-value = 0.3885
+```
+
+---
+
+## Normality test
+
+.pull-left[
+
+`\(Y = \beta_0 + \beta_1 x + \epsilon\)`
+
+![](regression9_files/figure-html/unnamed-chunk-41-1.png)&lt;!-- --&gt;
+
+  
+
+```
+
+	Shapiro-Wilk normality test
+
+data:  coconut.lm.result$.resid
+W = 0.95463, p-value = 0.001697
+```
+
+
+
+]
+
+
+.pull-right[
+
+`\(\sqrt(Y) = \beta_0 + \beta_1 x + \epsilon\)`
+
+![](regression9_files/figure-html/unnamed-chunk-43-1.png)&lt;!-- --&gt;
+
+  
+
+```
+
+	Shapiro-Wilk normality test
+
+data:  coconut.lm.result2$.resid
+W = 0.98624, p-value = 0.3885
+```
+
+
+]
+
+---
+
+### Your turn: Tests on individual regression coefficients
+
+
+```r
+summary(coconut.lm2)
+```
+
+```
+
+Call:
+lm(formula = sqrt.weight ~ circumference, data = coconut)
+
+Residuals:
+      Min        1Q    Median        3Q       Max 
+-0.054212 -0.009988  0.000234  0.008474  0.034324 
+
+Coefficients:
+              Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)   0.016311   0.049346   0.331    0.742    
+circumference 0.999507   0.001648 606.382   &lt;2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 0.0156 on 98 degrees of freedom
+Multiple R-squared:  0.9997,	Adjusted R-squared:  0.9997 
+F-statistic: 3.677e+05 on 1 and 98 DF,  p-value: &lt; 2.2e-16
+```
+
+---
+
+## Back transformation: sqrt
+
+- The back transformation is to square the number. If you have negative numbers, you can't take the square root; you should add a constant to each number to make them all positive.
+
+- Square-root transformation when the variable is a count of something, or the variables that can take positive values.
+
+---
+
+
+## Back transformation: sqrt
+
+`$$\sqrt(Y) = 0.016 + 0.99x$$`
+
+`$$Y = (0.016 + 0.99x)^2$$`
+
+`$$Y = 0.016^2 + 2(0.016 \times0.99)x + (0.99x)^2$$`
+
+
+
+&gt; "Although the popular square root transformation
+can be useful for simplifying relationships with quadratic
+effects, and also for stabilizing variances (Baguley, 2012),
+this transformation does not aid in interpretation."
+
+&gt; Data Transformations for Inference with Linear Regression: Clarifications and Recommendations.
+[J. Pek, O. Wong, A. C. Wong] 
+
+
+Link to the paper: https://scholarworks.umass.edu/cgi/viewcontent.cgi?article=1360&amp;context=pare
+
+---
+# Note
+
+- When the model is presented to the professional community or to the general public/ when making preidctions, transformations done to the dependent variable `\(Y\)` should be transformed back to the **original units**  
+
+---
+
+## Model with transformation on X
+
+`$$\hat{Y} = \hat{\beta}_0 + \hat{\beta}_1log(x)$$`
+
+## Interpretation of intercept:
+
+When `\(log(x)=0\)`, that is `\(x=1\)`, mean of `\(Y\)` is expected to be `\(\hat{\beta_0}\)`
+
+## Interpretation of slope:
+
+When `\(X\)` is multiplied by a factor of `\(K\)`, the mean of `\(Y\)` changes by `\(\hat{\beta}_1log(K)\)`.
+
+Example: when `\(K=2\)` (some constant value)
+
+
+When `\(X\)` is multiplied by a factor of 2, the mean of `\(Y\)` changes by `\(\hat{\beta}_1log(2)\)`.
+
+---
+
+## Help but Not  RULES
+
+
+### Transformations on X
+
+- Suppose the assumption of normally and independently distributed responses with constant variance are at least approximately satisfied, however the relationship between `\(Y\)` and one or more of the regressor variables is nonlinear. 
+
+### Transformations on Y
+
+- To correct nonnormality assumption and/or nonconstant variance assumption of the error term.
+
+---
+
+
+
+class: center, middle
+
+
+
+Acknowledgement
+
+Introduction to Linear Regression Analysis, Douglas C. Montgomery, Elizabeth A. Peck, G. Geoffrey Vining
+
+
+All rights reserved by 
+
+[Dr. Thiyanga S. Talagala](https://thiyanga.netlify.app/) 
+
+
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

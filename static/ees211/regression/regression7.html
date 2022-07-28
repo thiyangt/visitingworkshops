@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>STA 506 2.0 Linear Regression Analysis</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Dr Thiyanga S. Talagala" />
+    <script src="libs/header-attrs/header-attrs.js"></script>
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
+    <link href="libs/remark-css/default-fonts.css" rel="stylesheet" />
+    <link href="libs/remark-css/duke-blue.css" rel="stylesheet" />
+    <link href="libs/remark-css/hygge-duke.css" rel="stylesheet" />
+    <link rel="stylesheet" href="libs/cc-fonts.css" type="text/css" />
+    <link rel="stylesheet" href="libs/figure-captions.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# STA 506 2.0 Linear Regression Analysis
+## Analysis of Variance, or ANOVA
+### Dr Thiyanga S. Talagala
+
+---
+
+
+
+## Analysis of Variance (ANOVA)
+
+- a statistical method that separates observed variance in a response variable (continuous random variable) into different components to use for additional tests.
+
+- an approach to **test significance of regression** - if there is a **linear relationship** between the response `\(Y\)` and any of the regressor variables `\(X_1, X_2, ...X_p\)`
+
+- often thought of as an overall or global test of model adequacy.
+---
+
+## ANOVA table
+
+Source of variation | DF | Sum of squares (SS) | Mean Square (MS) | F| p-value |
+---:---:---:---:---:---|
+Regression | 1| SSM = `\(\sum_{i=1}^{n}(\hat{Y_i}-\bar{y})^2\)`| MSR = `\(\frac{SSM}{1}\)` | `\(F* =\frac{MSR}{MSE}\)` | `\(P(F&gt;F*)\)`|
+Residual error | `\(n-2\)` | SSE = `\(\sum_{i=1}^{n}(y_i-\hat{Y_i})^2\)`| MSE = `\(\frac{SSE}{(n-2)}\)` | |
+Total | `\(n-1\)` | SST = `\(\sum_{i=1}^{n}(y_i-\bar{y})^2\)` | | | |
+
+### Hypotheses
+
+`\(H_0: \beta_1 = 0\)`
+
+`\(H_1: \beta_1 \neq 0\)`
+
+The p -value of this test is the same as the  p -value of the t-test for  `\(H_0: \beta_1 = 0\)`, this only happens in simple linear regression.
+
+---
+### Simple Linear Regression Analysis - Data
+
+
+```r
+library(alr3)
+```
+
+```
+Loading required package: car
+```
+
+```
+Loading required package: carData
+```
+
+```r
+head(heights)
+```
+
+```
+  Mheight Dheight
+1    59.7    55.1
+2    58.2    56.5
+3    60.6    56.0
+4    60.7    56.8
+5    61.8    56.0
+6    55.5    57.9
+```
+
+```r
+dim(heights)
+```
+
+```
+[1] 1375    2
+```
+
+---
+
+### Simple Linear Regression Analysis
+
+Daughter's height vs Mother's height
+
+
+```r
+library(alr3)
+model &lt;- lm(Dheight ~ Mheight, data=heights)
+anova(model)
+```
+
+```
+Analysis of Variance Table
+
+Response: Dheight
+            Df Sum Sq Mean Sq F value    Pr(&gt;F)    
+Mheight      1 2236.7 2236.66  435.47 &lt; 2.2e-16 ***
+Residuals 1373 7052.0    5.14                      
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+```
+
+&lt;img src="slranova.png" width="60%" height="5%" /&gt;
+
+---
+### Simple Linear Regression Analysis - ANOVA
+
+Demo:
+
+
+---
+
+## Simple Linear Regression Analysis - F test
+
+### Hypothesis testing with ANOVA
+
+
+```
+Analysis of Variance Table
+
+Response: Dheight
+            Df Sum Sq Mean Sq F value    Pr(&gt;F)    
+Mheight      1 2236.7 2236.66  435.47 &lt; 2.2e-16 ***
+Residuals 1373 7052.0    5.14                      
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+```
+
+#### Test for significance of regression
+
+.pull-left[
+
+
+
+`\(Y = \beta_0 + \beta_1 X + \epsilon\)`
+
+where 
+
+`\(Y\)` - daughter's height
+
+`\(X\)` - mother's height
+]
+
+.pull-right[
+
+`\(H_0: \beta_1=0\)`
+
+`\(H_1: \beta_1 \neq 0\)`
+
+]
+
+---
+
+## Simple Linear Regression: F test vs t-test
+
+
+
+```r
+summary(model)
+```
+
+```
+
+Call:
+lm(formula = Dheight ~ Mheight, data = heights)
+
+Residuals:
+   Min     1Q Median     3Q    Max 
+-7.397 -1.529  0.036  1.492  9.053 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept) 29.91744    1.62247   18.44   &lt;2e-16 ***
+Mheight      0.54175    0.02596   20.87   &lt;2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 2.266 on 1373 degrees of freedom
+Multiple R-squared:  0.2408,	Adjusted R-squared:  0.2402 
+F-statistic: 435.5 on 1 and 1373 DF,  p-value: &lt; 2.2e-16
+```
+
+---
+class: duke-orange, center, middle
+
+# Multiple Linear Regression Analysis
+
+---
+
+## Multiple Linear Regression Analysis
+
+
+```r
+library(tidyverse)
+heart.data &lt;- read_csv("heart.data.csv")
+heart.data
+```
+
+```
+# A tibble: 498 × 4
+    ...1 biking smoking heart.disease
+   &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;         &lt;dbl&gt;
+ 1     1  30.8    10.9          11.8 
+ 2     2  65.1     2.22          2.85
+ 3     3   1.96   17.6          17.2 
+ 4     4  44.8     2.80          6.82
+ 5     5  69.4    16.0           4.06
+ 6     6  54.4    29.3           9.55
+ 7     7  49.1     9.06          7.62
+ 8     8   4.78   12.8          15.9 
+ 9     9  65.7    12.0           3.07
+10    10  35.3    23.3          12.1 
+# … with 488 more rows
+```
+
+
+---
+## Multiple Linear Regression Analysis - ANOVA
+
+Source of variation | DF | Sum of squares (SS) | Mean Square (MS) | F| p-value |
+---:---:---:---:---:---|
+Regression | p| SSM = `\(\sum_{i=1}^{n}(\hat{Y_i}-\bar{y})^2\)`| MSR = `\(\frac{SSM}{p}\)` | `\(F* =\frac{MSR}{MSE}\)` | `\(P(F&gt;F*)\)`|
+Residual error | `\(n-p-1\)` | SSE = `\(\sum_{i=1}^{n}(y_i-\hat{Y_i})^2\)`| MSE = `\(\frac{SSE}{(n-p-1)}\)` | |
+Total | `\(n-1\)` | `\(\sum_{i=1}^{n}(y_i-\bar{y})^2\)` | | | |
+
+### Hypotheses
+
+`\(H_0: \beta_1 = \beta_2 = ... = \beta_p = 0\)`
+
+`\(H_1: \beta_j \neq 0 \text{ for at least one j, j=1, 2, ...p}\)`
+
+The p -value of this test is not the same as the  p -value of the t-test for  `\(H_0: \beta_1 = 0\)`, that only happens in simple linear regression because `\(p=1\)`.
+
+
+---
+
+## Multiple Linear Regression Analysis - ANOVA
+
+
+
+```
+Analysis of Variance Table
+
+Response: heart.disease
+            Df  Sum Sq Mean Sq F value    Pr(&gt;F)    
+Predictors   2 10176.6  5088.3   11895 &lt; 2.2e-16 ***
+Residuals  495   211.7     0.4                      
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+```
+
+`\(Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \epsilon\)`
+
+`\(Y\)` - percentage of people in each town who have heart disease
+
+`\(X_1\)` - percentage of people in each town who bike to work
+
+`\(X_2\)` - percentage of people in each town who smoke
+
+
+### Test for Significance of Regression
+
+`\(H_0: \beta_1 = \beta_2 = 0\)`
+
+`\(H_1: \beta_j \neq 0 \text{ for at least one j, j=1, 2}\)`
+
+
+---
+
+## Tests on Individual Regression Coefficients
+
+### Partial or marginal test
+
+test of the contribution of `\(X_j\)` given the other regressors in the model.
+
+
+```r
+summary(regHeart)
+```
+
+```
+
+Call:
+lm(formula = heart.disease ~ biking + smoking, data = heart.data)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-2.1789 -0.4463  0.0362  0.4422  1.9331 
+
+Coefficients:
+             Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept) 14.984658   0.080137  186.99   &lt;2e-16 ***
+biking      -0.200133   0.001366 -146.53   &lt;2e-16 ***
+smoking      0.178334   0.003539   50.39   &lt;2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 0.654 on 495 degrees of freedom
+Multiple R-squared:  0.9796,	Adjusted R-squared:  0.9795 
+F-statistic: 1.19e+04 on 2 and 495 DF,  p-value: &lt; 2.2e-16
+```
+
+---
+### Tests on Individual Regression Coefficients (cont)
+
+
+```
+
+Call:
+lm(formula = heart.disease ~ biking + smoking, data = heart.data)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-2.1789 -0.4463  0.0362  0.4422  1.9331 
+
+Coefficients:
+             Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept) 14.984658   0.080137  186.99   &lt;2e-16 ***
+biking      -0.200133   0.001366 -146.53   &lt;2e-16 ***
+smoking      0.178334   0.003539   50.39   &lt;2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 0.654 on 495 degrees of freedom
+Multiple R-squared:  0.9796,	Adjusted R-squared:  0.9795 
+F-statistic: 1.19e+04 on 2 and 495 DF,  p-value: &lt; 2.2e-16
+```
+
+`\(H_0: \beta_1 =  0\)`  vs `\(H_1: \beta_1 \neq 0\)`
+
+`\(p-value &lt; 0.05\)`, we reject `\(H_0\)` under 0.05 level of significance and conclude that the regressor `biking` or `\(X_1\)`, contributes significantly to the model given that `smoking`, `\(X_2\)` is also in the model.
+
+---
+
+## Partial test for smoking
+
+- Write down the hypotheses
+
+- Write the decision and conclusions
+
+
+
+---
+## Next Lecture
+
+&gt; More work - Multiple Linear Regression
+---
+class: center, middle
+
+
+
+Acknowledgement
+
+Introduction to Linear Regression Analysis, Douglas C. Montgomery, Elizabeth A. Peck, G. Geoffrey Vining
+
+Data from
+
+https://www.scribbr.com/statistics/multiple-linear-regression/
+
+All rights reserved by 
+
+[Dr. Thiyanga S. Talagala](https://thiyanga.netlify.app/) 
+
+
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

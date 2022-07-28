@@ -1,0 +1,36 @@
+---
+title: "STA 506 2.0 Linear Regression Analysis"
+output: pdf_document
+date: ""
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+The systolic blood pressure is thought to be related to the weight of an individual. The weight and systolic blood pressure of 15 randomly selected males in the age group 30 - 40 are shown below. 
+
+```{r, comment=NA}
+weight <- c(185, 187, 180, 155, 212, 175, 190, 210, 200, 190,
+            168, 189, 190, 172, 189, 168, 174, 183, 155, 195,
+            180, 143, 240, 235, 192, 197)
+SBP <- c(148, 151, 146, 139, 159, 144, 150, 155, 152, 149, 141, 
+         150, 150, 143, 150, 143, 145, 147, 136, 154, 146,
+         133, 169, 165, 150, 153)
+data <- data.frame(weight, SBP)
+data
+```
+
+1. Make a scatterplot of the data.
+
+2. Estimate the correlation coefficient.
+
+3. Fit a simple linear regression model with intercept to the data.
+
+4. Test the hypothesis $H_0: \beta_1=0$ vs  $H_0: \beta_1 \neq 0$
+
+5. Construct the analysis-of-variance table and test for significance of regression.
+
+6. Find a 95% confidence interval on the slope and the intercept and interpret the confidence intervals.
+
+7. Fit a no-intercept model to the data and compare it to the model obtained above. Which model you conclude is superior?

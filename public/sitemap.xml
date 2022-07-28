@@ -1,48 +1,33 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
-  
   <url>
+    <loc>/ees211/</loc>
+    <lastmod>2022-05-05T21:48:51-07:00</lastmod>
+  </url><url>
     <loc>/</loc>
     <lastmod>2020-06-30T21:49:57-07:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>/2020/06/30/ictc-3104.3-data-analytics-and-big-data/</loc>
     <lastmod>2020-06-30T21:49:57-07:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>/post/</loc>
     <lastmod>2020-06-30T21:49:57-07:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>/about/</loc>
     <lastmod>2016-05-05T21:48:51-07:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>/ictc2020/</loc>
     <lastmod>2016-05-05T21:48:51-07:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>/reg2020/</loc>
     <lastmod>2016-05-05T21:48:51-07:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>/installation/</loc>
     <priority>0</priority>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>/categories/</loc>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>/tags/</loc>
   </url>
-  
 </urlset>

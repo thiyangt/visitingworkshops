@@ -1,0 +1,553 @@
+---
+title: "STA 506 2.0 Linear Regression Analysis"
+subtitle: "Interpretation of Regression Outputs"
+author: "Dr Thiyanga S. Talagala"
+date: ""
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    css: 
+      - default
+      - default-fonts
+      - duke-blue
+      - hygge-duke
+      - libs/cc-fonts.css
+      - libs/figure-captions.css
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+```
+
+
+## Recapping what we know
+
+**True linear regression model/ Population regression equation**
+
+$$\mu_{Y|X=x} = \beta_0 + \beta_1x $$
+
+- how the mean of $Y$ changes for given values of $X$.
+
+- We can also write the equation in terms of the observed values of $Y$, rather than the mean.  Because the individual observations for any given value of $X$ vary randomly about the mean of $Y|X$, we need to account for this random variation, or error, in the regression equation.  Sample regression line
+
+$$Y_i = \beta_0 + \beta_1x_i + \epsilon_i, \text{ i = 1, 2, 3...n}$$
+
+> Please  write the assumptions of $\epsilon_i$
+
+**Fitted regression line**
+
+$$\hat{Y} = \hat{\beta}_0 + \hat{\beta}_1x$$
+
+
+---
+# Revisiting the fitted regression model
+
+## Fitted model
+
+```{r, comment=NA, warning=FALSE}
+library(alr3) # to load the dataset
+model1 <- lm(Dheight ~ Mheight, data=heights)
+model1
+```
+
+---
+## Model summary
+
+```{r, comment=NA, warning=FALSE}
+summary(model1)
+```
+
+---
+# $R^2$ = 24.08%
+
+- Maybe you have one or more omitted variables. It is important to consider other factors that might influence the daughter's height:
+
+    - Father's height
+
+    - Physical activities performed by the daughter
+
+    - Food nutrition, etc.
+
+- Maybe the functional form of the regression form is incorrect (so you have to add some quadratic, or cubic terms...). At the same time a transformation can be an alternative (if appropriate).
+
+- Maybe could be the effect of a group of outlier (maybe not one...).
+
+---
+
+
+- A large $R^2$ does not necessarily imply that the regression model will be an accurate predictor.
+
+- $R^2$ does not measure the appropriateness of the linear model.
+
+- $R^2$ will often large even though $Y$ and $X$ are nonlinearly related. 
+
+---
+```{r, echo=FALSE, comment=NA, warning=FALSE, message=FALSE,  fig.cap="Scatterplot of  price vs carat in diamonds (Pearson's correlation coefficient = 0.783)"}
+set.seed(55)
+library(tidyverse)
+df <- tibble(x_var = runif(100, min = 0, max = 25)
+             ,y_var = log2(x_var) + rnorm(100)
+             )
+ggplot(data=df, aes(x=x_var, y=y_var)) + 
+  geom_point() + labs(x="carat", y="price")
+cor(df$x_var, df$y_var)
+```
+---
+
+```{r, echo=FALSE, comment=NA}
+colnames(df) <- c("price", "carat")
+mod <- lm(carat ~ price, data=df)
+summary(mod)
+```
+
+
+- $R^2$ is large even though the linear approximation is poor.
+
+> In general a good policy is to observe the scatterplot of your data 
+
+---
+class:  duke-orange, center, middle
+
+![](crystal.jpg)
+
+ Y - Crystal size
+ 
+ X - Number of hours it takes crystal to grow
+
+---
+## Data set
+
+```{r, comment=NA}
+crystaldata <- data.frame(Size = c(0.08, 0.07,  1.12, 2.01, 4.43, 
+                                   4.98, 4.92, 7.18, 
+                                   5.57, 8.40, 8.81, 10.81, 11.61, 10.12, 13.12, 15.04, 0.075, 0.075,  1.13, 2.02, 4.45, 
+                                   4.99, 4.95, 7.28, 
+                                   5.67, 8.40, 8.51, 10.82, 11.62, 10.13, 13.22, 15.03),
+  Time= c(2, 2, 4, 4,6, 8, 10, 12, 14, 16, 18, 20, 20, 24, 26, 28, 2, 2, 4, 4,6, 8, 10, 12, 14, 16, 18, 20, 20, 24, 26, 28))
+crystaldata
+```
+---
+## scatterplot
+
+```{r, comment=NA, message=FALSE, fig.height=5, fig.width=5}
+ggplot(crystaldata, aes(x=Time, y = Size)) + geom_point()
+cor(crystaldata$Time, crystaldata$Size)
+```
+---
+
+## Fit a simple linear regression model
+
+```{r, comment=NA, message=FALSE}
+mod1 <- lm(Size ~ Time, data=crystaldata)
+mod1
+```
+
+---
+## Visualise the model
+
+```{r, comment=NA, fig.height=5}
+ggplot(crystaldata, aes(y=Size, x=Time))+geom_point(alpha=0.5) +
+  geom_abline(intercept = -0.21, slope = 0.52, colour="forestgreen", lwd=2) +
+            theme(aspect.ratio = 1)
+
+```
+
+---
+## Questions
+
+1. How well does this equation fit the data?
+
+2. Are any of the basic assumptions violated?
+
+
+---
+
+
+```{r, comment=NA}
+summary(mod1)
+
+```
+
+
+---
+## Coefficient of determination
+
+
+```{r, comment=NA, echo=FALSE}
+summary(mod1)
+
+```
+
+- 94.5% of the variability in size is accounted by the regression model. 
+
+or
+
+- 94.5% of the variation in size  is explained by the number of hours it takes crystal to grow.
+
+
+---
+## Are any of the basic assumptions violated?
+
+
+
+```{r , comment=NA}
+mod1
+
+```
+
+
+
+
+---
+
+## Compute Residuals and Fitted values
+
+```{r, comment=NA, message=FALSE, comment=NA}
+library(broom)
+mod1_fitresid <- augment(mod1)
+mod1_fitresid
+
+```
+
+---
+
+### 1) The relationship between the response $Y$ and the regressors is linear, at least approximately.
+
+Plot of residuals vs fitted values and Plot of residuals vs predictor 
+
+
+.pull-left[
+
+Residuals vs Fitted
+
+
+```{r, comment=NA, echo=FALSE}
+ggplot(mod1_fitresid, 
+  aes(x = .fitted, y = .resid))+
+  geom_point() +
+  geom_hline(yintercept = 0, col = "blue", size = 1)
+
+```
+]
+
+
+.pull-right[
+
+Residuals vs Time
+
+
+```{r comment=NA, echo=FALSE}
+ggplot(mod1_fitresid, 
+  aes(x = Time, y = .resid))+
+  geom_point() +
+  geom_hline(yintercept = 0, col = "blue", size = 1)
+
+```
+]
+
+---
+
+## 2) The error term $\epsilon$ has zero mean.
+
+## 3) The error term $\epsilon$ has constant variance $\sigma^2$.
+
+Residuals vs Fitted
+
+```{r, comment=NA, echo=FALSE, fig.height=5, fig.width=5}
+ggplot(mod1_fitresid, 
+  aes(x = .fitted, y = .resid))+
+  geom_point(alpha=0.5) +
+  geom_hline(yintercept = 0, col = "blue", size = 1)
+
+```
+
+
+---
+
+## 4) The error are uncorrelated.
+
+---
+## 5) The errors are normally distributed.
+
+
+.pull-left[
+```{r, comment=NA, message=FALSE, fig.height=4.5}
+ggplot(mod1_fitresid, 
+       aes(x=.resid))+
+  geom_histogram(colour="white")+ggtitle("Distribution of Residuals")
+```
+]
+
+.pull-right[
+```{r, comment=NA, message=FALSE, fig.height=4.5}
+ggplot(mod1_fitresid, 
+       aes(sample=.resid))+
+  stat_qq() + stat_qq_line()+labs(x="Theoretical Quantiles", y="Sample Quantiles")
+```
+
+]
+
+```{r, comment=NA, message=FALSE, fig.height=4}
+shapiro.test(mod1_fitresid$.resid)
+```
+
+
+---
+## Interpretations
+
+$$\mu_{Y|X=x} = \beta_0 + \beta_1x $$
+
+**Slope:**
+
+Increase in the mean response for every one unit increase in the explanatory variable.
+
+**Intercept:**
+
+Mean response when the explanatory variable equals 0
+
+```{r , comment=NA}
+mod1
+
+```
+
+
+.content-box-yellow[Interpret slope and intercept]
+
+---
+## Nonsensical intercept interpretation
+
+
+- Sometimes it doesn't make sense to interpret the intercept: when?
+
+    - $X$ can never realistically take the value of zero, then the intercept is meaningless.
+
+    - The intercept is negative even though the response can take only positive values.
+
+- The intercept helps the line fit the data as closely as possible.
+
+- It is fine to have a regression model with nonsensical intercept if it helps the model give better overall prediction accuracy.
+
+
+---
+
+class:  duke-orange, center, middle
+
+## Hypothesis testing on the slope and intercept
+---
+
+## Hypothesis testing - Intercept
+
+$H_0: \beta_1=0$
+
+$H_1: \beta_1 \neq 0$
+
+```{r, comment=NA}
+summary(mod1)
+```
+
+---
+## Situations where $H_0: \beta_1=0$ is not rejected.
+
+In-class
+
+
+---
+## Situations where $H_0: \beta_1=0$ is rejected.
+
+In-class
+
+
+---
+## Confidence Interval on $\beta_0$ and $\beta_1$
+
+- Confidence intervals $\beta_0$
+
+$$[\hat{\beta_0} - t_{\alpha/2, n-2}se(\hat{\beta_0}), \hat{\beta_0} + t_{\alpha/2, n-2}se(\hat{\beta_0})]$$
+
+- Confidence intervals $\beta_1$
+
+$$[\hat{\beta_1} - t_{\alpha/2, n-2}se(\hat{\beta_1}), \hat{\beta_1} + t_{\alpha/2, n-2}se(\hat{\beta_1})]$$
+
+
+
+---
+
+## t-distribution
+
+$t_{0.025, 30}$
+
+```{r, comment=NA, echo=TRUE, fig.height=5}
+qt(0.975, df=30)
+```
+
+```{r, comment=NA, echo=FALSE, fig.height=5}
+ggplot(data.frame(x = c(-4, 4)), aes(x)) +
+  stat_function(fun = dt, args =list(df =30)) +
+  stat_function(fun = dt,   args =list(df =30),
+                xlim = c(2.04,4),
+                geom = "area") 
+```
+
+```{r, comment=NA, echo=TRUE, fig.height=5}
+qt(0.025, df=30)
+```
+
+---
+```{r, comment=NA}
+summary(mod1)
+```
+
+
+.content-box-yellow[Compute confidence intervals on slope and intercept]
+
+---
+## Confidence Interval on $\beta_0$ and $\beta_1$ - Interpretation
+
+- Confidence intervals $\beta_0$
+
+$$[\hat{\beta_0} - t_{\alpha/2, n-2}se(\hat{\beta_0}), \hat{\beta_0} + t_{\alpha/2, n-2}se(\hat{\beta_0})]$$
+
+- Confidence intervals $\beta_1$
+
+$$[\hat{\beta_1} - t_{\alpha/2, n-2}se(\hat{\beta_1}), \hat{\beta_1} + t_{\alpha/2, n-2}se(\hat{\beta_1})]$$
+
+Frequency interpretation:
+
+If we were to take repeated samples of the same size at the same $X$ levels and construct, for example, $95\%$ confidence intervals on the slope for each sample, then $95\%$ of those intervals will contain the true value $\beta_1$.
+
+We therefore have considerable *confidence* that the observed interval, here (04792, 0.5608), covers the true $\beta_1$. The measure of confidence is .95. Here, .95 is called the confidence coefficient.
+
+In general, the larger the confidence coefficient $(1-\alpha)$ is, the wider the confidence interval.
+
+.content-box-green[page 375, Mood and Graybill, Introduction to the theory of statistics]
+---
+
+## Analysis of variance - ANOVA
+
+- We may also use ANOVA to test the significance of regression.
+
+- The idea behind the ANOVA  is that the variation in the response variable (referred to as the total variation - **SST**) is partitioned into two parts: 
+ 
+> i. how much of the variation is explained by the regression model (referred to as the variable name in the R output) - **SSM (Model sum of squares)**
+ 
+> ii. how much of the variation is left unexplained by the regression model (called the “Residual” or “Error”) - **SSE (Residual or error sum of squares)**.
+
+$$\sum_{i=1}^n(y_i - \bar{y})^2=\sum_{i=1}^n(\hat{Y}_i - \bar{y})^2 + \sum_{i=1}^n(y_i - \hat{Y_i})^2$$
+
+$$SST = SSM + SSE$$
+
+Degrees of component
+
+$$df_T = df_M + df_E$$
+$$n-1 = 1 + (n-2)$$
+---
+
+## ANOVA  - F test
+
+$$F = \frac{SSM/df_M}{SSE/df_E} = \frac{MS_M}{MS_E}$$
+
+$$E(MS_E) = \sigma^2$$
+---
+
+## ANOVA - Hypothesis
+
+$$H_0: \beta_1=0$$
+$$H_1: \beta_1 \neq 0$$
+
+
+- In simple linear regression t-test is equivalent to the F test.
+
+- The real usefulness of the analysis of variance is in multiple regression models.
+
+```{r, comment=NA}
+anova(mod1)
+```
+---
+
+
+```{r, comment=NA}
+summary(mod1)
+```
+
+---
+### Regression through the origin (No intercept)
+
+-  Appropriate in analysing data from chemical and other manufacturing processes. 
+
+- Do not misuse the no-intercept model: where the data lie in a region of $x$-space remote from the origin.
+
+- Scatterplot sometimes helps in deciding whether or not to fit the no-intercept model.
+
+How to select the model: Fit both models (with intercept and without intercept) and choose between them based on the quality of the fit.
+
+```{r, comment=NA, message=FALSE}
+mod2 <- lm(Size ~ Time -1, data=crystaldata)
+mod2
+```
+
+---
+
+```{r, comment=NA, message=FALSE}
+summary(mod2)
+```
+---
+
+.pull-left[
+
+With intercept
+
+```{r, comment=NA, fig.height=5}
+ggplot(crystaldata, aes(y=Size, x=Time))+geom_point(alpha=0.5) +
+  geom_abline(intercept = -0.21, slope = 0.52, colour="forestgreen", lwd=2) +
+            theme(aspect.ratio = 1)
+
+```
+
+]
+
+.pull-right[
+Without intercept
+
+```{r, comment=NA, fig.height=5}
+ggplot(crystaldata, aes(y=Size, x=Time))+geom_point(alpha=0.5) +
+  geom_abline(intercept = 0, slope = 0.51, colour="red", lwd=2) +
+            theme(aspect.ratio = 1)
+
+```
+
+]
+
+Perform the residual analysis on the new model before using it.
+---
+
+class:  duke-orange, center, middle
+
+## Prediction of new observations
+
+---
+```{r, comment=NA}
+test <- data.frame(Time = c(2, 2, 6, 6, 8, 20, 26))
+test
+predict(mod2, newdata=test, interval="predict") 
+```
+
+---
+## Next Lecture
+
+> Multiple linear regression
+---
+class: center, middle
+
+
+
+Acknowledgement
+
+Introduction to Linear Regression Analysis, Douglas C. Montgomery, Elizabeth A. Peck, G. Geoffrey Vining
+
+All rights reserved by 
+
+[Dr. Thiyanga S. Talagala](https://thiyanga.netlify.app/) 
+

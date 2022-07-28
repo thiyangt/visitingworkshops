@@ -1,0 +1,118 @@
+---
+title: Multicollinearity
+output: pdf_document
+author: "Thiyanga S. Talagala"
+date: ""
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## 1. Introduction
+
+Multicollinearity refers to a situation in which two or more **explanatory variables** in a multiple regression model are highly linearly related. 
+
+## 2. Data
+
+```{r, comment=NA, message=FALSE, warning=FALSE, message=FALSE}
+library(readr)
+bloodpressure <- read_csv("bloodpressure.csv")
+bloodpressure
+```
+
+### 2.1 Variable description
+
+1. $Y$: BP (blood pressure, in mmHg)
+
+2. $X_1$: Age (in years)
+
+3. $X_2$: Weight (in kg)
+
+4. $X_3$: BSA (body surface area, in sq m)
+
+5. $X_4$: Dur (duration of hypertension)
+
+6.  $X_5$: Pulse (basal pulse)
+
+7.  $X_6$: Stress (stress index)
+
+## 3. How to detect multicollinearity?
+
+1. Correlation matrix and scatterplot matrix
+
+This is limiting. It is possible that the pairwise correlations between variables are small, but a linear dependence exists among three or even more variables in the dataset. Hence, we use **variance inflation factors (VIF)** to detect multicollinearity.
+
+```{r, comment=NA, message=FALSE, warning=FALSE}
+library(GGally)
+ggpairs(bloodpressure[, -c(1, 2)])
+
+```
+
+
+2. Variance Inflation Factors (VIF)
+
+Variance inflation factor for $j^{th}$ variable
+
+$$VIF_j = \frac{1}{1-R^2_j}$$
+
+where $R^2_j$ is the $R^2$ value obtained by regressing the $j^{th}$ predictor on the remaining predictors.
+
+
+```{r, comment=NA, message=FALSE, warning=FALSE}
+library(broom)
+bp <- lm(BP ~ Age + Weight + BSA + Dur + Pulse + Stress, data=bloodpressure)
+bp
+summary(bp)
+```
+
+## 4. Calculate VIF
+
+```{r, comment=NA, message=FALSE, warning=FALSE}
+library(car)
+vif(bp)
+```
+
+## 5. Illustration of the output for weight variable
+
+Build a regression model taking *weight* as the dependent variable and remaining `x` variables as the independent variables.
+
+```{r, comment=NA, message=FALSE, warning=FALSE}
+weight <- lm(Weight ~ Age  + BSA + Dur + Pulse + Stress, data=bloodpressure)
+weight
+summary(weight)
+```
+
+$$VIF_weight = \frac{1}{1-R^2_weight} = \frac{1}{1-0.8812} = 8.42$$
+
+**VIFs exceeding 4  indicates high multicollinearity while  VIFs exceeding 10 are considered  evidence of serious multicollinearity requiring correction.**
+
+## 6. What to do now?
+
+One solution is to remove some of the variables with high VIF. Variables `Weight`, `BSA` and `Pulse` have high VIF values.  If we review the pairwise correlations again, we can see `Weight` and `BSA` are highly correlated. We can choose to remove either predictor from the model. 
+
+Which one to remove? In-class discussion.
+
+```{r, comment=NA, message=FALSE, warning=FALSE}
+library(GGally)
+ggpairs(bloodpressure[, -c(1, 2)])
+
+```
+
+\newpage
+
+
+## New model without `Pulse` and `BSA`
+
+```{r, comment=NA, message=FALSE, warning=FALSE}
+library(broom)
+bp2 <- lm(BP ~ Age + Weight  + Dur  + Stress, data=bloodpressure)
+bp2
+summary(bp2)
+vif(bp2)
+```
+
+
+## Ackowledgement
+
+Data: The Pennsylvania State University.

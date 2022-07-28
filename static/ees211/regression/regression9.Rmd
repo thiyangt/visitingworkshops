@@ -1,0 +1,755 @@
+---
+title: "STA 506 2.0 Linear Regression Analysis"
+subtitle: "Lecture 11-i: Transformations to Correct Model Inadequacies"
+author: "Dr Thiyanga S. Talagala"
+date: ""
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    css: 
+      - default
+      - default-fonts
+      - duke-blue
+      - hygge-duke
+      - libs/cc-fonts.css
+      - libs/figure-captions.css
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+```
+
+
+## Introduction
+
+In this section we are going to learn methods and procedures for building regression models when the assumptions are violated.
+
+### Transformations
+
+- Variance-stabilizing transformations
+
+- Transformations to linearize the model
+
+### How to get around the problem?
+
+- Transform  $X$ variable(s)
+
+- Transform $Y$
+
+- Transformations on both $X$ variable(s) and $Y$.
+
+
+
+---
+class: duke-orange, middle
+
+
+## Variance-Stabilizing Transformations
+
+---
+
+## Dataset 1
+
+We will try to model salary as a function of years of experience.
+
+```{r, comment=NA, message=FALSE, warning=FALSE}
+library(tidyverse)
+salarydata <- read_csv("salarydata.csv")
+salarydata
+```
+
+Data are obtained from: https://daviddalpiaz.github.io/appliedstats/transformations.html
+
+---
+
+## Salary vs Years of Experience
+
+```{r, comment=NA, message=FALSE, warning=FALSE, fig.height=5.3, fig.width=5.3}
+ggplot(salarydata, aes(x=years, y=salary)) + geom_point()
+cor(salarydata$years, salarydata$salary)
+```
+
+---
+## Fit a Simple Linear Regression Model
+
+```{r, comment=NA, message=FALSE, warning=FALSE}
+salary_fit <- lm(salary ~ years, data = salarydata)
+summary(salary_fit)
+
+```
+
+
+---
+
+## Compute Residuals and Fitted Values
+
+```{r, comment=NA, message=FALSE, warning=FALSE}
+library(broom)
+salary_residuals <- augment(salary_fit)
+salary_residuals
+```
+
+
+---
+
+## Residuals vs Fitted Values
+
+```{r, comment=NA, message=FALSE, warning=FALSE, fig.height=6, fig.width=6}
+ggplot(salary_residuals, aes(x=.fitted, y=.resid)) + geom_point()
+```
+
+
+---
+
+## Normality assumption
+
+
+.pull-left[
+
+```{r, comment=NA, message=FALSE, fig.height=4}
+qplot(data=salary_residuals,
+      x=.resid,)+
+  geom_histogram(color="black", 
+                 fill="lightblue")
+```
+
+```{r, comment=NA, message=FALSE}
+shapiro.test(salary_residuals$.resid)
+```
+
+
+]
+
+.pull-right[
+
+```{r, comment=NA, message=FALSE, fig.height=4, fig.width=4}
+ggplot(salary_residuals, 
+       aes(sample=.resid))+
+  stat_qq() + 
+  stat_qq_line() +
+  labs(x="Theoretical Quantiles",
+       y="Sample Quantiles")
+```
+
+
+
+
+]
+
+
+
+---
+
+## Variance - Stabilizing Transformations
+
+
+.pull-left[
+
+```{r, comment=NA, message=FALSE, echo=FALSE, warning=FALSE, fig.height=6, fig.width=6}
+ggplot(salary_residuals, aes(x=.fitted, y=.resid)) + geom_point()
+```
+
+
+]
+
+.pull-left[
+
+- Useful variance-stabilizing transformations
+
+    - square root: $\sqrt{y}$
+  
+    - log transformation: $log(y)$
+    
+    - reciprocal: $y^{-1}$
+    
+    - reciprocal square root: $y^{-1/2}$
+
+
+]
+
+---
+
+## Apply log transformation
+
+$$log(Y) = \beta_0 + \beta_1x_ + \epsilon$$
+
+```{r, comment=NA, message=FALSE, warning=FALSE}
+
+salarydata$log.salary <- log(salarydata$salary)
+salarydata
+```
+
+---
+## Fit a regression model with log transformation
+
+```{r, comment=NA, message=FALSE, warning=FALSE}
+
+salary_fit_log <- lm(log.salary ~ years, data = salarydata)
+salary_fit_log
+```
+
+---
+
+## Compute Residuals and Fitted values
+
+```{r, comment=NA, message=FALSE, warning=FALSE}
+
+salary_log_residuals <- augment(salary_fit_log)
+salary_log_residuals
+```
+
+---
+## Residuals vs Fitted values
+
+```{r, comment=NA, message=FALSE, echo=FALSE, warning=FALSE, fig.height=6, fig.width=6}
+ggplot(salary_log_residuals, aes(x=.fitted, y=.resid)) + geom_point()
+```
+
+---
+## Residuals vs Fitted
+
+.pull-left[
+
+$$Y = \beta_0 + \beta_1x + \epsilon$$
+
+
+```{r, comment=NA, message=FALSE, echo=FALSE, warning=FALSE, fig.height=6, fig.width=6}
+ggplot(salary_residuals, aes(x=.fitted, y=.resid)) + geom_point()
+```
+
+
+]
+
+.pull-right[
+
+$$log(Y) = \beta_0 + \beta_1x + \epsilon$$
+
+```{r, comment=NA, message=FALSE, echo=FALSE, warning=FALSE, fig.height=6, fig.width=6}
+ggplot(salary_log_residuals, aes(x=.fitted, y=.resid)) + geom_point()
+```
+
+
+]
+
+---
+
+## Normality assumption
+
+$log(Y) = \beta_0 + \beta_1x + \epsilon$
+
+
+
+```{r, comment=NA, message=FALSE, fig.height=4, fig.width=4}
+qplot(data=salary_log_residuals, x=.resid,)+
+  geom_histogram(color="black", fill="lightblue")
+```
+
+---
+
+## Normality assumption (cont.)
+
+```{r, comment=NA, message=FALSE, fig.height=4, fig.width=4}
+ggplot(salary_log_residuals, 
+       aes(sample=.resid))+
+  stat_qq() + 
+  stat_qq_line() +
+  labs(x="Theoretical Quantiles",
+       y="Sample Quantiles")
+```
+
+
+---
+
+## Normality assumption (cont.)
+
+```{r, comment=NA, message=FALSE}
+shapiro.test(salary_log_residuals$.resid)
+```
+
+---
+## Model Statistics
+
+```{r, comment=NA, message=FALSE, warning=FALSE}
+summary(salary_fit_log)
+
+```
+
+---
+
+## Hypothesis testing
+
+### Intercept
+
+$H_0: \beta_0 = 0$ vs $H_1: \beta_0 \neq 0$
+
+Decision:
+
+p-value < 0.05.  We reject $H_0$ under 0.05 level of significance.
+
+
+Conclusion: We can conclude that population regression line intercept is significantly different from 0.
+
+### Slope
+
+
+$H_0: \beta_1 = 0$ vs $H_1: \beta_1 \neq 0$
+
+Decision: 
+
+p-value < 0.05.  We reject $H_0$ under 0.05 level of significance.
+
+Conclusion: The variable `years` contributes significantly to the model.
+
+---
+# Re-scale
+
+### log scale  to the original scale of the data
+
+**Preliminary Maths**
+
+$$Y=10$$
+$$log(10) = 2.302585$$
+$$e^{2.302585} = 10$$
+$$e^{a+b} = e^ae^b$$
+
+### New fitted regression model
+
+$$\hat{log(Y)} = 10.48 + 0.079X$$
+
+Convert to original scale
+
+$$e^{\hat{log(Y)}} = e^{10.48 + 0.079X}$$
+
+$$\hat{Y} = e^{10.48}e^{0.079X}$$
+
+---
+## Interpretation of slope
+
+When $X=x_1$
+
+$$Y' = e^{10.48}e^{0.079x_1}$$
+
+When $X={x_1 + 1}$
+
+$$Y'' = e^{10.48}e^{0.079(x_1 + 1)} = e^{10.48}e^{0.079(x_1)}e^{0.079}$$
+
+$$e^{0.079} = 1.0822$$
+
+We see that for every one additional year of experience, average (median) salary increases 1.0822 times. We are now multiplying, not adding.
+
+---
+
+## Interpretation of slope
+
+$$\hat{log(Y)} = \hat{\beta_0} + \hat{\beta_1}x$$
+
+### Interpretation of $\hat{\beta_0}$
+
+When $x=0$, the median of $Y$ is expected to be $e^{\hat{\beta}_0}$.
+
+
+### Interpretation of $\hat{\beta_1}$
+
+For every one unit increase in $x$, the median of $Y$ is expected to multiply by a factor of $e^{\hat{\beta}_1}$.
+
+
+Why median not mean?: Read here
+https://www2.stat.duke.edu/courses/Spring20/sta210.001/slides/lec-slides/09-transformations.html#29
+
+---
+
+## Confidence interval for $\beta_j$
+
+The confidence interval for the coefficient of $x$ describing its relationship with $Y$ is:
+
+- Confidence intervals $\beta_0$
+
+$$[\hat{\beta_0} - t_{\alpha/2, n-2}se(\hat{\beta_0}), \hat{\beta_0} + t_{\alpha/2, n-2}se(\hat{\beta_0})]$$
+
+- Confidence intervals $\beta_1$
+
+$$[\hat{\beta_1} - t_{\alpha/2, n-2}se(\hat{\beta_1}), \hat{\beta_1} + t_{\alpha/2, n-2}se(\hat{\beta_1})]$$
+
+```{r, comment=NA, message=FALSE, warning=FALSE}
+confint(salary_fit_log, level=0.95)
+```
+
+
+---
+
+## Confidence interval for $\beta_j$ - backtransform
+
+
+The confidence interval for the coefficient of $x$ describing its relationship with $log(Y)$ is:
+
+- Confidence intervals $\beta_0$
+
+$$[e^{\hat{\beta_0} - t_{\alpha/2, n-2}se(\hat{\beta_0})}, e^{\hat{\beta_0} + t_{\alpha/2, n-2}se(\hat{\beta_0})}]$$
+
+- Confidence intervals $\beta_1$
+
+$$[e^{\hat{\beta_1} - t_{\alpha/2, n-2}se(\hat{\beta_1})}, e^{\hat{\beta_1} + t_{\alpha/2, n-2}se(\hat{\beta_1})}]$$
+
+```{r, comment=NA, message=FALSE, warning=FALSE}
+exp(confint(salary_fit_log, level=0.95))
+```
+
+
+
+---
+
+
+class: duke-orange, middle
+
+## Transformations to Linearize the Model
+
+<!--https://ademos.people.uic.edu/Chapter12.html-->
+
+
+
+
+---
+
+
+
+![](coconut.png)
+
+source: https://srilankamirror.com/biz/20026-coconuts-to-be-measured-by-weight-instead-of-circumference
+
+---
+
+## Data
+
+```{r, comment=NA, warning=F, message=FALSE}
+coconut <- read_csv("coconut.csv") # Ignore the warning message
+coconut
+```
+
+---
+## EDA
+
+.pull-left[
+
+```{r, comment=NA, message=FALSE, warning=FALSE}
+qplot(data=coconut, y=weight, geom=c("boxplot"))+
+  geom_boxplot(color="black", fill="#d95f02")
+
+```
+
+
+
+
+]
+
+.pull-right[
+
+```{r, comment=NA, message=FALSE, warning=FALSE}
+qplot(data=coconut, y=circumference, geom=c("boxplot"))+
+  geom_boxplot(color="black", fill="forestgreen")
+
+```
+
+
+
+]
+
+---
+## Weight vs Circumference
+
+```{r, comment=NA, message=FALSE, fig.height=5, fig.width=5}
+ggplot(coconut, aes(x=circumference, y=weight)) + geom_point()
+cor(coconut$circumference, coconut$weight)
+```
+
+---
+
+# Fit a regression model
+
+```{r, comment=NA, message=FALSE}
+coconut.lm <- lm(weight ~ circumference, data=coconut)
+coconut.lm
+```
+
+---
+
+## Compute Residuals and Fitted Values
+
+
+```{r, comment=NA, message=FALSE}
+coconut.lm.result <- broom::augment(coconut.lm)
+coconut.lm.result
+```
+
+---
+
+## Residuals vs Fitted values
+
+```{r, comment=NA, message=FALSE, echo=FALSE, warning=FALSE, fig.height=6, fig.width=6}
+ggplot(coconut.lm.result, aes(x=.fitted, y=.resid)) + geom_point()
+```
+
+---
+
+## Normality assumption
+
+
+```{r, fig.height=5, fig.width=5, warning=FALSE, message=FALSE}
+qplot(data=coconut.lm.result, x=.resid, geom=c("histogram"))+
+  geom_histogram(color="black", fill="#d95f02")
+```
+
+---
+
+## Normality assumption
+
+
+```{r, comment=NA, message=FALSE, fig.height=5, fig.width=5}
+ggplot(coconut.lm.result, aes(sample=.resid))+
+  stat_qq() + stat_qq_line() +
+  labs(x="Theoretical Quantiles",  y="Sample Quantiles")
+```
+
+---
+
+## Normality assumption (cont.)
+  
+```{r, comment=NA, message=FALSE}
+shapiro.test(coconut.lm.result$.resid)
+```
+
+
+---
+
+## Transform Y
+
+$$\sqrt(Y) = \beta_0 + \beta_1 x + \epsilon$$
+
+```{r, comment=NA, message=FALSE}
+coconut$sqrt.weight <- sqrt(coconut$weight)
+coconut
+```
+
+---
+
+### Estimate parameters of $\sqrt(Y) = \beta_0 + \beta_1 x + \epsilon$
+
+
+```{r, comment=NA, message=FALSE}
+coconut.lm2 <- lm(sqrt.weight ~ circumference, data=coconut)
+coconut.lm2
+```
+
+---
+
+## Compute Residuals and Fitted Values
+
+```{r, comment=NA, message=FALSE}
+coconut.lm.result2 <- broom::augment(coconut.lm2)
+coconut.lm.result2
+```
+
+
+---
+
+## Residuals vs Fitted values
+
+```{r, comment=NA, message=FALSE,  warning=FALSE, fig.height=6, fig.width=6}
+ggplot(coconut.lm.result2, aes(x=.fitted, y=.resid)) + geom_point()
+```
+
+---
+
+## Residuals vs Fitted values
+
+.pull-left[
+
+$Y = \beta_0 + \beta_1 x + \epsilon$
+
+```{r, comment=NA, message=FALSE, echo=FALSE, warning=FALSE, fig.height=6, fig.width=6}
+ggplot(coconut.lm.result, aes(x=.fitted, y=.resid)) + geom_point()
+```
+
+
+]
+
+.pull-right[
+
+$\sqrt(Y) = \beta_0 + \beta_1 x + \epsilon$
+
+```{r, comment=NA, message=FALSE, echo=FALSE, warning=FALSE, fig.height=6, fig.width=6}
+ggplot(coconut.lm.result2, aes(x=.fitted, y=.resid)) + geom_point()
+```
+
+
+]
+
+---
+
+## Normality assumption
+
+
+```{r, fig.height=5, fig.width=5, warning=FALSE, message=FALSE}
+qplot(data=coconut.lm.result2, x=.resid, geom=c("histogram"))+
+  geom_histogram(color="black", fill="#d95f02")
+```
+
+---
+
+## Normality assumption
+
+
+```{r, comment=NA, message=FALSE, fig.height=5, fig.width=5}
+ggplot(coconut.lm.result2, aes(sample=.resid))+
+  stat_qq() + stat_qq_line() +
+  labs(x="Theoretical Quantiles",  y="Sample Quantiles")
+```
+
+---
+
+## Normality assumption (cont.)
+  
+```{r, comment=NA, message=FALSE}
+shapiro.test(coconut.lm.result2$.resid)
+```
+
+---
+
+## Normality test
+
+.pull-left[
+
+$Y = \beta_0 + \beta_1 x + \epsilon$
+
+```{r, echo=FALSE, comment=NA, message=FALSE, fig.height=5, fig.width=5}
+ggplot(coconut.lm.result, aes(sample=.resid))+
+  stat_qq() + stat_qq_line() +
+  labs(x="Theoretical Quantiles",  y="Sample Quantiles")
+```
+
+  
+```{r, echo=FALSE, comment=NA, message=FALSE}
+shapiro.test(coconut.lm.result$.resid)
+```
+
+
+
+]
+
+
+.pull-right[
+
+$\sqrt(Y) = \beta_0 + \beta_1 x + \epsilon$
+
+```{r, echo=FALSE, comment=NA, message=FALSE, fig.height=5, fig.width=5}
+ggplot(coconut.lm.result2, aes(sample=.resid))+
+  stat_qq() + stat_qq_line() +
+  labs(x="Theoretical Quantiles",  y="Sample Quantiles")
+```
+
+  
+```{r, echo=FALSE, comment=NA, message=FALSE}
+shapiro.test(coconut.lm.result2$.resid)
+```
+
+
+]
+
+---
+
+### Your turn: Tests on individual regression coefficients
+
+```{r, comment=NA, message=FALSE}
+summary(coconut.lm2)
+```
+
+---
+
+## Back transformation: sqrt
+
+- The back transformation is to square the number. If you have negative numbers, you can't take the square root; you should add a constant to each number to make them all positive.
+
+- Square-root transformation when the variable is a count of something, or the variables that can take positive values.
+
+---
+
+
+## Back transformation: sqrt
+
+$$\sqrt(Y) = 0.016 + 0.99x$$
+
+$$Y = (0.016 + 0.99x)^2$$
+
+$$Y = 0.016^2 + 2(0.016 \times0.99)x + (0.99x)^2$$
+
+
+
+> "Although the popular square root transformation
+can be useful for simplifying relationships with quadratic
+effects, and also for stabilizing variances (Baguley, 2012),
+this transformation does not aid in interpretation."
+
+> Data Transformations for Inference with Linear Regression: Clarifications and Recommendations.
+[J. Pek, O. Wong, A. C. Wong] 
+
+
+Link to the paper: https://scholarworks.umass.edu/cgi/viewcontent.cgi?article=1360&context=pare
+
+---
+# Note
+
+- When the model is presented to the professional community or to the general public/ when making preidctions, transformations done to the dependent variable $Y$ should be transformed back to the **original units**  
+
+---
+
+## Model with transformation on X
+
+$$\hat{Y} = \hat{\beta}_0 + \hat{\beta}_1log(x)$$
+
+## Interpretation of intercept:
+
+When $log(x)=0$, that is $x=1$, mean of $Y$ is expected to be $\hat{\beta_0}$
+
+## Interpretation of slope:
+
+When $X$ is multiplied by a factor of $K$, the mean of $Y$ changes by $\hat{\beta}_1log(K)$.
+
+Example: when $K=2$ (some constant value)
+
+
+When $X$ is multiplied by a factor of 2, the mean of $Y$ changes by $\hat{\beta}_1log(2)$.
+
+---
+
+## Help but Not  RULES
+
+
+### Transformations on X
+
+- Suppose the assumption of normally and independently distributed responses with constant variance are at least approximately satisfied, however the relationship between $Y$ and one or more of the regressor variables is nonlinear. 
+
+### Transformations on Y
+
+- To correct nonnormality assumption and/or nonconstant variance assumption of the error term.
+
+---
+
+
+
+class: center, middle
+
+
+
+Acknowledgement
+
+Introduction to Linear Regression Analysis, Douglas C. Montgomery, Elizabeth A. Peck, G. Geoffrey Vining
+
+
+All rights reserved by 
+
+[Dr. Thiyanga S. Talagala](https://thiyanga.netlify.app/) 
+
+
+

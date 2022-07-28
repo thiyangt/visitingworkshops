@@ -1,0 +1,140 @@
+---
+title: "STA 506 2.0 Linear Regression Analysis"
+author: "Mid Evaluation Assignment"
+date: "1 November 2020"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Total marks: 40 
+
+
+## Question 
+
+Any sound that is loud enough and lasts long enough can damage hearing and lead to hearing loss. A study was conducted to assess the effects of noise on hearing loss. The independent variable (X) was maximal noise level. Each  individual was exposed regularly (5 hours a day, for a period of 5 years) to an environment with  a specific noise level. The noise level is measured in units called decibels. The dependent variable was hearing loss. Hearing loss was measured as a percentage, compared with normal hearing. The data are given below.
+
+```{r, comment=NA, message=FALSE, warning=FALSE}
+
+hearing <- data.frame(NoiseLevel = c(62, 65, 70, 72, 81, 86, 90, 111, 123,
+                                     128, 142, 106, 100, 100, 112, 142),
+Loss = c(12, 15, 10, 18, 16, 23, 20, 34, 38, 48, 50, 32, 35, 36, 30, 58))
+hearing
+
+```
+
+\newpage
+
+## Q1 [4 marks]
+
+```{r, fig.cap="Relationship between noise level and hearing loss", echo=FALSE, fig.height=4, fig.width=4}
+library(ggplot2)
+ggplot(hearing, aes(x=NoiseLevel, y=Loss)) + geom_point()
+```
+
+The Pearson's correlation coefficient between X and Y is
+
+```{r, echo=FALSE, comment=NA, message=FALSE, warning=FALSE}
+
+cor(hearing$Loss, hearing$NoiseLevel)
+```
+
+Comment on the results given above.
+
+## Q2 [5 marks]
+
+Write the regression model that you would be fitted for the above variables. Define every term and state any assumptions regarding the model.
+
+## Q3
+
+A researcher fitted a simple linear regression model. The output is shown below
+
+```{r,comment=NA, message=FALSE, warning=FALSE, echo=FALSE}
+hearing_fit <- lm(Loss ~ NoiseLevel, data=hearing)
+hearing_fit 
+summary(hearing_fit)
+```
+
+The results of residual analysis
+
+```{r,comment=NA, message=FALSE, warning=FALSE, echo=FALSE, fig.cap="Residuals vs Fitted Values", fig.height=4, fig.width=4}
+library(broom)
+hearing_fit_resid <- augment(hearing_fit)
+qplot(data=hearing_fit_resid, y=.resid, x=.fitted)
+```
+
+
+```{r, comment=NA, message=FALSE, fig.height=4, fig.width=4, fig.cap="Normality test of residuals", echo=FALSE}
+ggplot(hearing_fit_resid, 
+       aes(sample=.resid))+
+  stat_qq() + 
+  stat_qq_line() +
+  labs(x="Theoretical Quantiles",
+       y="Sample Quantiles")
+```
+
+
+```{r, comment=NA, message=FALSE}
+shapiro.test(hearing_fit_resid$.resid)
+```
+
+### Q3 - i [3 marks]
+
+Write the fitted regression model.
+
+### Q3 - ii [5 marks]
+
+Check the validity of the assumptions. You should clearly specify the reasons referring to suitable outputs.
+
+### Q3 - iii [5 marks]
+
+Test the significance of the model. You should clearly write the hypothesis, decision and conclusions.
+
+### Q3 - iv [5 marks]
+
+What proportion of the variation in the response is explained by the model fitted?
+
+### Q3 - v  [4 marks]
+
+Interpret the value $\hat{\beta_1}=0.5289$.
+
+### Q3 - vi [3 marks]
+
+If an individual's environment noise level is 100, give a point estimate for its predicted hearing loss value.
+
+## Q4 [6 marks]
+
+Another researcher fitted a regression model without an intercept. The results are given below. Which model would you conclude is superior (model with intercept or model without intercept)? Give reasons for your answer. 
+
+
+```{r,comment=NA, message=FALSE, warning=FALSE, echo=FALSE}
+hearing_fit_nointercept <- lm(Loss ~ NoiseLevel-1, data=hearing)
+hearing_fit_nointercept
+summary(hearing_fit_nointercept)
+```
+
+The results of residual analysis
+
+```{r,comment=NA, message=FALSE, warning=FALSE, echo=FALSE, fig.cap="Residuals vs Fitted Values (Model without intercept)", fig.height=4, fig.width=4}
+library(broom)
+hearing_fit_resid_nointercept <- augment(hearing_fit_nointercept)
+qplot(data=hearing_fit_resid_nointercept, y=.resid, x=.fitted)
+```
+
+
+```{r, comment=NA, message=FALSE, fig.height=4, fig.width=4, fig.cap="Normality test of residuals (Model without intercept)", echo=FALSE}
+ggplot(hearing_fit_resid_nointercept, 
+       aes(sample=.resid))+
+  stat_qq() + 
+  stat_qq_line() +
+  labs(x="Theoretical Quantiles",
+       y="Sample Quantiles")
+```
+
+
+```{r, comment=NA, message=FALSE}
+shapiro.test(hearing_fit_resid_nointercept$.resid)
+```
+

@@ -1,0 +1,280 @@
+---
+title: "Model Questions"
+subtitle: "STA 506 2.0 Linear Regression Analysis"
+author: "Thiyanga Talagala"
+date: ""
+output: pdf_document
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Use 5% significance level for all tests.
+
+## Question 1
+
+A chemical reaction is performed at different levels of temperature (Celsius) and the end product is weighed (g). The following results were obtained for the purpose of finding a regression model to represent the relationship of the two variables. 
+
+```{r, comment=NA, message=FALSE, warning=FALSE, echo=FALSE}
+temp <- c(10, 10, 20, 33, 33, 40, 40, 40, 47, 50, 56, 56, 56, 60, 60, 65, 69)
+weight <- c(11, 9, 16, 23, 24, 25, 26, 23, 25, 22, 26, 27, 26, 25, 27, 24, 24)
+df <- data.frame(Temperature=temp, Weight=weight)
+df
+
+```
+
+i) The two variables are supposed to have a linear relationship. Write the model you would fit to these data. 
+
+\newpage
+
+\textcolor{blue}{Answer}
+
+
+\newpage
+
+A regression analysis was performed with these data and the following outputs were obtained using R.
+
+
+**Output a**
+
+```{r, comment=NA, message=FALSE, warning=FALSE, echo=FALSE, fig.height=3, fig.width=3}
+library(tidyverse)
+ggplot(df, aes(y=Weight, x=Temperature)) + geom_point()
+```
+
+**Output b**
+
+
+```{r, comment=NA, message=FALSE, warning=FALSE, echo=FALSE}
+model <- lm(Weight ~ Temperature, data=df)
+summary(model)
+```
+
+
+**Output c**
+
+```{r, comment=NA, message=FALSE, warning=FALSE, echo=FALSE, fig.height=3, fig.width=3}
+library(broom)
+fitmodel <- augment(model)
+qplot(data=fitmodel, y=.resid, x=.fitted)
+```
+
+**Output d**
+
+```{r, comment=NA, message=FALSE, warning=FALSE, echo=FALSE, fig.height=3, fig.width=3}
+ggplot(fitmodel, 
+       aes(sample=.resid))+
+  stat_qq() + 
+  stat_qq_line() +
+  labs(x="Theoretical Quantiles",
+       y="Sample Quantiles")
+```
+
+
+**Output e**
+
+```{r, comment=NA, message=FALSE, warning=FALSE, echo=FALSE}
+shapiro.test(fitmodel$.resid)
+```
+
+ii)	Two undergraduates studying statistics were looking at this analysis.
+
+(A)	One said that the results strongly suggest that this model is highly significant and can be used for prediction purposes. 
+
+(B)	The other said that the results show the fitted model is not appropriate for this case and this model cannot be used for prediction. 
+
+
+With whom would you agree? Justify your argument using each part ((a) to (e)) of the results given. 
+
+
+
+
+\textcolor{blue}{Answer}
+
+\newpage
+
+## Question 2
+
+In a soap production factory, there are two machines used for the production. Using 27 production runs; 15 of line 1 and 12 of line 2, the management wanted to find the relationship between the machine speed and the amount of scrap produced during the production process. To allow the two machines have different regression lines with different intercepts and slopes the following model was fitted with all 27 observations.
+
+$$Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \beta_3 X_1 X_2 + \epsilon$$
+
+where,
+
+$X_1$ is line speed and
+
+\begin{equation}
+  X_{2} =
+  \begin{cases}
+    1 & \text{if line 1} \\
+    0 & \text{if line 2}
+  \end{cases}
+\end{equation}
+
+ i)	Draw a sketch of the scatter plot which is expected with the above model.
+
+ \textcolor{blue}{Answer}
+ 
+ \newpage
+ 
+ \textcolor{blue}{Answer}
+
+ \newpage
+ 
+ii)	Write the model for each line.
+
+
+ \textcolor{blue}{Answer}
+ 
+ \newpage
+ 
+
+
+iii) Write the hypotheses that should be tested to find whether the two machines have the same regression model or not, i.e. whether both the intercept and the slope are the same of the two models you wrote in ii) in the above. 
+
+ \textcolor{blue}{Answer}
+ 
+ \newpage
+
+## Question 3
+
+A group of new graduates who have studied Statistics, Mathematics and Computer Science at the Faculty of Applied Sciences of University of Jayewardenepura joined a company. They were given three tests in the three subjects they have studied for the degree at the final interview at which they were selected for the job. After three months of a probationary period, their proficiency for the job was measured. The tests scores and the measure of proficiency were analysed to find a model to predict proficiency by the test scores. Some results are shown below. 
+
+```{r, comment=NA, message=FALSE, warning=FALSE, echo=FALSE, fig.height=7, fig.width=7}
+set.seed(1)
+Proficiency <- rnorm(70, mean=50)
+maths <- rnorm(70, 70, sd=5)
+set.seed(1)
+csc <- rexp(70, 60)
+set.seed(1)
+stat <- maths + rnorm(70)
+df <- data.frame(Proficiency=Proficiency, maths=maths, csc=csc, stat=stat)
+library(GGally)
+ggpairs(df)
+
+```
+
+```{r, comment=NA, message=FALSE, warning=FALSE}
+model.sjp <- lm(Proficiency ~ maths + csc + stat, data=df)
+summary(model.sjp)
+car::vif(model.sjp)
+```
+
+
+A statistician examined these results and claimed that “multicollinearity” has affected this model. 
+
+i) What is meant by multicollinearity? 
+
+ \textcolor{blue}{Answer}
+ 
+ \newpage
+ 
+ \textcolor{blue}{Answer}
+ 
+ \newpage
+
+ii) Do you agree with statistician claim. Justify your answer.
+
+ \textcolor{blue}{Answer}
+ 
+  \newpage
+
+The following outputs are obtained using R
+
+```{r, comment=NA, message=FALSE, warning=FALSE}
+as.data.frame(augment(model.sjp))
+
+```
+
+iii) Are there any observations that have high leverage values? If so, what are the observation numbers.
+
+ \textcolor{blue}{Answer}
+ 
+ \newpage
+ 
+ \textcolor{blue}{Answer}
+
+\newpage
+
+iv) Are there any observations that are outliers? If so, what are the sample observation numbers?
+
+ \textcolor{blue}{Answer}
+ 
+ \newpage
+ 
+ \textcolor{blue}{Answer}
+
+\newpage
+
+## Question 4
+
+it is required to study the relationship between age ($X$) and girth ($Y$) of teak trees growing in a plantation. Note that girth is the diameter of the tree (in inches) measured at 5 inches above the ground. The girth of the trees and the ages (in years) have been recorded from a sample of 25 trees. Assume that the scatterplot of the data clearly shows a linear relationship between the two variables with an intercept.
+
+i) Write the simple linear regression model that you would be fitted for the above variables. Define all terms in it and state any assumptions regarding the model. 
+
+ 
+ \textcolor{blue}{Answer}
+
+\newpage
+
+ii) Later it was suggested that a linear model goes through the origin is suitable for this situation. Write the new model using the usual notation.
+
+ 
+ \textcolor{blue}{Answer}
+
+\newpage
+
+iii) The estimated regression model in part (ii) satisfied all of the assumptions regarding the error term. Sketch the residual plot vs fitted values and Q-Q normality plot of residuals.
+
+ \textcolor{blue}{Answer}
+
+\newpage
+
+## Question 5
+
+An experiment was conducted to determine the influence of sulphide concentration ($X_1$) on the whiteness of rayon ($Y$). The results obtained through R are given below.
+
+```{r, comment=NA, message=FALSE}
+x1 <- rnorm(15, mean=40)
+y <- 13 + (2*x1) + rnorm(15)
+df5 <- data.frame(x1=x1, Y=y)
+mod5 <- lm(Y ~ x1, data=df5)
+summary(mod5)
+
+```
+
+```{r, comment=NA, message=FALSE}
+anova(mod5)
+```
+
+
+i) Construct the ANOVA table using the above results.
+
+ \textcolor{blue}{Answer}
+
+\newpage
+
+\textcolor{blue}{Answer}
+
+\newpage
+
+ii) Write the hypothesis to be tested in the ANOVA in part i.
+
+![](ANOVA.png)
+
+\textcolor{blue}{Answer}
+
+\newpage
+
+\textcolor{blue}{Answer}
+
+\newpage
+
+iii) What is your decision about the fitted model.
+
+\newpage
+
+\textcolor{blue}{Answer}
+
