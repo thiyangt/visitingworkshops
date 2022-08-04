@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="" xml:lang="">
   <head>
-    <title>STA 506 2.0 Linear Regression Analysis</title>
+    <title>regression3.knit</title>
     <meta charset="utf-8" />
     <meta name="author" content="Dr Thiyanga S. Talagala" />
     <script src="libs/header-attrs/header-attrs.js"></script>
@@ -14,13 +14,6 @@
   </head>
   <body>
     <textarea id="source">
-class: center, middle, inverse, title-slide
-
-# STA 506 2.0 Linear Regression Analysis
-## Simple Linear Regression (cont.)
-### Dr Thiyanga S. Talagala
-
----
 
 
 
@@ -43,7 +36,7 @@ class: center, middle, inverse, title-slide
 
 
 ```r
-library(alr3) # to load the dataset
+library(alr4) # to load the dataset
 ```
 
 ```
@@ -54,18 +47,27 @@ Loading required package: car
 Loading required package: carData
 ```
 
+```
+Loading required package: effects
+```
+
+```
+lattice theme set by effectsTheme()
+See ?effectsTheme for details.
+```
+
 ```r
-model1 &lt;- lm(Dheight ~ Mheight, data=heights)
+model1 &lt;- lm(dheight ~ mheight, data=Heights)
 model1
 ```
 
 ```
 
 Call:
-lm(formula = Dheight ~ Mheight, data = heights)
+lm(formula = dheight ~ mheight, data = Heights)
 
 Coefficients:
-(Intercept)      Mheight  
+(Intercept)      mheight  
     29.9174       0.5417  
 ```
 
@@ -80,7 +82,7 @@ summary(model1)
 ```
 
 Call:
-lm(formula = Dheight ~ Mheight, data = heights)
+lm(formula = dheight ~ mheight, data = Heights)
 
 Residuals:
    Min     1Q Median     3Q    Max 
@@ -89,7 +91,7 @@ Residuals:
 Coefficients:
             Estimate Std. Error t value Pr(&gt;|t|)    
 (Intercept) 29.91744    1.62247   18.44   &lt;2e-16 ***
-Mheight      0.54175    0.02596   20.87   &lt;2e-16 ***
+mheight      0.54175    0.02596   20.87   &lt;2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
@@ -178,13 +180,13 @@ Diagnosing methods are primarily based on model residuals.
 ---
 
 ```r
-df &lt;- alr3::heights
-df$fitted &lt;- 30.7 + (0.52*df$M)
+df &lt;- alr4::Heights
+df$fitted &lt;- 30.7 + (0.52*df$mheight)
 head(df,10)
 ```
 
 ```
-   Mheight Dheight fitted
+   mheight dheight fitted
 1     59.7    55.1 61.744
 2     58.2    56.5 60.964
 3     60.6    56.0 62.212
@@ -202,14 +204,14 @@ First fitted value: 30.7 + (0.52 * 59.7) = 61.744
 ---
 
 ```r
-df &lt;- alr3::heights
-df$fitted &lt;- 30.7 + (0.52*df$M)
-df$residuals &lt;- df$Dheight - df$fitted
+df &lt;- alr4::Heights
+df$fitted &lt;- 30.7 + (0.52*df$mheight)
+df$residuals &lt;- df$dheight - df$fitted
 head(df,10)
 ```
 
 ```
-   Mheight Dheight fitted residuals
+   mheight dheight fitted residuals
 1     59.7    55.1 61.744    -6.644
 2     58.2    56.5 60.964    -4.464
 3     60.6    56.0 62.212    -6.212
@@ -246,7 +248,7 @@ model1_fitresid
 
 ```
 # A tibble: 1,375 × 8
-   Dheight Mheight .fitted .resid     .hat .sigma .cooksd .std.resid
+   dheight mheight .fitted .resid     .hat .sigma .cooksd .std.resid
      &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt;    &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;      &lt;dbl&gt;
  1    55.1    59.7    62.3  -7.16 0.00172    2.26 0.00862     -3.16 
  2    56.5    58.2    61.4  -4.95 0.00310    2.26 0.00743     -2.19 
@@ -436,7 +438,7 @@ summary(model1)
 ```
 
 Call:
-lm(formula = Dheight ~ Mheight, data = heights)
+lm(formula = dheight ~ mheight, data = Heights)
 
 Residuals:
    Min     1Q Median     3Q    Max 
@@ -445,7 +447,7 @@ Residuals:
 Coefficients:
             Estimate Std. Error t value Pr(&gt;|t|)    
 (Intercept) 29.91744    1.62247   18.44   &lt;2e-16 ***
-Mheight      0.54175    0.02596   20.87   &lt;2e-16 ***
+mheight      0.54175    0.02596   20.87   &lt;2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
@@ -483,7 +485,7 @@ F-statistic: 435.5 on 1 and 1373 DF,  p-value: &lt; 2.2e-16
 
 
 ```r
-cor(heights$Mheight, heights$Dheight)
+cor(Heights$mheight, Heights$dheight)
 ```
 
 ```
@@ -491,7 +493,7 @@ cor(heights$Mheight, heights$Dheight)
 ```
 
 ```r
-cor(heights$Mheight, heights$Dheight)^2
+cor(Heights$mheight, Heights$dheight)^2
 ```
 
 ```
@@ -569,6 +571,19 @@ if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
     deleted = true;
   });
 })();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
 (function() {
   "use strict"
   // Replace <script> tags in slides area to make them executable
