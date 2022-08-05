@@ -1,5 +1,5 @@
 ---
-title: "STA 506 2.0 Linear Regression Analysis"
+title: ""
 subtitle: "Simple Linear Regression (cont.)"
 author: "Dr Thiyanga S. Talagala"
 date: ""
@@ -40,8 +40,8 @@ options(htmltools.dir.version = FALSE)
 # Fitted model
 
 ```{r, comment=NA, warning=FALSE}
-library(alr3) # to load the dataset
-model1 <- lm(Dheight ~ Mheight, data=heights)
+library(alr4) # to load the dataset
+model1 <- lm(dheight ~ mheight, data=Heights)
 model1
 ```
 
@@ -131,8 +131,8 @@ $$e_i = y_i - \hat{Y_i}$$
 
 ---
 ```{r, comment=NA, message=FALSE, warning=FALSE}
-df <- alr3::heights
-df$fitted <- 30.7 + (0.52*df$M)
+df <- alr4::Heights
+df$fitted <- 30.7 + (0.52*df$mheight)
 head(df,10)
 
 ```
@@ -141,9 +141,9 @@ First fitted value: 30.7 + (0.52 * 59.7) = 61.744
 
 ---
 ```{r, comment=NA, message=FALSE, warning=FALSE}
-df <- alr3::heights
-df$fitted <- 30.7 + (0.52*df$M)
-df$residuals <- df$Dheight - df$fitted
+df <- alr4::Heights
+df$fitted <- 30.7 + (0.52*df$mheight)
+df$residuals <- df$dheight - df$fitted
 head(df,10)
 
 ```
@@ -219,7 +219,7 @@ Residuals vs X
 
 ```{r comment=NA, echo=FALSE, fig.height=4, , fig.width=4}
 ggplot(model1_fitresid, 
-  aes(x = Mheight, y = .resid))+
+  aes(x = mheight, y = .resid))+
   geom_point() +
   geom_hline(yintercept = 0, col = "blue", size = 1)
 
@@ -366,8 +366,8 @@ $24\%$ of the variability in daughter's height is accounted by the regression mo
 ## Relationship between $r$ and $R^2$
 
 ```{r, comment=NA}
-cor(heights$Mheight, heights$Dheight)
-cor(heights$Mheight, heights$Dheight)^2
+cor(Heights$mheight, Heights$dheight)
+cor(Heights$mheight, Heights$dheight)^2
 ```
 ---
 ## Is correlation enough?
