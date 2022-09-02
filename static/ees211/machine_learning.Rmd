@@ -63,7 +63,21 @@ Many more...
 2. Unsupervised learning algorithm
 
     Deals with labelled dataset
-    
+
+# Loss function
+
+- Function that calculates loss for a single data point
+
+$e_i = y - \hat{y}$
+
+$e_i^2 = (y - \hat{y})^2$
+
+# Cost function
+
+- Calculates loss for the entire data sets 
+
+
+
 # Prediction accuracy measures (cost functions)
 
 ## Mean Error
