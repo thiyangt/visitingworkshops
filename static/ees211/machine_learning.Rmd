@@ -322,7 +322,7 @@ rpart.plot(tree, box.palette="RdBu", shadow.col="gray", nn=TRUE)
 
 split that increases the homogeneity 
  
-```{r, echo=FALSE}
+```{r}
 ggplot(data, aes(x=Sepal.Length, y=Sepal.Width, col=Species)) + geom_point() + scale_color_manual(values = c("#1b9e77", "#d95f02")) + coord_fixed() 
 ```
 
@@ -330,7 +330,7 @@ ggplot(data, aes(x=Sepal.Length, y=Sepal.Width, col=Species)) + geom_point() + s
 
 split that increases the homogeneity .
  
-```{r, echo=FALSE}
+```{r}
 ggplot(data, aes(x=Sepal.Length, y=Sepal.Width, col=Species)) + geom_point() + scale_color_manual(values = c("#1b9e77", "#d95f02")) + coord_fixed() + geom_vline(xintercept = 5.5) 
 ```
 
@@ -380,7 +380,7 @@ $$entropy(A) = - \sum_{k=1}^{m}p_k log_2(p_k)$$
 ## Example: Calculation (left)
 
 
-```{r, echo=FALSE, out.height="70%"}
+```{r, out.height="70%"}
 df <- data.frame(x=rep(c(2, 4, 6, 8), each=4),
                  y=rep(c(2, 4, 6, 8), times=4), col=factor(c(rep("red", 15), "blue")))
 ggplot(df, aes(x=x, y=y, col=col)) + geom_point(size=4)
@@ -388,7 +388,7 @@ ggplot(df, aes(x=x, y=y, col=col)) + geom_point(size=4)
 
 ## Example: calculation (right) (cont.) 
 
-```{r, echo=FALSE, out.height="70%"}
+```{r, out.height="70%"}
 df <- data.frame(x=rep(c(2, 4, 6, 8), each=4),
                  y=rep(c(2, 4, 6, 8), times=4), col=factor(c(rep("red", 8), rep("blue", 8))))
 ggplot(df, aes(x=x, y=y, col=col)) + geom_point(size=4)
@@ -470,7 +470,7 @@ $\lambda$ between 0 and $\infty$ balance predictive power and complexity.
 ## Example: candidate for pruning (in-class)
 
 
-```{r echo=FALSE, warning=FALSE, message=FALSE}
+```{r warning=FALSE, message=FALSE}
 # Load rpart and rpart.plot
 library(rpart)
 library(rpart.plot)
@@ -489,7 +489,7 @@ labels are based on majority votes.
 
 ## Regression Trees
 
-```{r echo=FALSE, warning=FALSE, message=FALSE}
+```{r, warning=FALSE, message=FALSE}
 # Load rpart and rpart.plot
 library(rpart)
 library(rpart.plot)
@@ -522,7 +522,7 @@ Value of the terminal node: average outcome value of the training records that w
 
 ## Decision Tree
 
-```{r, echo=FALSE}
+```{r}
 data <- iris[1:100,]
 library(rpart)
 library(rpart.plot)
@@ -535,7 +535,7 @@ rpart.plot(tree, box.palette="RdBu", shadow.col="gray", nn=TRUE)
 
 ## Decision boundary
 
-```{r, echo=FALSE, message=FALSE, warning=FALSE}
+```{r,  message=FALSE, warning=FALSE}
 library(tidyverse)
 ggplot(data, aes(x=Sepal.Length, y=Sepal.Width, col=Species)) + geom_point() + scale_color_manual(values = c("#1b9e77", "#d95f02")) + coord_fixed() + geom_vline(xintercept = 5.5) + geom_hline(yintercept = 3) + geom_hline(yintercept = 3.3)
 ```
