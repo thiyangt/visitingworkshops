@@ -1,0 +1,25 @@
+---
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+set.seed(123)                        # Create example data
+x <- rnorm(100)
+y <- rnorm(100) + x+x^2
+```
+
+## Method 1
+
+```{r}
+lm(y ~ x + I(x^2) + I(x^3) + I(x^4))
+```
+
+# Method 2
+
+```{r}
+lm(y ~ poly(x, 4, raw = TRUE))  
+```
